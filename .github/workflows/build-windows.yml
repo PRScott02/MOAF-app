@@ -42,9 +42,10 @@ jobs:
             --input package-input `
             --main-jar MOAF-Campaign-App.jar `
             --main-class MoafCampaignApp `
-            --add-modules jdk.httpserver,java.desktop `
+            --add-modules jdk.httpserver,java.desktop,java.awt `
             --win-menu `
             --win-shortcut `
+            --win-dir-chooser `
             --dest installer
       - uses: actions/upload-artifact@v4
         with:
