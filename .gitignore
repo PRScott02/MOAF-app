@@ -1,0 +1,5 @@
+campaign-master.json
+github-config.json
+build/
+package-input/
+*.log

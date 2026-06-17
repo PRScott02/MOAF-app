@@ -1,0 +1,52 @@
+name: Build Windows Installer
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'content/**'
+      - '.github/workflows/build-windows.yml'
+
+jobs:
+  windows-installer:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Compile
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force build | Out-Null
+          javac --add-modules jdk.httpserver -d build src/MoafCampaignApp.java
+          "Main-Class: MoafCampaignApp`nAdd-Modules: jdk.httpserver`n" | Set-Content -Encoding ascii MANIFEST.MF
+          jar cfm MOAF-Campaign-App.jar MANIFEST.MF -C build .
+      - name: Prepare installer files
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force package-input | Out-Null
+          Copy-Item MOAF-Campaign-App.jar package-input/
+          Copy-Item content package-input/content -Recurse
+      - name: Build EXE
+        shell: pwsh
+        run: |
+          jpackage `
+            --type exe `
+            --name "MOAF Campaign Index" `
+            --app-version "1.0.0" `
+            --vendor "Memories of a Few" `
+            --input package-input `
+            --main-jar MOAF-Campaign-App.jar `
+            --main-class MoafCampaignApp `
+            --add-modules jdk.httpserver,java.desktop `
+            --win-menu `
+            --win-shortcut `
+            --dest installer
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MOAF-Campaign-Index-Windows
+          path: installer/*.exe
