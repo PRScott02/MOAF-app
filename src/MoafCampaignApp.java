@@ -18,31 +18,40 @@ import java.util.concurrent.Executors;
  */
 public final class MoafCampaignApp {
     private static final int PORT = 38921;
-    private static final Path APP_DIR = locateAppDir();
-    private static final Path MASTER_FILE = APP_DIR.resolve("campaign-master.json");
-    private static final Path CONFIG_FILE = APP_DIR.resolve("github-config.json");
-    private static final Path LEGACY_DIR = APP_DIR.resolve("content").resolve("legacy");
+    private static final Path INSTALL_DIR = locateInstallDir();
+    private static final Path DATA_DIR = locateDataDir();
+    private static final Path MASTER_FILE = DATA_DIR.resolve("campaign-master.json");
+    private static final Path CONFIG_FILE = DATA_DIR.resolve("github-config.json");
+    private static final Path LEGACY_DIR = INSTALL_DIR.resolve("content").resolve("legacy");
 
-    public static void main(String[] args) throws Exception {
-        ensureInitialFiles();
-        HttpServer server;
+    public static void main(String[] args) {
         try {
-            server = HttpServer.create(new InetSocketAddress("127.0.0.1", PORT), 0);
-        } catch (IOException busy) {
+            ensureInitialFiles();
+            HttpServer server;
+            try {
+                server = HttpServer.create(new InetSocketAddress("127.0.0.1", PORT), 0);
+            } catch (IOException busy) {
+                openBrowser("http://127.0.0.1:" + PORT + "/");
+                return;
+            }
+            server.createContext("/", MoafCampaignApp::handleRoot);
+            server.createContext("/api/master", ex -> handleJsonFile(ex, MASTER_FILE));
+            server.createContext("/api/config", ex -> handleJsonFile(ex, CONFIG_FILE));
+            server.createContext("/legacy/", MoafCampaignApp::handleLegacy);
+            server.setExecutor(Executors.newCachedThreadPool());
+            server.start();
             openBrowser("http://127.0.0.1:" + PORT + "/");
-            return;
+        } catch (Exception e) {
+            try {
+                Files.createDirectories(DATA_DIR);
+                Files.writeString(DATA_DIR.resolve("startup-error.txt"), e.toString() + System.lineSeparator(),
+                        StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+            } catch (Exception ignored) { }
+            e.printStackTrace();
         }
-        server.createContext("/", MoafCampaignApp::handleRoot);
-        server.createContext("/api/master", ex -> handleJsonFile(ex, MASTER_FILE));
-        server.createContext("/api/config", ex -> handleJsonFile(ex, CONFIG_FILE));
-        server.createContext("/legacy/", MoafCampaignApp::handleLegacy);
-        server.setExecutor(Executors.newCachedThreadPool());
-        server.start();
-        System.out.println("MOAF Campaign Index is running at http://127.0.0.1:" + PORT);
-        openBrowser("http://127.0.0.1:" + PORT + "/");
     }
 
-    private static Path locateAppDir() {
+    private static Path locateInstallDir() {
         try {
             Path code = Paths.get(MoafCampaignApp.class.getProtectionDomain().getCodeSource().getLocation().toURI());
             return Files.isRegularFile(code) ? code.getParent().toAbsolutePath() : Paths.get("").toAbsolutePath();
@@ -51,15 +60,31 @@ public final class MoafCampaignApp {
         }
     }
 
+    private static Path locateDataDir() {
+        String localAppData = System.getenv("LOCALAPPDATA");
+        Path base = (localAppData != null && !localAppData.isBlank())
+                ? Paths.get(localAppData)
+                : Paths.get(System.getProperty("user.home"), ".local", "share");
+        return base.resolve("MOAF Campaign Index").toAbsolutePath();
+    }
+
     private static void ensureInitialFiles() throws IOException {
-        Files.createDirectories(LEGACY_DIR);
+        Files.createDirectories(DATA_DIR);
         if (!Files.exists(MASTER_FILE)) Files.writeString(MASTER_FILE, INITIAL_DATA, StandardCharsets.UTF_8);
         if (!Files.exists(CONFIG_FILE)) Files.writeString(CONFIG_FILE, INITIAL_CONFIG, StandardCharsets.UTF_8);
     }
 
     private static void openBrowser(String url) {
         try {
-            if (Desktop.isDesktopSupported()) Desktop.getDesktop().browse(URI.create(url));
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                Desktop.getDesktop().browse(URI.create(url));
+                return;
+            }
+        } catch (Exception ignored) { }
+        try {
+            if (System.getProperty("os.name", "").toLowerCase().contains("win")) {
+                new ProcessBuilder("rundll32", "url.dll,FileProtocolHandler", url).start();
+            }
         } catch (Exception e) {
             System.err.println("Open this address in your browser: " + url);
         }
