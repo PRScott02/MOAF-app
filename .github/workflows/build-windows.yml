@@ -42,7 +42,7 @@ jobs:
             --input package-input `
             --main-jar MOAF-Campaign-App.jar `
             --main-class MoafCampaignApp `
-            --add-modules jdk.httpserver,java.desktop,java.awt `
+            --add-modules jdk.httpserver,java.desktop `
             --win-menu `
             --win-shortcut `
             --win-dir-chooser `
@@ -51,3 +51,4 @@ jobs:
         with:
           name: MOAF-Campaign-Index-Windows
           path: installer/*.exe
+
