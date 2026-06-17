@@ -63,6 +63,10 @@ public final class MoafCampaignApp extends Application {
         WebView webView = new WebView();
         WebEngine engine = webView.getEngine();
 
+        // GRAY font smoothing composites faster than the default LCD subpixel
+        // mode in JavaFX WebView, reducing per-frame work while scrolling.
+        webView.setFontSmoothingType(javafx.scene.text.FontSmoothingType.GRAY);
+
         // Allow the JS inside the page to call fetch() against localhost
         engine.setUserAgent("MOAFCampaignIndex/1.0");
 
@@ -95,13 +99,25 @@ public final class MoafCampaignApp extends Application {
             engine.load("http://127.0.0.1:" + PORT + "/");
         });
 
-        stage.setOnCloseRequest(ev -> {
-            Platform.exit();
-            System.exit(0);
-        });
+        stage.setOnCloseRequest(ev -> shutdown());
+    }
+
+    @Override
+    public void stop() {
+        // Called by JavaFX during shutdown — backstop in case the window is
+        // closed by a route that bypasses setOnCloseRequest.
+        shutdown();
+    }
+
+    private static void shutdown() {
+        try { if (SERVER != null) SERVER.stop(0); } catch (Exception ignored) {}
+        Platform.exit();
+        System.exit(0);
     }
 
     // ── Local HTTP server ─────────────────────────────────────────────────────
+
+    private static volatile HttpServer SERVER;
 
     private static void startServer() throws IOException {
         HttpServer server;
@@ -115,8 +131,15 @@ public final class MoafCampaignApp extends Application {
         server.createContext("/api/master",  ex -> handleJsonFile(ex, MASTER_FILE));
         server.createContext("/api/config",  ex -> handleJsonFile(ex, CONFIG_FILE));
         server.createContext("/legacy/",     MoafCampaignApp::handleLegacy);
-        server.setExecutor(Executors.newCachedThreadPool());
+        // Daemon threads: these never keep the JVM alive on their own, so the
+        // process can always exit cleanly even if shutdown is reached unusually.
+        server.setExecutor(Executors.newCachedThreadPool(r -> {
+            Thread t = new Thread(r, "moaf-http");
+            t.setDaemon(true);
+            return t;
+        }));
         server.start();
+        SERVER = server;
     }
 
     // ── Request handlers ──────────────────────────────────────────────────────
@@ -252,8 +275,10 @@ public final class MoafCampaignApp extends Application {
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MOAF Campaign Index</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" media="print" onload="this.media='all'"
+      href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
 :root{
   --bg:#020403;--panel:#060d09;--panel2:#0a1410;--line:#1a4230;
   --green:#39ff8f;--green-dim:#1a7a45;--dim:#4e8060;--red:#ff3d4e;
@@ -265,15 +290,19 @@ html,body{height:100%;overflow:hidden;background:var(--bg)}
 body{font-family:var(--font);color:#b8dfc8;
   background:radial-gradient(ellipse at 50% 0%,#0a2018 0%,#030806 55%,#010302 100%)}
 
-/* scanlines overlay */
+/* scanlines overlay — promoted to its own GPU layer so it does not
+   force a full-window repaint while the content area scrolls */
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
   background:repeating-linear-gradient(0deg,
     rgba(0,0,0,.13) 0px,rgba(0,0,0,.13) 1px,
-    transparent 1px,transparent 3px)}
+    transparent 1px,transparent 3px);
+  transform:translateZ(0);will-change:transform}
 
-/* phosphor flicker — subtle */
-@keyframes flicker{0%,100%{opacity:1}92%{opacity:.97}94%{opacity:.99}}
-body{animation:flicker 8s infinite}
+/* phosphor flicker — applied to the fixed overlay only, never the whole
+   body. Animating <body> opacity repaints every descendant each frame,
+   which is the main cause of scroll lag in the WebView. */
+@keyframes flicker{0%,100%{opacity:.34}92%{opacity:.30}94%{opacity:.33}}
+body::before{opacity:.34;animation:flicker 8s infinite}
 
 button,input,textarea,select{font:inherit;outline:none}
 button{cursor:pointer}
@@ -370,7 +399,7 @@ button{cursor:pointer}
 }
 
 /* ── Content area ── */
-.content{flex:1;overflow-y:auto;padding:22px 24px}
+.content{flex:1;overflow-y:auto;padding:22px 24px;transform:translateZ(0);will-change:scroll-position}
 .content::-webkit-scrollbar{width:4px}
 .content::-webkit-scrollbar-thumb{background:var(--green-dim)}
 
