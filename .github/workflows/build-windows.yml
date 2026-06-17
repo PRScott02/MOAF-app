@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - 'src/**'
+      - 'data/**'
       - 'content/**'
       - '.github/workflows/build-windows.yml'
 
@@ -33,19 +34,21 @@ jobs:
           Invoke-WebRequest -Uri $modsUrl -OutFile javafx-jmods.zip
           Expand-Archive -Path javafx-sdk.zip  -DestinationPath javafx-sdk-extract
           Expand-Archive -Path javafx-jmods.zip -DestinationPath javafx-jmods-extract
-          # Normalise folder names (the zips contain a versioned subfolder)
           $sdkDir  = (Get-ChildItem javafx-sdk-extract  -Directory | Select-Object -First 1).FullName
           $modsDir = (Get-ChildItem javafx-jmods-extract -Directory | Select-Object -First 1).FullName
-          "JAVAFX_SDK_LIB=$sdkDir\lib"   | Out-File -FilePath $env:GITHUB_ENV -Append
-          "JAVAFX_JMODS=$modsDir"        | Out-File -FilePath $env:GITHUB_ENV -Append
+          "JAVAFX_SDK_LIB=$sdkDir\lib" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "JAVAFX_JMODS=$modsDir"      | Out-File -FilePath $env:GITHUB_ENV -Append
 
       - name: Compile
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force build | Out-Null
+          # Copy bundled JSON data into the classpath as resources
+          New-Item -ItemType Directory -Force build/data | Out-Null
+          Copy-Item data/*.json build/data/
           javac `
             --module-path "$env:JAVAFX_SDK_LIB" `
-            --add-modules javafx.controls,javafx.web `
+            --add-modules javafx.controls `
             -d build src/MoafCampaignApp.java
           jar cf MOAF-Campaign-App.jar -C build .
 
@@ -68,7 +71,7 @@ jobs:
             --main-jar MOAF-Campaign-App.jar `
             --main-class 'MoafCampaignApp$Launcher' `
             --module-path "$env:JAVAFX_JMODS" `
-            --add-modules javafx.controls,javafx.web,jdk.httpserver,java.desktop `
+            --add-modules javafx.controls,java.net.http `
             --win-menu `
             --win-shortcut `
             --win-dir-chooser `
@@ -78,4 +81,3 @@ jobs:
         with:
           name: MOAF-Campaign-Index-Windows
           path: installer/*.exe
-
