@@ -1,44 +1,85 @@
-import com.sun.net.httpserver.Headers;
-import com.sun.net.httpserver.HttpExchange;
-import com.sun.net.httpserver.HttpServer;
-
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.net.InetSocketAddress;
-import java.net.URLDecoder;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
-import java.util.concurrent.Executors;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.concurrent.*;
 
 /**
- * Memories of a Few – Campaign Index
- * JavaFX desktop app. Starts a local HTTP server and displays the UI in an
- * embedded WebView — no external browser required.
- * Requires Java 21+ with JavaFX.
+ * Memories of a Few — Campaign Index
+ * Pure JavaFX desktop app. No WebView, no embedded HTTP server, no HTML.
+ *
+ * Data sources:
+ *   • Bundled JSON resources for the seed Factions, NPCs, and Maps content.
+ *   • A user-editable campaign-master.json in the OS application data folder
+ *     for everything the GM adds or modifies after install.
+ *   • An optional github-config.json controlling player-snapshot publishing
+ *     and the player-side update sync.
+ *
+ * Requires Java 21 + JavaFX 21 (controls).
  */
 public final class MoafCampaignApp extends Application {
 
-    private static final int    PORT         = 38921;
-    private static final Path   INSTALL_DIR  = locateInstallDir();
-    private static final Path   DATA_DIR     = locateDataDir();
-    private static final Path   MASTER_FILE  = DATA_DIR.resolve("campaign-master.json");
-    private static final Path   CONFIG_FILE  = DATA_DIR.resolve("github-config.json");
-    private static final Path   LEGACY_DIR   = INSTALL_DIR.resolve("content").resolve("legacy");
+    // ── Locations ────────────────────────────────────────────────────────────
+    private static final Path INSTALL_DIR = locateInstallDir();
+    private static final Path DATA_DIR    = locateDataDir();
+    private static final Path MASTER_FILE = DATA_DIR.resolve("campaign-master.json");
+    private static final Path CONFIG_FILE = DATA_DIR.resolve("github-config.json");
+    private static final Path MAPS_DIR    = INSTALL_DIR.resolve("content").resolve("maps");
+
+    // ── Theme (BCI terminal palette) ─────────────────────────────────────────
+    private static final String BG       = "#040908";
+    private static final String PANEL    = "#070f0c";
+    private static final String PANEL2   = "#0b1612";
+    private static final String LINE     = "#1a4230";
+    private static final String GREEN    = "#39ff8f";
+    private static final String GREEN_D  = "#1a7a45";
+    private static final String DIM      = "#6c9080";
+    private static final String TEXT     = "#b8dfc8";
+    private static final String RED      = "#ff3d4e";
+    private static final String AMBER    = "#ffb833";
+    private static final String FONT     = "Consolas, 'Courier New', monospace";
+
+    // ── State ────────────────────────────────────────────────────────────────
+    private final CampaignData data = new CampaignData();
+    private final GitHubConfig ghConfig = new GitHubConfig();
+    private final StringProperty currentTab = new SimpleStringProperty("factions");
+    private boolean adminMode = false;
+
+    // UI elements that need to refresh
+    private VBox    sidebarTabs;
+    private Label   pageTitleLabel;
+    private Label   pageSubtitleLabel;
+    private Label   statusLabel;
+    private FlowPane cardGrid;
+    private Button  adminButton;
+    private HBox    adminBar;
+    private Button  newEntryButton;
+    private Button  manageButton;
+    private Stage   primaryStage;
 
     // ── Entry point ──────────────────────────────────────────────────────────
-    //
-    // A separate launcher class (that does NOT extend Application) is used as the
-    // packaged main class. Launching JavaFX from a non-Application class avoids the
-    // "JavaFX runtime components are missing" error that occurs when an
-    // Application subclass is invoked directly as the main class of a packaged app.
-
     public static void main(String[] args) {
         Launcher.main(args);
     }
@@ -50,174 +91,808 @@ public final class MoafCampaignApp extends Application {
     }
 
     // ── JavaFX lifecycle ─────────────────────────────────────────────────────
-
     @Override
     public void start(Stage stage) {
+        this.primaryStage = stage;
         try {
-            ensureInitialFiles();
-            startServer();
+            ensureDataDir();
+            loadOrSeedMaster();
+            loadConfig();
         } catch (Exception e) {
             logError(e);
         }
 
-        WebView webView = new WebView();
-        WebEngine engine = webView.getEngine();
+        BorderPane root = new BorderPane();
+        root.setStyle("-fx-background-color: " + BG + ";");
 
-        // GRAY font smoothing composites faster than the default LCD subpixel
-        // mode in JavaFX WebView, reducing per-frame work while scrolling.
-        webView.setFontSmoothingType(javafx.scene.text.FontSmoothingType.GRAY);
+        root.setLeft(buildSidebar());
+        VBox mainColumn = new VBox(buildAdminBar(), buildHeader());
+        BorderPane mainArea = new BorderPane();
+        mainArea.setTop(mainColumn);
+        mainArea.setCenter(buildContentArea());
+        root.setCenter(mainArea);
 
-        // Allow the JS inside the page to call fetch() against localhost
-        engine.setUserAgent("MOAFCampaignIndex/1.0");
-
-        // Intercept JS alert/confirm/prompt so they display natively if needed
-        engine.setOnAlert(ev -> {
-            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
-                    javafx.scene.control.Alert.AlertType.INFORMATION, ev.getData());
-            alert.setHeaderText(null);
-            alert.showAndWait();
-        });
-
-        Scene scene = new Scene(webView, 1280, 820);
-        scene.getStylesheets().add("data:text/css,");          // placeholder
+        Scene scene = new Scene(root, 1280, 820);
         stage.setScene(scene);
         stage.setTitle("MOAF Campaign Index");
-        stage.setMinWidth(860);
-        stage.setMinHeight(560);
+        stage.setMinWidth(900);
+        stage.setMinHeight(600);
 
-        // Try to set the window icon (ignored silently if the resource is absent)
-        try {
-            stage.getIcons().add(new Image(
-                    MoafCampaignApp.class.getResourceAsStream("/moaf-icon.png")));
-        } catch (Exception ignored) {}
+        currentTab.addListener((obs, oldVal, newVal) -> refresh());
+        refresh();
 
+        stage.setOnCloseRequest(e -> shutdown());
         stage.show();
 
-        // Load the app — small delay so the HTTP server is guaranteed to be up
-        Platform.runLater(() -> {
-            try { Thread.sleep(300); } catch (InterruptedException ignored) {}
-            engine.load("http://127.0.0.1:" + PORT + "/");
-        });
-
-        stage.setOnCloseRequest(ev -> shutdown());
+        // Auto-sync after the window is up if configured
+        if (ghConfig.autoSync && !ghConfig.owner.isBlank() && !ghConfig.repo.isBlank()) {
+            CompletableFuture.runAsync(() -> syncRemote(true));
+        }
     }
 
     @Override
-    public void stop() {
-        // Called by JavaFX during shutdown — backstop in case the window is
-        // closed by a route that bypasses setOnCloseRequest.
-        shutdown();
-    }
+    public void stop() { shutdown(); }
 
     private static void shutdown() {
-        try { if (SERVER != null) SERVER.stop(0); } catch (Exception ignored) {}
         Platform.exit();
         System.exit(0);
     }
 
-    // ── Local HTTP server ─────────────────────────────────────────────────────
+    // ── Sidebar ──────────────────────────────────────────────────────────────
+    private VBox buildSidebar() {
+        VBox side = new VBox();
+        side.setPrefWidth(270);
+        side.setStyle("-fx-background-color: " + PANEL + ";" +
+                      "-fx-border-color: transparent " + LINE + " transparent transparent;" +
+                      "-fx-border-width: 0 1 0 0;");
 
-    private static volatile HttpServer SERVER;
+        // Brand block
+        Label title = new Label(data.campaignTitle);
+        title.setStyle(headerStyle(18, true));
+        Label sub = new Label(data.subtitle);
+        sub.setStyle(labelStyle(10, DIM));
+        sub.setWrapText(true);
 
-    private static void startServer() throws IOException {
-        HttpServer server;
+        VBox brand = new VBox(6, title, sub);
+        brand.setPadding(new Insets(20, 16, 18, 18));
+        brand.setStyle("-fx-border-color: transparent transparent " + LINE + " transparent;" +
+                       "-fx-border-width: 0 0 1 0;");
+
+        // Tab list
+        sidebarTabs = new VBox(2);
+        sidebarTabs.setPadding(new Insets(10, 0, 10, 0));
+        ScrollPane tabsScroll = new ScrollPane(sidebarTabs);
+        tabsScroll.setFitToWidth(true);
+        tabsScroll.setStyle("-fx-background-color: transparent; -fx-background: transparent;" +
+                            " -fx-border-color: transparent;");
+        VBox.setVgrow(tabsScroll, Priority.ALWAYS);
+
+        // Bottom actions
+        VBox foot = new VBox(6);
+        foot.setPadding(new Insets(10, 12, 12, 12));
+        foot.setStyle("-fx-border-color: " + LINE + " transparent transparent transparent;" +
+                      "-fx-border-width: 1 0 0 0;");
+
+        manageButton = makeBtn("▸ MANAGE CAMPAIGN");
+        manageButton.setOnAction(e -> openManager());
+        manageButton.setVisible(false);
+        manageButton.setManaged(false);
+
+        Button updates = makeBtn("▸ CHECK FOR UPDATES");
+        updates.setOnAction(e -> CompletableFuture.runAsync(() -> syncRemote(false)));
+
+        adminButton = makeBtn("▸ ADMIN LOGIN");
+        adminButton.setOnAction(e -> adminAction());
+
+        foot.getChildren().addAll(manageButton, updates, adminButton);
+
+        side.getChildren().addAll(brand, tabsScroll, foot);
+        return side;
+    }
+
+    private void renderSidebarTabs() {
+        sidebarTabs.getChildren().clear();
+        List<Tab> visible = new ArrayList<>();
+        for (Tab t : data.tabs) {
+            if (adminMode || t.visible) visible.add(t);
+        }
+        visible.sort(Comparator.comparingInt(t -> t.order));
+
+        for (Tab t : visible) {
+            boolean active = t.id.equals(currentTab.get());
+            Button btn = new Button((t.icon == null ? "□" : t.icon) + "    " + t.title.toUpperCase());
+            btn.setMaxWidth(Double.MAX_VALUE);
+            btn.setAlignment(Pos.CENTER_LEFT);
+            btn.setPadding(new Insets(10, 16, 10, 16));
+            btn.setStyle(tabButtonStyle(active));
+            btn.setOnMouseEntered(e -> { if (!active) btn.setStyle(tabButtonStyle(false, true)); });
+            btn.setOnMouseExited(e -> { if (!active) btn.setStyle(tabButtonStyle(false, false)); });
+            btn.setOnAction(e -> currentTab.set(t.id));
+            sidebarTabs.getChildren().add(btn);
+        }
+    }
+
+    // ── Top admin bar ────────────────────────────────────────────────────────
+    private HBox buildAdminBar() {
+        Label l = new Label("◆ ADMIN MODE // MASTER DATA IS LOCAL // PUBLISH SENDS ONLY UNLOCKED CONTENT");
+        l.setStyle(labelStyle(10, "#ffaaa0"));
+        adminBar = new HBox(l);
+        adminBar.setPadding(new Insets(7, 24, 7, 24));
+        adminBar.setStyle("-fx-background-color: #2a0c0f;" +
+                          "-fx-border-color: transparent transparent #7f2731 transparent;" +
+                          "-fx-border-width: 0 0 1 0;");
+        adminBar.setVisible(false);
+        adminBar.setManaged(false);
+        return adminBar;
+    }
+
+    // ── Header ───────────────────────────────────────────────────────────────
+    private HBox buildHeader() {
+        pageTitleLabel = new Label("INDEX");
+        pageTitleLabel.setStyle(headerStyle(16, false));
+        pageSubtitleLabel = new Label("PLAYER ACCESS // AUTHORIZED RECORDS ONLY");
+        pageSubtitleLabel.setStyle(labelStyle(10, DIM));
+
+        VBox titles = new VBox(4, pageTitleLabel, pageSubtitleLabel);
+
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
+
+        statusLabel = new Label("LOCAL");
+        statusLabel.setStyle(labelStyle(10, DIM));
+
+        newEntryButton = makeBtn("+ ENTRY");
+        newEntryButton.setOnAction(e -> openEntryEditor(null));
+        newEntryButton.setVisible(false);
+        newEntryButton.setManaged(false);
+
+        HBox tools = new HBox(8, statusLabel, newEntryButton);
+        tools.setAlignment(Pos.CENTER_RIGHT);
+
+        HBox header = new HBox(20, titles, spacer, tools);
+        header.setAlignment(Pos.CENTER_LEFT);
+        header.setPadding(new Insets(16, 24, 16, 24));
+        header.setStyle("-fx-background-color: " + PANEL + ";" +
+                        "-fx-border-color: transparent transparent " + LINE + " transparent;" +
+                        "-fx-border-width: 0 0 1 0;");
+        return header;
+    }
+
+    // ── Card grid area ───────────────────────────────────────────────────────
+    private ScrollPane buildContentArea() {
+        cardGrid = new FlowPane(14, 14);
+        cardGrid.setPadding(new Insets(22, 24, 22, 24));
+        cardGrid.setStyle("-fx-background-color: " + BG + ";");
+
+        ScrollPane scroll = new ScrollPane(cardGrid);
+        scroll.setFitToWidth(true);
+        scroll.setStyle("-fx-background-color: " + BG + "; -fx-background: " + BG + ";" +
+                        " -fx-border-color: transparent;");
+        return scroll;
+    }
+
+    // ── Refresh entire view ──────────────────────────────────────────────────
+    private void refresh() {
+        renderSidebarTabs();
+
+        adminBar.setVisible(adminMode);
+        adminBar.setManaged(adminMode);
+        manageButton.setVisible(adminMode);
+        manageButton.setManaged(adminMode);
+        newEntryButton.setVisible(adminMode);
+        newEntryButton.setManaged(adminMode);
+        adminButton.setText(adminMode ? "▸ EXIT ADMIN MODE" : "▸ ADMIN LOGIN");
+
+        Tab t = findTab(currentTab.get());
+        pageTitleLabel.setText(t == null ? "INDEX" : t.title.toUpperCase());
+        pageSubtitleLabel.setText(adminMode
+                ? "ADMIN ACCESS // LOCKED RECORDS VISIBLE"
+                : "PLAYER ACCESS // AUTHORIZED RECORDS ONLY");
+
+        cardGrid.getChildren().clear();
+        List<Entry> entries = entriesForCurrentTab();
+        if (entries.isEmpty()) {
+            Label empty = new Label("NO AUTHORIZED RECORDS IN THIS SECTION");
+            empty.setPadding(new Insets(40));
+            empty.setStyle(labelStyle(11, DIM));
+            cardGrid.getChildren().add(empty);
+        } else {
+            for (Entry e : entries) cardGrid.getChildren().add(buildCard(e));
+        }
+    }
+
+    private List<Entry> entriesForCurrentTab() {
+        List<Entry> out = new ArrayList<>();
+        for (Entry e : data.entries) {
+            if (!e.tabId.equals(currentTab.get())) continue;
+            if (!adminMode && !e.unlocked) continue;
+            out.add(e);
+        }
+        out.sort(Comparator.comparingInt(x -> x.order));
+        return out;
+    }
+
+    private Tab findTab(String id) {
+        for (Tab t : data.tabs) if (t.id.equals(id)) return t;
+        return null;
+    }
+
+    // ── A single card ────────────────────────────────────────────────────────
+    private VBox buildCard(Entry e) {
+        VBox card = new VBox(8);
+        card.setPrefWidth(280);
+        card.setMinWidth(280);
+        card.setMaxWidth(280);
+        card.setPadding(new Insets(14, 14, 14, 14));
+        card.setStyle(cardStyle(e.unlocked));
+
+        if (!e.unlocked) {
+            Label lock = new Label("LOCKED");
+            lock.setStyle(labelStyle(9, RED) + "-fx-padding: 0 0 0 0;");
+            card.getChildren().add(lock);
+        }
+
+        Label tag = new Label(e.unlocked ? "▸ AUTHORIZED RECORD" : "▸ GM-ONLY RECORD");
+        tag.setStyle(labelStyle(9, DIM));
+
+        Label title = new Label(e.title);
+        title.setStyle(headerStyle(14, false));
+        title.setWrapText(true);
+
+        Label sub = new Label(e.subtitle == null ? "" : e.subtitle);
+        sub.setStyle(labelStyle(10, "#8db8a0"));
+        sub.setWrapText(true);
+
+        Label body = new Label(truncate(e.body, 180));
+        body.setStyle(labelStyle(11, TEXT));
+        body.setWrapText(true);
+
+        card.getChildren().addAll(tag, title, sub, body);
+
+        if (adminMode) {
+            Region spacer = new Region();
+            VBox.setVgrow(spacer, Priority.ALWAYS);
+            Button editBtn = makeBtn("EDIT");
+            editBtn.setStyle(makeBtnSmallStyle());
+            editBtn.setOnAction(ev -> {
+                ev.consume();
+                openEntryEditor(e);
+            });
+            HBox row = new HBox(editBtn);
+            row.setAlignment(Pos.CENTER_RIGHT);
+            card.getChildren().addAll(spacer, row);
+        }
+
+        card.setOnMouseClicked(ev -> {
+            if (ev.getButton() == MouseButton.PRIMARY) openEntry(e);
+        });
+        card.setOnMouseEntered(ev -> card.setStyle(cardStyle(e.unlocked, true)));
+        card.setOnMouseExited(ev -> card.setStyle(cardStyle(e.unlocked, false)));
+
+        return card;
+    }
+
+    // ── Entry detail view ────────────────────────────────────────────────────
+    private void openEntry(Entry e) {
+        if (!adminMode && !e.unlocked) return;
+
+        Stage dialog = new Stage();
+        dialog.initOwner(primaryStage);
+        dialog.initModality(Modality.WINDOW_MODAL);
+        dialog.setTitle(e.title);
+
+        VBox content = new VBox(12);
+        content.setPadding(new Insets(24, 28, 24, 28));
+        content.setStyle("-fx-background-color: " + PANEL + ";");
+
+        Label title = new Label(e.title);
+        title.setStyle(headerStyle(20, true));
+        title.setWrapText(true);
+
+        if (e.subtitle != null && !e.subtitle.isBlank()) {
+            Label sub = new Label(e.subtitle);
+            sub.setStyle(labelStyle(11, DIM));
+            sub.setWrapText(true);
+            content.getChildren().addAll(title, sub);
+        } else {
+            content.getChildren().add(title);
+        }
+
+        // Image: either a bundled file (relative path under content/) or absent
+        if (e.image != null && !e.image.isBlank()) {
+            try {
+                Path imgPath = INSTALL_DIR.resolve(e.image);
+                if (Files.exists(imgPath)) {
+                    ImageView iv = new ImageView(new Image(imgPath.toUri().toString()));
+                    iv.setPreserveRatio(true);
+                    iv.setFitWidth(900);
+                    iv.setSmooth(true);
+                    content.getChildren().add(iv);
+                }
+            } catch (Exception ignored) {}
+        }
+
+        // Structured sections (Map of section header → text), if present
+        if (e.sections != null && !e.sections.isEmpty()) {
+            for (Map.Entry<String, String> s : e.sections.entrySet()) {
+                Label h = new Label("▸ " + s.getKey().toUpperCase());
+                h.setStyle(labelStyle(12, GREEN) + " -fx-font-weight: bold;");
+                Label v = new Label(s.getValue());
+                v.setStyle(labelStyle(12, TEXT));
+                v.setWrapText(true);
+                VBox block = new VBox(6, h, v);
+                content.getChildren().add(block);
+            }
+        }
+
+        // Free-form body
+        if (e.body != null && !e.body.isBlank()) {
+            Label body = new Label(e.body);
+            body.setStyle(labelStyle(12, TEXT));
+            body.setWrapText(true);
+            content.getChildren().add(body);
+        }
+
+        // Connections list, if any
+        if (e.connections != null && !e.connections.isEmpty()) {
+            Label h = new Label("▸ CONNECTIONS");
+            h.setStyle(labelStyle(12, GREEN) + " -fx-font-weight: bold;");
+            Label v = new Label(String.join(" · ", e.connections));
+            v.setStyle(labelStyle(11, "#9bc9b0"));
+            v.setWrapText(true);
+            content.getChildren().addAll(h, v);
+        }
+
+        // Close button
+        Button close = makeBtn("CLOSE");
+        close.setOnAction(ev -> dialog.close());
+        HBox btnRow = new HBox(close);
+        btnRow.setAlignment(Pos.CENTER_RIGHT);
+        btnRow.setPadding(new Insets(8, 0, 0, 0));
+        content.getChildren().add(btnRow);
+
+        ScrollPane scroll = new ScrollPane(content);
+        scroll.setFitToWidth(true);
+        scroll.setStyle("-fx-background-color: " + PANEL + "; -fx-background: " + PANEL + ";" +
+                        " -fx-border-color: transparent;");
+        Scene s = new Scene(scroll, 1000, 720);
+        dialog.setScene(s);
+        dialog.show();
+    }
+
+    // ── Admin login / mode toggle ────────────────────────────────────────────
+    private void adminAction() {
+        if (adminMode) {
+            adminMode = false;
+            toast("Admin mode closed");
+            refresh();
+            return;
+        }
+        TextInputDialog dlg = new TextInputDialog();
+        dlg.initOwner(primaryStage);
+        dlg.setTitle("Admin Authorization");
+        dlg.setHeaderText("Enter admin PIN");
+        dlg.setContentText("PIN:");
+        Optional<String> r = dlg.showAndWait();
+        r.ifPresent(pin -> {
+            if (pin.equals(data.adminPin)) {
+                adminMode = true;
+                toast("Admin mode enabled");
+                refresh();
+            } else {
+                toast("Incorrect PIN");
+            }
+        });
+    }
+
+    // ── Entry editor (admin) ─────────────────────────────────────────────────
+    private void openEntryEditor(Entry existing) {
+        Stage dlg = new Stage();
+        dlg.initOwner(primaryStage);
+        dlg.initModality(Modality.WINDOW_MODAL);
+        dlg.setTitle(existing == null ? "New Entry" : "Edit Entry");
+
+        TextField tTitle = new TextField(existing == null ? "" : existing.title);
+        TextField tSub   = new TextField(existing == null ? "" : existing.subtitle);
+        TextArea  tBody  = new TextArea(existing == null ? "" : existing.body);
+        tBody.setPrefRowCount(8);
+        tBody.setWrapText(true);
+
+        ComboBox<String> tTab = new ComboBox<>();
+        for (Tab t : data.tabs) tTab.getItems().add(t.id);
+        tTab.setValue(existing == null ? currentTab.get() : existing.tabId);
+
+        TextField tImage = new TextField(existing == null ? "" : existing.image);
+
+        Spinner<Integer> tOrder = new Spinner<>(1, 9999, existing == null ? 1 : existing.order);
+        tOrder.setEditable(true);
+
+        ComboBox<String> tUnlocked = new ComboBox<>();
+        tUnlocked.getItems().addAll("Unlocked (player visible)", "Locked (GM only)");
+        tUnlocked.setValue(existing != null && existing.unlocked
+                ? "Unlocked (player visible)" : "Locked (GM only)");
+
+        GridPane g = new GridPane();
+        g.setHgap(10); g.setVgap(10);
+        g.setPadding(new Insets(20));
+        g.setStyle("-fx-background-color: " + PANEL + ";");
+        int row = 0;
+        g.add(label("Title"), 0, row);      g.add(tTitle, 1, row++);
+        g.add(label("Subtitle"), 0, row);   g.add(tSub, 1, row++);
+        g.add(label("Tab"), 0, row);        g.add(tTab, 1, row++);
+        g.add(label("Order"), 0, row);      g.add(tOrder, 1, row++);
+        g.add(label("Image path"), 0, row); g.add(tImage, 1, row++);
+        g.add(label("Visibility"), 0, row); g.add(tUnlocked, 1, row++);
+        g.add(label("Body"), 0, row);       g.add(tBody, 1, row++);
+
+        tTitle.setPrefColumnCount(40);
+
+        Button save = makeBtn("SAVE");
+        Button cancel = makeBtn("CANCEL");
+        Button del = makeBtn("DELETE");
+        del.setStyle(makeBtnStyle("#ff8891", "#6b252d"));
+        del.setVisible(existing != null);
+
+        save.setOnAction(e -> {
+            Entry target = existing;
+            if (target == null) {
+                target = new Entry();
+                target.id = slug(tTitle.getText());
+                data.entries.add(target);
+            }
+            target.title    = tTitle.getText().isBlank() ? "Untitled" : tTitle.getText().trim();
+            target.subtitle = tSub.getText().trim();
+            target.body     = tBody.getText();
+            target.tabId    = tTab.getValue();
+            target.order    = tOrder.getValue();
+            target.image    = tImage.getText().trim();
+            target.unlocked = tUnlocked.getValue().startsWith("Unlocked");
+            saveLocal();
+            currentTab.set(target.tabId);
+            refresh();
+            dlg.close();
+            toast("Entry saved");
+        });
+        cancel.setOnAction(e -> dlg.close());
+        del.setOnAction(e -> {
+            Alert a = new Alert(Alert.AlertType.CONFIRMATION, "Delete this entry?", ButtonType.YES, ButtonType.NO);
+            a.initOwner(dlg);
+            a.showAndWait().ifPresent(bt -> {
+                if (bt == ButtonType.YES && existing != null) {
+                    data.entries.remove(existing);
+                    saveLocal();
+                    refresh();
+                    dlg.close();
+                    toast("Entry deleted");
+                }
+            });
+        });
+
+        HBox btns = new HBox(8, save, cancel, del);
+        btns.setAlignment(Pos.CENTER_RIGHT);
+        btns.setPadding(new Insets(14, 20, 20, 20));
+        btns.setStyle("-fx-background-color: " + PANEL + ";");
+
+        VBox layout = new VBox(g, btns);
+        layout.setStyle("-fx-background-color: " + PANEL + ";");
+        Scene scene = new Scene(layout, 720, 640);
+        dlg.setScene(scene);
+        dlg.show();
+    }
+
+    // ── Campaign manager (admin) ─────────────────────────────────────────────
+    private void openManager() {
+        Stage dlg = new Stage();
+        dlg.initOwner(primaryStage);
+        dlg.initModality(Modality.WINDOW_MODAL);
+        dlg.setTitle("Campaign Manager");
+
+        TextField mTitle = new TextField(data.campaignTitle);
+        TextField mSub   = new TextField(data.subtitle);
+        PasswordField mPin = new PasswordField(); mPin.setText(data.adminPin);
+
+        TextField gOwner = new TextField(ghConfig.owner);
+        TextField gRepo  = new TextField(ghConfig.repo);
+        TextField gBranch = new TextField(ghConfig.branch);
+        TextField gPath  = new TextField(ghConfig.path);
+        PasswordField gToken = new PasswordField(); gToken.setText(ghConfig.token);
+
+        GridPane g = new GridPane();
+        g.setHgap(10); g.setVgap(8);
+        g.setPadding(new Insets(20));
+        int r = 0;
+        g.add(headerLabel("CAMPAIGN SETTINGS"), 0, r++, 2, 1);
+        g.add(label("Title"), 0, r);    g.add(mTitle, 1, r++);
+        g.add(label("Subtitle"), 0, r); g.add(mSub,   1, r++);
+        g.add(label("Admin PIN"), 0, r); g.add(mPin,  1, r++);
+
+        Region sp = new Region(); sp.setMinHeight(14);
+        g.add(sp, 0, r++);
+        g.add(headerLabel("GITHUB PUBLISHING"), 0, r++, 2, 1);
+        Label notice = new Label("Use a public repository for the player snapshot.\n" +
+                "Locked entries are never uploaded.\n" +
+                "Your token is stored only on this machine.");
+        notice.setStyle(labelStyle(10, AMBER));
+        notice.setWrapText(true);
+        g.add(notice, 0, r++, 2, 1);
+
+        g.add(label("Owner / username"), 0, r); g.add(gOwner, 1, r++);
+        g.add(label("Repository"), 0, r);       g.add(gRepo,  1, r++);
+        g.add(label("Branch"), 0, r);           g.add(gBranch, 1, r++);
+        g.add(label("Player data path"), 0, r); g.add(gPath, 1, r++);
+        g.add(label("Token (PAT)"), 0, r);      g.add(gToken, 1, r++);
+
+        Button save = makeBtn("SAVE SETTINGS");
+        Button publish = makeBtn("PUBLISH PLAYER VIEW");
+        Button test = makeBtn("TEST CONNECTION");
+        Button export = makeBtn("EXPORT MASTER");
+        Button close = makeBtn("CLOSE");
+
+        save.setOnAction(e -> {
+            data.campaignTitle = mTitle.getText().isBlank() ? "MEMORIES OF A FEW" : mTitle.getText().trim();
+            data.subtitle = mSub.getText().trim();
+            if (!mPin.getText().isBlank()) data.adminPin = mPin.getText();
+            ghConfig.owner = gOwner.getText().trim();
+            ghConfig.repo  = gRepo.getText().trim();
+            ghConfig.branch = gBranch.getText().isBlank() ? "main" : gBranch.getText().trim();
+            ghConfig.path = gPath.getText().isBlank() ? "campaign.json" : gPath.getText().trim();
+            ghConfig.token = gToken.getText().trim();
+            saveLocal();
+            saveConfig();
+            refresh();
+            toast("Settings saved");
+        });
+        publish.setOnAction(e -> {
+            save.fire();
+            CompletableFuture.runAsync(this::publishGithub);
+        });
+        test.setOnAction(e -> {
+            save.fire();
+            CompletableFuture.runAsync(this::testGithub);
+        });
+        export.setOnAction(e -> exportMaster());
+        close.setOnAction(e -> dlg.close());
+
+        HBox btns = new HBox(8, save, publish, test, export, close);
+        btns.setAlignment(Pos.CENTER_LEFT);
+        btns.setPadding(new Insets(8, 20, 20, 20));
+
+        VBox layout = new VBox(g, btns);
+        layout.setStyle("-fx-background-color: " + PANEL + ";");
+        ScrollPane scroll = new ScrollPane(layout);
+        scroll.setFitToWidth(true);
+        scroll.setStyle("-fx-background-color: " + PANEL + "; -fx-background: " + PANEL + ";" +
+                        " -fx-border-color: transparent;");
+        Scene scene = new Scene(scroll, 720, 720);
+        dlg.setScene(scene);
+        dlg.show();
+    }
+
+    // ── Toast ────────────────────────────────────────────────────────────────
+    private void toast(String message) {
+        Platform.runLater(() -> {
+            Stage toast = new Stage();
+            toast.initOwner(primaryStage);
+            toast.initStyle(javafx.stage.StageStyle.UNDECORATED);
+            Label l = new Label(message);
+            l.setStyle(labelStyle(11, TEXT) + " -fx-padding: 12 16 12 16;" +
+                       " -fx-background-color: " + PANEL2 + ";" +
+                       " -fx-border-color: " + GREEN + "; -fx-border-width: 1;");
+            Scene s = new Scene(l);
+            s.setFill(Color.TRANSPARENT);
+            toast.setScene(s);
+            toast.show();
+            toast.setX(primaryStage.getX() + primaryStage.getWidth() - 280);
+            toast.setY(primaryStage.getY() + primaryStage.getHeight() - 80);
+            new Timer(true).schedule(new TimerTask() {
+                @Override public void run() { Platform.runLater(toast::close); }
+            }, 2800);
+        });
+    }
+
+    // ── GitHub publish/sync/test ─────────────────────────────────────────────
+    private void publishGithub() {
+        if (ghConfig.owner.isBlank() || ghConfig.repo.isBlank() || ghConfig.token.isBlank()) {
+            toast("Complete the GitHub settings first"); return;
+        }
         try {
-            server = HttpServer.create(new InetSocketAddress("127.0.0.1", PORT), 0);
-        } catch (IOException busy) {
-            // Another instance already running — the WebView will still load it
+            String urlBase = "https://api.github.com/repos/" + ghConfig.owner + "/" + ghConfig.repo
+                    + "/contents/" + ghConfig.path;
+            String getUrl = urlBase + "?ref=" + ghConfig.branch;
+
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest getReq = HttpRequest.newBuilder(URI.create(getUrl))
+                    .header("Accept", "application/vnd.github+json")
+                    .header("Authorization", "Bearer " + ghConfig.token)
+                    .header("X-GitHub-Api-Version", "2022-11-28")
+                    .GET().build();
+            HttpResponse<String> getResp = client.send(getReq, HttpResponse.BodyHandlers.ofString());
+            String sha = null;
+            if (getResp.statusCode() == 200) {
+                String b = getResp.body();
+                int idx = b.indexOf("\"sha\":\"");
+                if (idx >= 0) {
+                    int s = idx + 7;
+                    int e = b.indexOf("\"", s);
+                    sha = b.substring(s, e);
+                }
+            }
+
+            String snapshot = JsonWriter.toJson(data.playerSnapshot());
+            String b64 = Base64.getEncoder().encodeToString(snapshot.getBytes(StandardCharsets.UTF_8));
+            StringBuilder body = new StringBuilder();
+            body.append("{\"message\":\"Publish MOAF player campaign data\",")
+                .append("\"branch\":").append(JsonWriter.quote(ghConfig.branch)).append(",")
+                .append("\"content\":\"").append(b64).append("\"");
+            if (sha != null) body.append(",\"sha\":\"").append(sha).append("\"");
+            body.append("}");
+
+            HttpRequest put = HttpRequest.newBuilder(URI.create(urlBase))
+                    .header("Accept", "application/vnd.github+json")
+                    .header("Authorization", "Bearer " + ghConfig.token)
+                    .header("X-GitHub-Api-Version", "2022-11-28")
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(body.toString())).build();
+            HttpResponse<String> putResp = client.send(put, HttpResponse.BodyHandlers.ofString());
+            if (putResp.statusCode() >= 200 && putResp.statusCode() < 300) {
+                Platform.runLater(() -> {
+                    statusLabel.setText("PUBLISHED " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+                });
+                toast("Unlocked player content published");
+            } else {
+                toast("Publish failed: HTTP " + putResp.statusCode());
+            }
+        } catch (Exception ex) {
+            toast("Publish failed: " + ex.getMessage());
+        }
+    }
+
+    private void testGithub() {
+        try {
+            String url = "https://api.github.com/repos/" + ghConfig.owner + "/" + ghConfig.repo;
+            HttpClient c = HttpClient.newHttpClient();
+            HttpRequest req = HttpRequest.newBuilder(URI.create(url))
+                    .header("Accept", "application/vnd.github+json")
+                    .header("Authorization", "Bearer " + ghConfig.token)
+                    .GET().build();
+            HttpResponse<String> resp = c.send(req, HttpResponse.BodyHandlers.ofString());
+            if (resp.statusCode() == 200) toast("GitHub connection successful");
+            else toast("Connection failed: HTTP " + resp.statusCode());
+        } catch (Exception ex) {
+            toast("Connection failed: " + ex.getMessage());
+        }
+    }
+
+    private void syncRemote(boolean silent) {
+        if (ghConfig.owner.isBlank() || ghConfig.repo.isBlank()) {
+            if (!silent) toast("Online updates are not configured yet");
             return;
         }
-        server.createContext("/",            MoafCampaignApp::handleRoot);
-        server.createContext("/api/master",  ex -> handleJsonFile(ex, MASTER_FILE));
-        server.createContext("/api/config",  ex -> handleJsonFile(ex, CONFIG_FILE));
-        server.createContext("/legacy/",     MoafCampaignApp::handleLegacy);
-        // Daemon threads: these never keep the JVM alive on their own, so the
-        // process can always exit cleanly even if shutdown is reached unusually.
-        server.setExecutor(Executors.newCachedThreadPool(r -> {
-            Thread t = new Thread(r, "moaf-http");
-            t.setDaemon(true);
-            return t;
-        }));
-        server.start();
-        SERVER = server;
-    }
-
-    // ── Request handlers ──────────────────────────────────────────────────────
-
-    private static void handleRoot(HttpExchange ex) throws IOException {
-        String path = ex.getRequestURI().getPath();
-        if (!"/".equals(path) && !"/index.html".equals(path)) {
-            send(ex, 404, "text/plain; charset=utf-8", "Not found");
-            return;
+        try {
+            String url = "https://raw.githubusercontent.com/" + ghConfig.owner + "/" + ghConfig.repo
+                       + "/" + ghConfig.branch + "/" + ghConfig.path + "?t=" + System.currentTimeMillis();
+            HttpClient c = HttpClient.newHttpClient();
+            HttpResponse<String> r = c.send(
+                    HttpRequest.newBuilder(URI.create(url)).GET().build(),
+                    HttpResponse.BodyHandlers.ofString());
+            if (r.statusCode() != 200) {
+                if (!silent) toast("Player data not found"); return;
+            }
+            if (!adminMode) data.applyFromSnapshotJson(r.body());
+            Platform.runLater(() -> {
+                statusLabel.setText("UPDATED " + LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+                refresh();
+            });
+            if (!silent) toast("Campaign updated");
+        } catch (Exception ex) {
+            if (!silent) toast("Update failed: " + ex.getMessage());
         }
-        send(ex, 200, "text/html; charset=utf-8", APP_HTML);
     }
 
-    private static void handleJsonFile(HttpExchange ex, Path file) throws IOException {
-        addCors(ex.getResponseHeaders());
-        String method = ex.getRequestMethod().toUpperCase();
-        if ("OPTIONS".equals(method)) { ex.sendResponseHeaders(204, -1); return; }
-        if ("GET".equals(method)) {
-            send(ex, 200, "application/json; charset=utf-8", Files.readString(file));
-            return;
+    private void exportMaster() {
+        try {
+            String path = System.getProperty("user.home") + "/moaf-campaign-master.json";
+            Files.writeString(Path.of(path), JsonWriter.toJson(data.fullExport()), StandardCharsets.UTF_8);
+            toast("Exported to home folder");
+        } catch (Exception e) {
+            toast("Export failed: " + e.getMessage());
         }
-        if ("PUT".equals(method) || "POST".equals(method)) {
-            byte[] body = ex.getRequestBody().readAllBytes();
-            if (body.length > 60_000_000) { send(ex, 413, "text/plain", "File too large"); return; }
-            Path tmp = file.resolveSibling(file.getFileName() + ".tmp");
-            Files.write(tmp, body);
-            Files.move(tmp, file, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
-            send(ex, 200, "application/json", "{\"ok\":true}");
-            return;
-        }
-        send(ex, 405, "text/plain", "Method not allowed");
     }
 
-    private static void handleLegacy(HttpExchange ex) throws IOException {
-        String raw     = ex.getRequestURI().getPath().substring("/legacy/".length());
-        String decoded = URLDecoder.decode(raw, StandardCharsets.UTF_8);
-        Path   file    = LEGACY_DIR.resolve(decoded).normalize();
-        if (!file.startsWith(LEGACY_DIR) || !Files.isRegularFile(file)) {
-            send(ex, 404, "text/plain", "Legacy page not found"); return;
-        }
-        String type  = decoded.toLowerCase().endsWith(".html")
-                ? "text/html; charset=utf-8" : "application/octet-stream";
-        byte[] bytes = Files.readAllBytes(file);
-        ex.getResponseHeaders().set("Content-Type", type);
-        ex.sendResponseHeaders(200, bytes.length);
-        try (OutputStream out = ex.getResponseBody()) { out.write(bytes); }
+    // ── Styles ───────────────────────────────────────────────────────────────
+    private String headerStyle(int size, boolean bright) {
+        return "-fx-text-fill: " + (bright ? GREEN : "#9cffc7") + ";" +
+               "-fx-font-family: " + FONT + ";" +
+               "-fx-font-size: " + size + "px;" +
+               "-fx-font-weight: bold;" +
+               "-fx-padding: 0;";
+    }
+    private String labelStyle(int size, String color) {
+        return "-fx-text-fill: " + color + ";" +
+               "-fx-font-family: " + FONT + ";" +
+               "-fx-font-size: " + size + "px;";
+    }
+    private String tabButtonStyle(boolean active) { return tabButtonStyle(active, false); }
+    private String tabButtonStyle(boolean active, boolean hover) {
+        String fg = active ? GREEN : (hover ? "#a8d6bd" : DIM);
+        String bg = active ? "rgba(57,255,143,0.06)" : (hover ? "rgba(57,255,143,0.03)" : "transparent");
+        String border = active ? GREEN : "transparent";
+        return "-fx-background-color: " + bg + ";" +
+               "-fx-text-fill: " + fg + ";" +
+               "-fx-font-family: " + FONT + ";" +
+               "-fx-font-size: 12px;" +
+               "-fx-letter-spacing: 2px;" +
+               "-fx-padding: 10 16 10 16;" +
+               "-fx-border-color: transparent transparent transparent " + border + ";" +
+               "-fx-border-width: 0 0 0 3;" +
+               "-fx-background-radius: 0;" +
+               "-fx-cursor: hand;";
+    }
+    private String cardStyle(boolean unlocked) { return cardStyle(unlocked, false); }
+    private String cardStyle(boolean unlocked, boolean hover) {
+        String border = hover ? "#2d7a52" : LINE;
+        return "-fx-background-color: " + PANEL2 + ";" +
+               "-fx-border-color: " + border + ";" +
+               "-fx-border-width: 1;" +
+               "-fx-background-radius: 0;" +
+               "-fx-cursor: hand;" +
+               (unlocked ? "" : "-fx-opacity: 0.55;");
+    }
+    private String makeBtnStyle() { return makeBtnStyle(GREEN, LINE); }
+    private String makeBtnStyle(String fg, String border) {
+        return "-fx-background-color: " + PANEL2 + ";" +
+               "-fx-text-fill: " + fg + ";" +
+               "-fx-font-family: " + FONT + ";" +
+               "-fx-font-size: 11px;" +
+               "-fx-border-color: " + border + ";" +
+               "-fx-border-width: 1;" +
+               "-fx-background-radius: 0;" +
+               "-fx-padding: 8 14 8 14;" +
+               "-fx-cursor: hand;";
+    }
+    private String makeBtnSmallStyle() {
+        return makeBtnStyle() + "-fx-font-size: 10px; -fx-padding: 5 9 5 9;";
+    }
+    private Button makeBtn(String text) {
+        Button b = new Button(text);
+        b.setStyle(makeBtnStyle());
+        b.setOnMouseEntered(e -> b.setStyle(makeBtnStyle().replace(PANEL2, "#0e211a")));
+        b.setOnMouseExited(e -> b.setStyle(makeBtnStyle()));
+        return b;
+    }
+    private Label label(String s) {
+        Label l = new Label(s);
+        l.setStyle(labelStyle(10, DIM));
+        return l;
+    }
+    private Label headerLabel(String s) {
+        Label l = new Label("▸ " + s);
+        l.setStyle(labelStyle(11, GREEN) + " -fx-font-weight: bold;");
+        return l;
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
-
-    private static void addCors(Headers h) {
-        h.set("Access-Control-Allow-Origin",  "*");
-        h.set("Access-Control-Allow-Methods", "GET,PUT,POST,OPTIONS");
-        h.set("Access-Control-Allow-Headers", "Content-Type,Authorization");
+    // ── Utilities ────────────────────────────────────────────────────────────
+    private static String truncate(String s, int max) {
+        if (s == null) return "";
+        s = s.trim();
+        if (s.length() <= max) return s;
+        return s.substring(0, max).trim() + "…";
+    }
+    private static String slug(String s) {
+        if (s == null || s.isBlank()) s = "entry";
+        s = s.toLowerCase().replaceAll("[^a-z0-9]+", "-").replaceAll("^-|-$", "");
+        return s + "-" + Long.toString(System.currentTimeMillis(), 36);
     }
 
-    private static void send(HttpExchange ex, int status, String type, String body)
-            throws IOException {
-        byte[] bytes = body.getBytes(StandardCharsets.UTF_8);
-        ex.getResponseHeaders().set("Content-Type",  type);
-        ex.getResponseHeaders().set("Cache-Control", "no-store");
-        ex.sendResponseHeaders(status, bytes.length);
-        try (OutputStream out = ex.getResponseBody()) { out.write(bytes); }
-    }
-
+    // ── Locations ────────────────────────────────────────────────────────────
     private static Path locateInstallDir() {
         try {
-            Path code = Path.of(
-                    MoafCampaignApp.class.getProtectionDomain()
-                                        .getCodeSource().getLocation().toURI());
-            return Files.isRegularFile(code)
-                    ? code.getParent().toAbsolutePath()
-                    : Path.of("").toAbsolutePath();
-        } catch (Exception ignored) {
-            return Path.of("").toAbsolutePath();
-        }
+            Path code = Path.of(MoafCampaignApp.class.getProtectionDomain()
+                                                     .getCodeSource().getLocation().toURI());
+            return Files.isRegularFile(code) ? code.getParent().toAbsolutePath()
+                                             : Path.of("").toAbsolutePath();
+        } catch (Exception ignored) { return Path.of("").toAbsolutePath(); }
     }
-
     private static Path locateDataDir() {
         String localAppData = System.getenv("LOCALAPPDATA");
         Path base = (localAppData != null && !localAppData.isBlank())
@@ -226,592 +901,513 @@ public final class MoafCampaignApp extends Application {
         return base.resolve("MOAF Campaign Index").toAbsolutePath();
     }
 
-    private static void ensureInitialFiles() throws IOException {
+    private void ensureDataDir() throws IOException {
         Files.createDirectories(DATA_DIR);
-        if (!Files.exists(MASTER_FILE)) Files.writeString(MASTER_FILE, INITIAL_DATA,  StandardCharsets.UTF_8);
-        if (!Files.exists(CONFIG_FILE)) Files.writeString(CONFIG_FILE, INITIAL_CONFIG, StandardCharsets.UTF_8);
+    }
+
+    // ── Load / save ──────────────────────────────────────────────────────────
+    private void loadOrSeedMaster() {
+        if (Files.exists(MASTER_FILE)) {
+            try {
+                data.loadFromJson(Files.readString(MASTER_FILE, StandardCharsets.UTF_8));
+                return;
+            } catch (Exception ex) {
+                logError(ex);
+            }
+        }
+        data.seedFromBundledResources();
+        saveLocal();
+    }
+
+    private void loadConfig() {
+        if (Files.exists(CONFIG_FILE)) {
+            try {
+                ghConfig.loadFromJson(Files.readString(CONFIG_FILE, StandardCharsets.UTF_8));
+            } catch (Exception ignored) {}
+        }
+    }
+
+    private void saveLocal() {
+        try {
+            Files.writeString(MASTER_FILE, JsonWriter.toJson(data.fullExport()), StandardCharsets.UTF_8);
+        } catch (Exception ex) { logError(ex); }
+    }
+    private void saveConfig() {
+        try {
+            Files.writeString(CONFIG_FILE, JsonWriter.toJson(ghConfig.toMap()), StandardCharsets.UTF_8);
+        } catch (Exception ex) { logError(ex); }
     }
 
     private static void logError(Exception e) {
         try {
             Files.createDirectories(DATA_DIR);
             Files.writeString(DATA_DIR.resolve("startup-error.txt"),
-                    e + System.lineSeparator(),
-                    StandardCharsets.UTF_8,
+                    e + System.lineSeparator(), StandardCharsets.UTF_8,
                     StandardOpenOption.CREATE, StandardOpenOption.APPEND);
         } catch (Exception ignored) {}
         e.printStackTrace();
     }
 
-    // ── Seed data ─────────────────────────────────────────────────────────────
-
-    private static final String INITIAL_CONFIG = """
-        {"owner":"","repo":"","branch":"main","path":"campaign.json","token":"","autoSync":true}
-        """;
-
-    private static final String INITIAL_DATA = """
-        {
-          "campaignTitle": "MEMORIES OF A FEW",
-          "subtitle": "MERIDIAN SPIRE // LICENSED PI INTELLIGENCE INDEX",
-          "adminPin": "2089",
-          "tabs": [
-            {"id":"factions","title":"Factions","icon":"◈","visible":true,"order":1},
-            {"id":"npcs",    "title":"NPCs",    "icon":"◎","visible":true,"order":2},
-            {"id":"maps",    "title":"Maps",    "icon":"⌖","visible":true,"order":3},
-            {"id":"notes",   "title":"Notes",   "icon":"▤","visible":true,"order":4}
-          ],
-          "entries": [
-            {"id":"faction-index","tabId":"factions","title":"Unified Faction Intelligence Database","subtitle":"BCI / CotU / Truth Division / Red Archive / Continuance / Grey Market","body":"Original campaign faction index.","image":"","legacyUrl":"/legacy/MOAF%20Faction%20Index.html","unlocked":true,"order":1},
-            {"id":"npc-index",    "tabId":"npcs",    "title":"NPC Intelligence Index",              "subtitle":"Known persons of interest",                                          "body":"Original campaign NPC index.",     "image":"","legacyUrl":"/legacy/MoaF%20NPC%20Index.html",      "unlocked":true,"order":1},
-            {"id":"map-index",    "tabId":"maps",    "title":"Meridian Spire District Atlas",       "subtitle":"District maps and operational locations",                            "body":"Original campaign map atlas.",     "image":"","legacyUrl":"/legacy/MOAF%20Map%20Index.html",      "unlocked":true,"order":1},
-            {"id":"session-notes","tabId":"notes",   "title":"Case Notes",                          "subtitle":"Shared investigation record",                                        "body":"No notes have been entered yet.",  "image":"","legacyUrl":"",                                    "unlocked":true,"order":1}
-          ]
+    // ── Data classes ─────────────────────────────────────────────────────────
+    static final class Tab {
+        String id, title, icon;
+        boolean visible = true;
+        int order;
+        Map<String, Object> toMap() {
+            Map<String, Object> m = new LinkedHashMap<>();
+            m.put("id", id); m.put("title", title); m.put("icon", icon);
+            m.put("visible", visible); m.put("order", order);
+            return m;
         }
-        """;
+    }
+    static final class Entry {
+        String id, tabId, title, subtitle, body, image;
+        int order = 1;
+        boolean unlocked = true;
+        // Optional structured content (used for converted faction/NPC/map entries)
+        LinkedHashMap<String, String> sections;
+        List<String> connections;
+        Map<String, Object> toMap() {
+            Map<String, Object> m = new LinkedHashMap<>();
+            m.put("id", id); m.put("tabId", tabId); m.put("title", title);
+            m.put("subtitle", subtitle); m.put("body", body); m.put("image", image);
+            m.put("order", order); m.put("unlocked", unlocked);
+            if (sections != null && !sections.isEmpty()) m.put("sections", sections);
+            if (connections != null && !connections.isEmpty()) m.put("connections", connections);
+            return m;
+        }
+    }
 
-    // ── Embedded UI (HTML + CSS + JS) ─────────────────────────────────────────
+    static final class CampaignData {
+        String campaignTitle = "MEMORIES OF A FEW";
+        String subtitle = "MERIDIAN SPIRE // LICENSED PI INTELLIGENCE INDEX";
+        String adminPin = "2089";
+        List<Tab> tabs = new ArrayList<>();
+        List<Entry> entries = new ArrayList<>();
 
-    private static final String APP_HTML = """
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MOAF Campaign Index</title>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" media="print" onload="this.media='all'"
-      href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap">
-<style>
-:root{
-  --bg:#020403;--panel:#060d09;--panel2:#0a1410;--line:#1a4230;
-  --green:#39ff8f;--green-dim:#1a7a45;--dim:#4e8060;--red:#ff3d4e;
-  --amber:#ffb833;--glow:0 0 14px rgba(57,255,143,.25);
-  --font:'Share Tech Mono',Consolas,'Courier New',monospace;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden;background:var(--bg)}
-body{font-family:var(--font);color:#b8dfc8;
-  background:radial-gradient(ellipse at 50% 0%,#0a2018 0%,#030806 55%,#010302 100%)}
+        Map<String, Object> fullExport() {
+            Map<String, Object> m = new LinkedHashMap<>();
+            m.put("campaignTitle", campaignTitle);
+            m.put("subtitle", subtitle);
+            m.put("adminPin", adminPin);
+            List<Map<String,Object>> ts = new ArrayList<>();
+            for (Tab t : tabs) ts.add(t.toMap());
+            m.put("tabs", ts);
+            List<Map<String,Object>> es = new ArrayList<>();
+            for (Entry e : entries) es.add(e.toMap());
+            m.put("entries", es);
+            return m;
+        }
 
-/* scanlines overlay — promoted to its own GPU layer so it does not
-   force a full-window repaint while the content area scrolls */
-body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
-  background:repeating-linear-gradient(0deg,
-    rgba(0,0,0,.13) 0px,rgba(0,0,0,.13) 1px,
-    transparent 1px,transparent 3px);
-  transform:translateZ(0);will-change:transform}
+        Map<String, Object> playerSnapshot() {
+            Map<String, Object> m = new LinkedHashMap<>();
+            m.put("campaignTitle", campaignTitle);
+            m.put("subtitle", subtitle);
+            m.put("publishedAt", java.time.Instant.now().toString());
+            List<Map<String,Object>> ts = new ArrayList<>();
+            Set<String> visibleTabIds = new HashSet<>();
+            for (Tab t : tabs) {
+                if (t.visible) { ts.add(t.toMap()); visibleTabIds.add(t.id); }
+            }
+            m.put("tabs", ts);
+            List<Map<String,Object>> es = new ArrayList<>();
+            for (Entry e : entries) {
+                if (!e.unlocked || !visibleTabIds.contains(e.tabId)) continue;
+                es.add(e.toMap());
+            }
+            m.put("entries", es);
+            return m;
+        }
 
-/* phosphor flicker — applied to the fixed overlay only, never the whole
-   body. Animating <body> opacity repaints every descendant each frame,
-   which is the main cause of scroll lag in the WebView. */
-@keyframes flicker{0%,100%{opacity:.34}92%{opacity:.30}94%{opacity:.33}}
-body::before{opacity:.34;animation:flicker 8s infinite}
+        @SuppressWarnings("unchecked")
+        void loadFromJson(String json) {
+            Map<String, Object> m = (Map<String, Object>) JsonReader.parse(json);
+            if (m.get("campaignTitle") instanceof String s) campaignTitle = s;
+            if (m.get("subtitle") instanceof String s) subtitle = s;
+            if (m.get("adminPin") instanceof String s) adminPin = s;
+            tabs.clear();
+            if (m.get("tabs") instanceof List<?> list) {
+                for (Object o : list) {
+                    if (!(o instanceof Map)) continue;
+                    Map<String,Object> t = (Map<String,Object>) o;
+                    Tab x = new Tab();
+                    x.id      = strOr(t.get("id"), "");
+                    x.title   = strOr(t.get("title"), x.id);
+                    x.icon    = strOr(t.get("icon"), "□");
+                    x.visible = boolOr(t.get("visible"), true);
+                    x.order   = intOr(t.get("order"), 1);
+                    tabs.add(x);
+                }
+            }
+            entries.clear();
+            if (m.get("entries") instanceof List<?> list) {
+                for (Object o : list) {
+                    if (!(o instanceof Map)) continue;
+                    entries.add(entryFromMap((Map<String,Object>) o));
+                }
+            }
+        }
 
-button,input,textarea,select{font:inherit;outline:none}
-button{cursor:pointer}
+        @SuppressWarnings("unchecked")
+        void applyFromSnapshotJson(String json) {
+            Map<String, Object> m = (Map<String, Object>) JsonReader.parse(json);
+            if (m.get("campaignTitle") instanceof String s) campaignTitle = s;
+            if (m.get("subtitle") instanceof String s) subtitle = s;
+            tabs.clear();
+            if (m.get("tabs") instanceof List<?> list) {
+                for (Object o : list) {
+                    if (!(o instanceof Map)) continue;
+                    Map<String,Object> t = (Map<String,Object>) o;
+                    Tab x = new Tab();
+                    x.id = strOr(t.get("id"), "");
+                    x.title = strOr(t.get("title"), x.id);
+                    x.icon  = strOr(t.get("icon"), "□");
+                    x.visible = boolOr(t.get("visible"), true);
+                    x.order = intOr(t.get("order"), 1);
+                    tabs.add(x);
+                }
+            }
+            entries.clear();
+            if (m.get("entries") instanceof List<?> list) {
+                for (Object o : list) {
+                    if (!(o instanceof Map)) continue;
+                    entries.add(entryFromMap((Map<String,Object>) o));
+                }
+            }
+        }
 
-/* ── Layout ── */
-.shell{display:grid;grid-template-columns:260px 1fr;height:100vh}
+        @SuppressWarnings("unchecked")
+        Entry entryFromMap(Map<String,Object> e) {
+            Entry x = new Entry();
+            x.id       = strOr(e.get("id"), slug("entry"));
+            x.tabId    = strOr(e.get("tabId"), "");
+            x.title    = strOr(e.get("title"), "Untitled");
+            x.subtitle = strOr(e.get("subtitle"), "");
+            x.body     = strOr(e.get("body"), "");
+            x.image    = strOr(e.get("image"), "");
+            x.order    = intOr(e.get("order"), 1);
+            x.unlocked = boolOr(e.get("unlocked"), true);
+            if (e.get("sections") instanceof Map<?,?> sm) {
+                x.sections = new LinkedHashMap<>();
+                for (Map.Entry<?,?> kv : sm.entrySet()) {
+                    x.sections.put(String.valueOf(kv.getKey()), String.valueOf(kv.getValue()));
+                }
+            }
+            if (e.get("connections") instanceof List<?> cl) {
+                x.connections = new ArrayList<>();
+                for (Object o : cl) x.connections.add(String.valueOf(o));
+            }
+            return x;
+        }
 
-/* ── Sidebar ── */
-.side{
-  border-right:1px solid var(--line);
-  background:rgba(2,6,4,.97);
-  display:flex;flex-direction:column;gap:0;
-  overflow:hidden;
-}
-.brand{
-  padding:20px 16px 16px;
-  border-bottom:1px solid var(--line);
-  flex-shrink:0;
-}
-.brand-top{
-  font-size:10px;letter-spacing:3px;color:var(--dim);margin-bottom:6px;
-}
-.brand h1{
-  font-size:17px;letter-spacing:4px;color:var(--green);
-  text-shadow:0 0 18px rgba(57,255,143,.6);
-  line-height:1.2;margin-bottom:4px;
-}
-.brand small{font-size:9px;color:var(--dim);letter-spacing:2px;line-height:1.5;display:block}
+        /** Build the initial campaign from bundled JSON resources + default tabs. */
+        void seedFromBundledResources() {
+            // Default tabs
+            tabs.add(makeTab("factions", "Factions", "◈", 1));
+            tabs.add(makeTab("npcs",     "NPCs",     "◎", 2));
+            tabs.add(makeTab("maps",     "Maps",     "⌖", 3));
+            tabs.add(makeTab("notes",    "Notes",    "▤", 4));
 
-/* blinking cursor after title */
-.brand h1::after{content:'_';animation:blink 1.1s step-end infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+            // Factions
+            try {
+                String raw = readResource("/data/factions.json");
+                Map<String, Object> f = (Map<String,Object>) JsonReader.parse(raw);
+                int order = 1;
+                for (Map.Entry<String,Object> kv : f.entrySet()) {
+                    Map<String,Object> v = (Map<String,Object>) kv.getValue();
+                    Entry e = new Entry();
+                    e.id = "faction-" + kv.getKey();
+                    e.tabId = "factions";
+                    e.title = strOr(v.get("title"), kv.getKey());
+                    e.subtitle = "MERIDIAN SPIRE FACTION DOSSIER";
+                    e.order = order++;
+                    e.unlocked = true;
+                    e.sections = new LinkedHashMap<>();
+                    if (v.get("sections") instanceof Map<?,?> sm) {
+                        for (Map.Entry<?,?> s : sm.entrySet()) {
+                            e.sections.put(String.valueOf(s.getKey()), String.valueOf(s.getValue()));
+                        }
+                    }
+                    entries.add(e);
+                }
+            } catch (Exception ex) { logErrorStatic(ex); }
 
-.tabs{flex:1;overflow-y:auto;padding:10px 0}
-.tabs::-webkit-scrollbar{width:3px}
-.tabs::-webkit-scrollbar-thumb{background:var(--green-dim)}
+            // NPCs
+            try {
+                String raw = readResource("/data/npcs.json");
+                List<Object> arr = (List<Object>) JsonReader.parse(raw);
+                int order = 1;
+                for (Object o : arr) {
+                    Map<String,Object> n = (Map<String,Object>) o;
+                    Entry e = new Entry();
+                    e.id = "npc-" + slug(strOr(n.get("name"), "npc"));
+                    e.tabId = "npcs";
+                    e.title = strOr(n.get("name"), "Unknown");
+                    e.subtitle = strOr(n.get("role"), "") + " // " + strOr(n.get("faction"), "");
+                    e.order = order++;
+                    e.unlocked = true;
+                    e.sections = new LinkedHashMap<>();
+                    putIfPresent(e.sections, "Section", n.get("section"));
+                    putIfPresent(e.sections, "Quote",         n.get("quote"));
+                    putIfPresent(e.sections, "Public Face",   n.get("public"));
+                    putIfPresent(e.sections, "The Truth",     n.get("truth"));
+                    putIfPresent(e.sections, "Vibe",          n.get("vibe"));
+                    if (n.get("personality") instanceof List<?> pl) {
+                        e.sections.put("Personality", joinList(pl));
+                    }
+                    putIfPresent(e.sections, "Why They Matter", n.get("why"));
+                    putIfPresent(e.sections, "Secret",          n.get("secret"));
+                    putIfPresent(e.sections, "First Encounter", n.get("first"));
+                    putIfPresent(e.sections, "DM Notes",        n.get("dm"));
+                    if (n.get("status") instanceof List<?> sl) {
+                        e.sections.put("Status", joinList(sl));
+                    }
+                    if (n.get("connections") instanceof List<?> cl) {
+                        e.connections = new ArrayList<>();
+                        for (Object x : cl) e.connections.add(String.valueOf(x));
+                    }
+                    entries.add(e);
+                }
+            } catch (Exception ex) { logErrorStatic(ex); }
 
-.tab{
-  width:100%;border:none;background:transparent;
-  color:var(--dim);padding:11px 18px;
-  text-align:left;display:flex;gap:12px;align-items:center;
-  font-size:12px;letter-spacing:2px;
-  border-left:3px solid transparent;
-  transition:all .15s;
-}
-.tab:hover{color:#7dffb8;background:rgba(57,255,143,.04);border-left-color:var(--green-dim)}
-.tab.active{color:var(--green);background:rgba(57,255,143,.07);border-left-color:var(--green)}
-.tab-icon{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+            // Maps
+            try {
+                String raw = readResource("/data/maps.json");
+                List<Object> arr = (List<Object>) JsonReader.parse(raw);
+                int order = 1;
+                for (Object o : arr) {
+                    Map<String,Object> mp = (Map<String,Object>) o;
+                    Entry e = new Entry();
+                    e.id = "map-" + strOr(mp.get("id"), "map");
+                    e.tabId = "maps";
+                    e.title = strOr(mp.get("title"), "Map");
+                    e.subtitle = strOr(mp.get("subtitle"), "");
+                    e.order = order++;
+                    e.unlocked = true;
+                    e.image = "content/maps/" + strOr(mp.get("file"), "");
+                    e.sections = new LinkedHashMap<>();
+                    putIfPresent(e.sections, "Description", mp.get("desc"));
+                    putIfPresent(e.sections, "Population",  mp.get("population"));
+                    putIfPresent(e.sections, "Scale",       mp.get("scale"));
+                    putIfPresent(e.sections, "Elevation",   mp.get("elevation"));
+                    putIfPresent(e.sections, "Connections", mp.get("connections"));
+                    entries.add(e);
+                }
+            } catch (Exception ex) { logErrorStatic(ex); }
 
-.side-foot{
-  border-top:1px solid var(--line);
-  padding:12px 12px;
-  display:flex;flex-direction:column;gap:7px;
-  flex-shrink:0;
-}
+            // Default note
+            Entry note = new Entry();
+            note.id = "session-notes";
+            note.tabId = "notes";
+            note.title = "Case Notes";
+            note.subtitle = "Shared investigation record";
+            note.body = "No notes have been entered yet.";
+            note.unlocked = true;
+            note.order = 1;
+            entries.add(note);
+        }
 
-/* ── Buttons ── */
-.btn{
-  border:1px solid var(--line);background:#060e09;color:var(--green);
-  padding:9px 12px;font-size:11px;letter-spacing:2px;
-  transition:all .15s;text-align:left;
-}
-.btn:hover{background:#0d2018;border-color:var(--green-dim);box-shadow:var(--glow)}
-.btn.primary{border-color:var(--green-dim);background:#091a10}
-.btn.danger{color:var(--red);border-color:#5a1a22}
-.btn.danger:hover{background:#1a060a;border-color:var(--red)}
-.btn.small{padding:5px 9px;font-size:10px}
-.btn.full{width:100%}
+        Tab makeTab(String id, String title, String icon, int order) {
+            Tab t = new Tab(); t.id = id; t.title = title; t.icon = icon; t.order = order; t.visible = true;
+            return t;
+        }
+        void putIfPresent(Map<String,String> m, String k, Object v) {
+            if (v == null) return;
+            String s = String.valueOf(v).trim();
+            if (!s.isEmpty()) m.put(k, s);
+        }
+        String joinList(List<?> l) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < l.size(); i++) { if (i > 0) sb.append(" · "); sb.append(l.get(i)); }
+            return sb.toString();
+        }
+        String readResource(String path) throws IOException {
+            try (InputStream is = MoafCampaignApp.class.getResourceAsStream(path)) {
+                if (is == null) throw new FileNotFoundException("Resource " + path);
+                return new String(is.readAllBytes(), StandardCharsets.UTF_8);
+            }
+        }
+        static void logErrorStatic(Exception e) { e.printStackTrace(); }
 
-/* ── Admin bar ── */
-.adminbar{
-  display:none;
-  background:#160507;border-bottom:1px solid #6b1a24;
-  padding:6px 24px;color:#ff6b7a;font-size:10px;letter-spacing:2px;
-  flex-shrink:0;
-}
-.admin .adminbar{display:block}
+        static String strOr(Object o, String d)  { return o instanceof String s ? s : d; }
+        static int intOr(Object o, int d)        { return o instanceof Number n ? n.intValue() : d; }
+        static boolean boolOr(Object o, boolean d){ return o instanceof Boolean b ? b : d; }
+    }
 
-/* ── Top bar ── */
-.main{min-width:0;display:flex;flex-direction:column;overflow:hidden}
-.topbar{
-  height:64px;border-bottom:1px solid var(--line);
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 24px;background:rgba(2,5,3,.9);
-  flex-shrink:0;
-}
-.top-title h2{font-size:16px;letter-spacing:4px;color:var(--green);
-  text-shadow:0 0 10px rgba(57,255,143,.4)}
-.top-title .sub{font-size:9px;color:var(--dim);letter-spacing:2px;margin-top:4px}
-.top-tools{display:flex;gap:8px;align-items:center}
-.status-pill{
-  font-size:9px;letter-spacing:2px;color:var(--dim);
-  border:1px solid var(--line);padding:3px 8px;
-}
+    static final class GitHubConfig {
+        String owner = "", repo = "", branch = "main", path = "campaign.json", token = "";
+        boolean autoSync = true;
 
-/* ── Content area ── */
-.content{flex:1;overflow-y:auto;padding:22px 24px;transform:translateZ(0);will-change:scroll-position}
-.content::-webkit-scrollbar{width:4px}
-.content::-webkit-scrollbar-thumb{background:var(--green-dim)}
+        @SuppressWarnings("unchecked")
+        void loadFromJson(String json) {
+            Map<String, Object> m = (Map<String, Object>) JsonReader.parse(json);
+            owner    = CampaignData.strOr(m.get("owner"), "");
+            repo     = CampaignData.strOr(m.get("repo"), "");
+            branch   = CampaignData.strOr(m.get("branch"), "main");
+            path     = CampaignData.strOr(m.get("path"), "campaign.json");
+            token    = CampaignData.strOr(m.get("token"), "");
+            autoSync = CampaignData.boolOr(m.get("autoSync"), true);
+        }
+        Map<String,Object> toMap() {
+            Map<String,Object> m = new LinkedHashMap<>();
+            m.put("owner", owner); m.put("repo", repo); m.put("branch", branch);
+            m.put("path", path); m.put("token", token); m.put("autoSync", autoSync);
+            return m;
+        }
+    }
 
-/* ── Cards grid ── */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+    // ── Minimal JSON reader/writer (no external dependencies) ────────────────
+    static final class JsonReader {
+        private final String s; private int i;
+        JsonReader(String s) { this.s = s; this.i = 0; }
+        static Object parse(String s) { return new JsonReader(s).val(); }
 
-.card{
-  border:1px solid var(--line);
-  background:linear-gradient(135deg,rgba(8,20,13,.95),rgba(3,8,5,.95));
-  padding:16px;position:relative;cursor:pointer;
-  transition:all .2s;min-height:160px;
-}
-.card:hover{border-color:#2d7a52;transform:translateY(-2px);box-shadow:var(--glow)}
-.card.locked{filter:saturate(.3) brightness(.7)}
+        Object val() {
+            ws();
+            if (i >= s.length()) return null;
+            char c = s.charAt(i);
+            if (c == '{') return obj();
+            if (c == '[') return arr();
+            if (c == '"') return str();
+            if (c == 't' || c == 'f') return bool();
+            if (c == 'n') return nul();
+            return num();
+        }
+        void ws() { while (i < s.length() && Character.isWhitespace(s.charAt(i))) i++; }
+        Map<String, Object> obj() {
+            Map<String, Object> m = new LinkedHashMap<>();
+            i++; ws();
+            if (i < s.length() && s.charAt(i) == '}') { i++; return m; }
+            while (i < s.length()) {
+                ws();
+                String k = str();
+                ws();
+                if (s.charAt(i) != ':') throw new RuntimeException("Expected ':' at " + i);
+                i++;
+                ws();
+                Object v = val();
+                m.put(k, v);
+                ws();
+                if (i < s.length() && s.charAt(i) == ',') { i++; continue; }
+                if (i < s.length() && s.charAt(i) == '}') { i++; return m; }
+                throw new RuntimeException("Bad object at " + i);
+            }
+            return m;
+        }
+        List<Object> arr() {
+            List<Object> l = new ArrayList<>();
+            i++; ws();
+            if (i < s.length() && s.charAt(i) == ']') { i++; return l; }
+            while (i < s.length()) {
+                ws();
+                l.add(val());
+                ws();
+                if (i < s.length() && s.charAt(i) == ',') { i++; continue; }
+                if (i < s.length() && s.charAt(i) == ']') { i++; return l; }
+                throw new RuntimeException("Bad array at " + i);
+            }
+            return l;
+        }
+        String str() {
+            if (s.charAt(i) != '"') throw new RuntimeException("Expected '\"' at " + i);
+            i++;
+            StringBuilder sb = new StringBuilder();
+            while (i < s.length()) {
+                char c = s.charAt(i++);
+                if (c == '"') return sb.toString();
+                if (c == '\\') {
+                    char e = s.charAt(i++);
+                    switch (e) {
+                        case '"': sb.append('"'); break;
+                        case '\\': sb.append('\\'); break;
+                        case '/': sb.append('/'); break;
+                        case 'n': sb.append('\n'); break;
+                        case 't': sb.append('\t'); break;
+                        case 'r': sb.append('\r'); break;
+                        case 'b': sb.append('\b'); break;
+                        case 'f': sb.append('\f'); break;
+                        case 'u':
+                            String hex = s.substring(i, i+4); i += 4;
+                            sb.append((char) Integer.parseInt(hex, 16));
+                            break;
+                        default: sb.append(e);
+                    }
+                } else sb.append(c);
+            }
+            throw new RuntimeException("Unterminated string");
+        }
+        Boolean bool() {
+            if (s.startsWith("true", i)) { i += 4; return true; }
+            if (s.startsWith("false", i)) { i += 5; return false; }
+            throw new RuntimeException("Bad bool at " + i);
+        }
+        Object nul() {
+            if (s.startsWith("null", i)) { i += 4; return null; }
+            throw new RuntimeException("Bad null at " + i);
+        }
+        Number num() {
+            int st = i;
+            if (s.charAt(i) == '-') i++;
+            while (i < s.length() && "0123456789.eE+-".indexOf(s.charAt(i)) >= 0) i++;
+            String t = s.substring(st, i);
+            if (t.contains(".") || t.contains("e") || t.contains("E")) return Double.parseDouble(t);
+            return Long.parseLong(t);
+        }
+    }
 
-.card-tag{font-size:8px;letter-spacing:3px;color:var(--dim);margin-bottom:10px}
-.card h3{font-size:15px;color:var(--green);letter-spacing:2px;margin-bottom:5px;line-height:1.3}
-.card .card-sub{font-size:10px;color:#5e9e78;letter-spacing:1px;min-height:28px;line-height:1.5}
-.card .card-body{
-  font-size:11px;color:#8abda0;line-height:1.6;margin-top:12px;
-  max-height:60px;overflow:hidden;
-}
-.card-thumb{width:100%;height:120px;object-fit:cover;border:1px solid var(--line);margin-bottom:12px}
-.lock-badge{
-  position:absolute;right:12px;top:12px;
-  font-size:9px;letter-spacing:2px;color:var(--red);
-  border:1px solid #5a1a22;padding:2px 6px;background:#0e0204;
-}
-.card-edit{
-  position:absolute;right:10px;bottom:10px;
-  display:none;
-}
-.admin .card-edit{display:inline-flex}
-
-.empty{
-  border:1px dashed var(--line);padding:48px;text-align:center;
-  color:var(--dim);font-size:11px;letter-spacing:2px;
-}
-
-/* hide admin-only elements unless in admin mode */
-.admin-only{display:none!important}
-.admin .admin-only{display:inline-flex!important}
-.admin .card.locked{display:block}
-
-/* ── Modals ── */
-.modal{
-  display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,.82);z-index:200;
-  align-items:center;justify-content:center;padding:20px;
-}
-.modal.show{display:flex}
-.dialog{
-  width:min(740px,96vw);max-height:90vh;overflow-y:auto;
-  background:#050e08;border:1px solid #2d6644;
-  box-shadow:0 0 80px rgba(0,0,0,.9),0 0 30px rgba(57,255,143,.08);
-  padding:22px;
-}
-.dialog.wide{width:min(1160px,96vw);height:90vh}
-.dialog h3{color:var(--green);letter-spacing:3px;font-size:14px;margin-bottom:18px;
-  border-bottom:1px solid var(--line);padding-bottom:10px}
-
-/* form */
-.form{display:grid;gap:10px}
-.form.two{grid-template-columns:1fr 1fr}
-.form label{font-size:9px;letter-spacing:2px;color:var(--dim);display:grid;gap:5px}
-.form input,.form textarea,.form select{
-  background:#020704;border:1px solid var(--line);color:#c8f0d8;
-  padding:8px 10px;font-size:12px;
-}
-.form input:focus,.form textarea:focus,.form select:focus{
-  border-color:var(--green-dim);box-shadow:0 0 8px rgba(57,255,143,.15);
-}
-.form textarea{min-height:120px;resize:vertical}
-.form select option{background:#050e08}
-
-.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.right{margin-left:auto}
-.muted{color:var(--dim);font-size:10px;letter-spacing:1px}
-.notice{
-  border-left:3px solid var(--amber);background:rgba(255,184,51,.06);
-  padding:10px 14px;color:#ffe0a0;font-size:10px;
-  line-height:1.6;letter-spacing:1px;
-}
-
-/* legacy iframe viewer */
-.viewer{height:calc(90vh - 90px);width:100%;border:1px solid var(--line);background:#fff}
-
-/* entry detail */
-.entry-view img{max-width:100%;border:1px solid var(--line);margin-bottom:14px}
-.entry-view .text{line-height:1.7;white-space:pre-wrap;color:#b0d8be;font-size:13px}
-
-/* split layout */
-.split{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-
-/* tab manager list */
-.listbox{border:1px solid var(--line);padding:8px;max-height:230px;overflow-y:auto}
-.listitem{
-  display:flex;align-items:center;gap:7px;
-  border-bottom:1px solid #0f2d1e;padding:7px 2px;
-}
-.listitem input[type=text],.listitem input[type=number]{
-  background:#020704;border:1px solid var(--line);color:#c8f0d8;padding:5px 7px
-}
-
-/* toast */
-.toast{
-  position:fixed;right:18px;bottom:18px;
-  background:#061209;border:1px solid var(--green-dim);
-  padding:10px 16px;z-index:500;display:none;
-  font-size:11px;letter-spacing:2px;color:var(--green);
-  box-shadow:var(--glow);
-}
-.toast.show{display:block}
-
-/* section headers */
-h4{font-size:10px;letter-spacing:3px;color:var(--dim);
-  border-bottom:1px solid var(--line);padding-bottom:6px;margin:14px 0 10px}
-</style></head>
-<body>
-<div class="shell">
-  <aside class="side">
-    <div class="brand">
-      <div class="brand-top">BCI TERMINAL // SECURE ACCESS</div>
-      <h1 id="brandTitle">MEMORIES OF A FEW</h1>
-      <small id="brandSub">MERIDIAN SPIRE // INTELLIGENCE INDEX</small>
-    </div>
-    <nav class="tabs" id="tabs"></nav>
-    <div class="side-foot">
-      <button class="btn full admin-only" onclick="openManager()">▸ MANAGE CAMPAIGN</button>
-      <button class="btn full" onclick="syncRemote()">▸ CHECK FOR UPDATES</button>
-      <button class="btn full" id="adminBtn" onclick="adminAction()">▸ ADMIN LOGIN</button>
-    </div>
-  </aside>
-
-  <main class="main">
-    <div class="adminbar">
-      ⚠ ADMIN MODE ACTIVE // MASTER DATA LOCAL // PUBLISH SENDS ONLY UNLOCKED RECORDS
-    </div>
-    <header class="topbar">
-      <div class="top-title">
-        <h2 id="pageTitle">INDEX</h2>
-        <div class="sub" id="pageSub">PLAYER ACCESS // AUTHORIZED RECORDS ONLY</div>
-      </div>
-      <div class="top-tools">
-        <span class="status-pill" id="status">LOCAL</span>
-        <button class="btn small admin-only" onclick="newEntry()">+ ENTRY</button>
-      </div>
-    </header>
-    <section class="content">
-      <div class="grid" id="grid"></div>
-    </section>
-  </main>
-</div>
-
-<!-- Admin Login -->
-<div class="modal" id="loginModal">
-  <div class="dialog">
-    <h3>ADMIN AUTHORIZATION</h3>
-    <div class="form">
-      <label>ACCESS CODE
-        <input id="pinInput" type="password" autocomplete="off"
-               onkeydown="if(event.key==='Enter')login()">
-      </label>
-      <div class="row">
-        <button class="btn primary" onclick="login()">UNLOCK</button>
-        <button class="btn" onclick="closeModal('loginModal')">CANCEL</button>
-        <span class="muted" style="margin-left:8px">Default: 2089</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Entry viewer -->
-<div class="modal" id="entryModal">
-  <div class="dialog wide" id="entryDialog"></div>
-</div>
-
-<!-- Entry editor -->
-<div class="modal" id="editModal">
-  <div class="dialog">
-    <h3 id="editHeading">EDIT ENTRY</h3>
-    <div class="form two">
-      <label>TITLE<input id="eTitle"></label>
-      <label>SUBTITLE<input id="eSub"></label>
-      <label>TAB<select id="eTab"></select></label>
-      <label>ORDER<input id="eOrder" type="number"></label>
-      <label style="grid-column:1/-1">IMAGE URL OR DATA URI<input id="eImage"></label>
-      <label style="grid-column:1/-1">LEGACY PAGE PATH<input id="eLegacy" placeholder="/legacy/example.html"></label>
-      <label style="grid-column:1/-1">INFORMATION<textarea id="eBody"></textarea></label>
-      <label>PLAYER VISIBILITY
-        <select id="eUnlocked">
-          <option value="true">UNLOCKED — VISIBLE TO PLAYERS</option>
-          <option value="false">LOCKED — GM ONLY</option>
-        </select>
-      </label>
-      <label>UPLOAD IMAGE<input id="eFile" type="file" accept="image/*" onchange="readImage(this)"></label>
-    </div>
-    <div class="row" style="margin-top:16px">
-      <button class="btn primary" onclick="saveEntry()">SAVE</button>
-      <button class="btn danger" id="deleteEntryBtn" onclick="deleteEntry()">DELETE</button>
-      <button class="btn right" onclick="closeModal('editModal')">CANCEL</button>
-    </div>
-  </div>
-</div>
-
-<!-- Campaign manager -->
-<div class="modal" id="manageModal">
-  <div class="dialog wide">
-    <h3>CAMPAIGN MANAGER</h3>
-    <div class="split">
-      <section>
-        <h4>TABS</h4>
-        <div class="listbox" id="tabManager"></div>
-        <div class="row" style="margin-top:9px">
-          <button class="btn" onclick="addTab()">+ ADD TAB</button>
-        </div>
-        <h4>CAMPAIGN SETTINGS</h4>
-        <div class="form two">
-          <label>CAMPAIGN TITLE<input id="mTitle"></label>
-          <label>SUBTITLE<input id="mSubtitle"></label>
-          <label>ADMIN PIN<input id="mPin" type="password"></label>
-        </div>
-      </section>
-      <section>
-        <h4>GITHUB PUBLISHING</h4>
-        <div class="notice">
-          Use a PUBLIC repository for the player snapshot.<br>
-          Locked entries are NEVER uploaded.<br>
-          Your token is stored only in the local config file.
-        </div>
-        <div class="form two" style="margin-top:12px">
-          <label>OWNER / USERNAME<input id="gOwner"></label>
-          <label>REPOSITORY<input id="gRepo"></label>
-          <label>BRANCH<input id="gBranch" value="main"></label>
-          <label>PLAYER DATA PATH<input id="gPath" value="campaign.json"></label>
-          <label style="grid-column:1/-1">FINE-GRAINED PERSONAL ACCESS TOKEN
-            <input id="gToken" type="password">
-          </label>
-        </div>
-        <div class="row" style="margin-top:10px">
-          <button class="btn primary" onclick="publishGithub()">PUBLISH PLAYER VIEW</button>
-          <button class="btn" onclick="testGithub()">TEST CONNECTION</button>
-        </div>
-        <h4>BACKUP</h4>
-        <div class="row">
-          <button class="btn" onclick="exportMaster()">EXPORT MASTER</button>
-          <label class="btn">IMPORT MASTER
-            <input type="file" accept="application/json" hidden onchange="importMaster(this)">
-          </label>
-        </div>
-      </section>
-    </div>
-    <div class="row" style="margin-top:18px">
-      <button class="btn primary" onclick="saveManager()">SAVE SETTINGS</button>
-      <button class="btn right" onclick="closeModal('manageModal')">CLOSE</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
-let data=null,config=null,currentTab='factions',admin=false,editingId=null;
-const $=id=>document.getElementById(id);
-const esc=s=>(s??'').toString().replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-
-async function boot(){
-  data=await(await fetch('/api/master')).json();
-  config=await(await fetch('/api/config')).json();
-  render();
-  if(config.autoSync&&config.owner&&config.repo)syncRemote(true);
-}
-
-function visibleTabs(){return data.tabs.filter(t=>admin||t.visible).sort((a,b)=>(a.order||0)-(b.order||0))}
-function entries(){return data.entries.filter(e=>e.tabId===currentTab&&(admin||e.unlocked)).sort((a,b)=>(a.order||0)-(b.order||0))}
-
-function render(){
-  document.body.classList.toggle('admin',admin);
-  $('brandTitle').textContent=data.campaignTitle;
-  $('brandSub').textContent=data.subtitle;
-  let ts=visibleTabs();
-  if(!ts.some(t=>t.id===currentTab)&&ts[0])currentTab=ts[0].id;
-  $('tabs').innerHTML=ts.map(t=>`<button class="tab ${t.id===currentTab?'active':''}" onclick="selectTab('${esc(t.id)}')"><span class="tab-icon">${esc(t.icon||'□')}</span><span>${esc(t.title)}</span></button>`).join('');
-  let tab=ts.find(t=>t.id===currentTab);
-  $('pageTitle').textContent=tab?.title?.toUpperCase()||'INDEX';
-  $('pageSub').textContent=admin?'ADMIN ACCESS // LOCKED RECORDS VISIBLE':'PLAYER ACCESS // AUTHORIZED RECORDS ONLY';
-  let list=entries();
-  $('grid').innerHTML=list.length?list.map(card).join(''):`<div class="empty">NO AUTHORIZED RECORDS IN THIS SECTION</div>`;
-  $('adminBtn').textContent=admin?'▸ EXIT ADMIN MODE':'▸ ADMIN LOGIN';
-}
-
-function card(e){
-  return`<article class="card ${e.unlocked?'':'locked'}" onclick="openEntry('${esc(e.id)}')">
-    ${!e.unlocked?'<span class="lock-badge">LOCKED</span>':''}
-    ${e.image?`<img class="card-thumb" src="${esc(e.image)}" onerror="this.style.display='none'">` :''}
-    <div class="card-tag">${e.unlocked?'AUTHORIZED RECORD':'GM-ONLY RECORD'}</div>
-    <h3>${esc(e.title)}</h3>
-    <div class="card-sub">${esc(e.subtitle)}</div>
-    <div class="card-body">${esc(e.body)}</div>
-    <button class="btn small card-edit" onclick="event.stopPropagation();editEntry('${esc(e.id)}')">EDIT</button>
-  </article>`;
-}
-
-function selectTab(id){currentTab=id;render()}
-function adminAction(){if(admin){admin=false;render();toast('Admin mode closed')}else{$('loginModal').classList.add('show');setTimeout(()=>$('pinInput').focus(),80)}}
-
-async function login(){
-  let master=await(await fetch('/api/master')).json();
-  if($('pinInput').value===master.adminPin){
-    data=master;admin=true;$('pinInput').value='';
-    closeModal('loginModal');render();toast('Admin mode enabled');
-  }else toast('Incorrect PIN');
-}
-
-function openEntry(id){
-  let e=data.entries.find(x=>x.id===id);
-  if(!e||(!admin&&!e.unlocked))return;
-  let d=$('entryDialog');
-  if(e.legacyUrl){
-    d.innerHTML=`<div class="row" style="margin-bottom:12px"><h3 style="margin:0">${esc(e.title)}</h3><button class="btn right" onclick="closeModal('entryModal')">CLOSE</button></div><iframe class="viewer" src="${esc(e.legacyUrl)}"></iframe>`;
-  }else{
-    d.innerHTML=`<div class="row" style="margin-bottom:14px"><h3 style="margin:0">${esc(e.title)}</h3><button class="btn right" onclick="closeModal('entryModal')">CLOSE</button></div><div class="entry-view">${e.image?`<img src="${esc(e.image)}">`:''}<p class="muted" style="margin-bottom:10px">${esc(e.subtitle)}</p><div class="text">${esc(e.body)}</div></div>`;
-  }
-  $('entryModal').classList.add('show');
-}
-
-function newEntry(){editingId=null;fillEntry({tabId:currentTab,title:'',subtitle:'',body:'',image:'',legacyUrl:'',unlocked:false,order:entries().length+1});$('deleteEntryBtn').style.display='none';$('editHeading').textContent='NEW ENTRY';$('editModal').classList.add('show')}
-function editEntry(id){editingId=id;fillEntry(data.entries.find(x=>x.id===id));$('deleteEntryBtn').style.display='inline-flex';$('editHeading').textContent='EDIT ENTRY';$('editModal').classList.add('show')}
-function fillEntry(e){$('eTab').innerHTML=data.tabs.map(t=>`<option value="${esc(t.id)}">${esc(t.title)}</option>`).join('');$('eTitle').value=e.title||'';$('eSub').value=e.subtitle||'';$('eTab').value=e.tabId||currentTab;$('eOrder').value=e.order||1;$('eImage').value=e.image||'';$('eLegacy').value=e.legacyUrl||'';$('eBody').value=e.body||'';$('eUnlocked').value=String(!!e.unlocked)}
-function slug(s){return(s||'entry').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'-'+Date.now().toString(36)}
-
-async function saveEntry(){
-  let e={id:editingId||slug($('eTitle').value),title:$('eTitle').value.trim()||'Untitled',subtitle:$('eSub').value.trim(),tabId:$('eTab').value,order:Number($('eOrder').value)||1,image:$('eImage').value.trim(),legacyUrl:$('eLegacy').value.trim(),body:$('eBody').value,unlocked:$('eUnlocked').value==='true'};
-  if(editingId){let i=data.entries.findIndex(x=>x.id===editingId);data.entries[i]=e}else data.entries.push(e);
-  currentTab=e.tabId;await saveLocal();closeModal('editModal');render();toast('Entry saved');
-}
-async function deleteEntry(){if(!editingId||!confirm('Delete this entry?'))return;data.entries=data.entries.filter(x=>x.id!==editingId);await saveLocal();closeModal('editModal');render();toast('Entry deleted')}
-function readImage(input){let f=input.files[0];if(!f)return;if(f.size>8_000_000)return toast('Use an image smaller than 8 MB');let r=new FileReader();r.onload=()=>$('eImage').value=r.result;r.readAsDataURL(f)}
-
-function openManager(){$('mTitle').value=data.campaignTitle;$('mSubtitle').value=data.subtitle;$('mPin').value=data.adminPin;$('gOwner').value=config.owner||'';$('gRepo').value=config.repo||'';$('gBranch').value=config.branch||'main';$('gPath').value=config.path||'campaign.json';$('gToken').value=config.token||'';renderTabManager();$('manageModal').classList.add('show')}
-function renderTabManager(){$('tabManager').innerHTML=data.tabs.sort((a,b)=>(a.order||0)-(b.order||0)).map((t,i)=>`<div class="listitem"><input type="text" style="width:32px" value="${esc(t.icon||'□')}" onchange="tabField('${t.id}','icon',this.value)"><input type="text" style="flex:1" value="${esc(t.title)}" onchange="tabField('${t.id}','title',this.value)"><input type="number" style="width:48px" value="${t.order||i+1}" onchange="tabField('${t.id}','order',Number(this.value))"><label class="muted" style="display:flex;gap:4px;align-items:center"><input type="checkbox" ${t.visible?'checked':''} onchange="tabField('${t.id}','visible',this.checked)">VISIBLE</label><button class="btn small danger" onclick="removeTab('${t.id}')">X</button></div>`).join('')}
-function tabField(id,key,val){let t=data.tabs.find(x=>x.id===id);if(t)t[key]=val}
-function addTab(){let title=prompt('New tab name:');if(!title)return;data.tabs.push({id:slug(title),title,icon:'□',visible:true,order:data.tabs.length+1});renderTabManager()}
-function removeTab(id){if(data.entries.some(e=>e.tabId===id))return toast('Move or delete entries in this tab first');if(confirm('Delete this empty tab?')){data.tabs=data.tabs.filter(t=>t.id!==id);renderTabManager()}}
-
-async function saveManager(){
-  data.campaignTitle=$('mTitle').value.trim()||'MEMORIES OF A FEW';
-  data.subtitle=$('mSubtitle').value.trim();
-  data.adminPin=$('mPin').value||data.adminPin;
-  config={...config,owner:$('gOwner').value.trim(),repo:$('gRepo').value.trim(),branch:$('gBranch').value.trim()||'main',path:$('gPath').value.trim()||'campaign.json',token:$('gToken').value.trim()};
-  await Promise.all([saveLocal(),fetch('/api/config',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(config,null,2)})]);
-  render();toast('Settings saved');
-}
-async function saveLocal(){await fetch('/api/master',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(data,null,2)})}
-
-function playerSnapshot(){
-  let tabs=data.tabs.filter(t=>t.visible);
-  let ids=new Set(tabs.map(t=>t.id));
-  return{campaignTitle:data.campaignTitle,subtitle:data.subtitle,publishedAt:new Date().toISOString(),tabs,
-    entries:data.entries.filter(e=>e.unlocked&&ids.has(e.tabId))
-      .map(({id,tabId,title,subtitle,body,image,legacyUrl,order,unlocked})=>({id,tabId,title,subtitle,body,image,legacyUrl,order,unlocked}))};
-}
-function githubHeaders(){return{'Accept':'application/vnd.github+json','Authorization':'Bearer '+config.token,'X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json'}}
-
-async function publishGithub(){
-  await saveManager();
-  if(!config.owner||!config.repo||!config.token)return toast('Complete the GitHub settings first');
-  let url=`https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/contents/${config.path.split('/').map(encodeURIComponent).join('/')}?ref=${encodeURIComponent(config.branch)}`;
-  try{
-    let sha=null;
-    let old=await fetch(url,{headers:githubHeaders()});
-    if(old.ok)sha=(await old.json()).sha;
-    let content=btoa(unescape(encodeURIComponent(JSON.stringify(playerSnapshot(),null,2))));
-    let body={message:'Publish MOAF player campaign data',content,branch:config.branch};
-    if(sha)body.sha=sha;
-    let res=await fetch(url,{method:'PUT',headers:githubHeaders(),body:JSON.stringify(body)});
-    if(!res.ok)throw new Error((await res.json()).message||res.statusText);
-    $('status').textContent='PUBLISHED '+new Date().toLocaleTimeString();
-    toast('Unlocked player content published');
-  }catch(e){toast('Publish failed: '+e.message)}
-}
-
-async function testGithub(){
-  await saveManager();
-  try{
-    let r=await fetch(`https://api.github.com/repos/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}`,{headers:githubHeaders()});
-    if(!r.ok)throw new Error((await r.json()).message||r.statusText);
-    toast('GitHub connection successful');
-  }catch(e){toast('Connection failed: '+e.message)}
-}
-
-async function syncRemote(silent=false){
-  if(!config.owner||!config.repo){if(!silent)toast('Online updates are not configured yet');return}
-  let raw=`https://raw.githubusercontent.com/${encodeURIComponent(config.owner)}/${encodeURIComponent(config.repo)}/${encodeURIComponent(config.branch)}/${config.path.split('/').map(encodeURIComponent).join('/')}?t=${Date.now()}`;
-  try{
-    let r=await fetch(raw,{cache:'no-store'});
-    if(!r.ok)throw new Error('Player data not found');
-    let remote=await r.json();
-    if(!admin)data=remote;
-    $('status').textContent='UPDATED '+new Date().toLocaleTimeString();
-    render();
-    if(!silent)toast('Campaign data updated');
-  }catch(e){if(!silent)toast('Update failed: '+e.message)}
-}
-
-function exportMaster(){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));a.download='moaf-campaign-master.json';a.click();URL.revokeObjectURL(a.href)}
-function importMaster(input){let f=input.files[0];if(!f)return;let r=new FileReader();r.onload=async()=>{try{data=JSON.parse(r.result);await saveLocal();render();toast('Master backup imported')}catch{toast('Invalid campaign backup')}};r.readAsText(f)}
-function closeModal(id){$(id).classList.remove('show')}
-function toast(msg){$('toast').textContent=msg;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),3200)}
-document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal.show').forEach(m=>m.classList.remove('show'))});
-boot();
-</script>
-</body></html>
-""";
+    static final class JsonWriter {
+        static String toJson(Object o) {
+            StringBuilder sb = new StringBuilder();
+            write(sb, o);
+            return sb.toString();
+        }
+        @SuppressWarnings("unchecked")
+        static void write(StringBuilder sb, Object o) {
+            if (o == null) { sb.append("null"); return; }
+            if (o instanceof String s) { sb.append(quote(s)); return; }
+            if (o instanceof Boolean || o instanceof Number) { sb.append(o); return; }
+            if (o instanceof Map<?,?> m) {
+                sb.append('{');
+                boolean first = true;
+                for (Map.Entry<?,?> e : m.entrySet()) {
+                    if (!first) sb.append(',');
+                    first = false;
+                    sb.append(quote(String.valueOf(e.getKey()))).append(':');
+                    write(sb, e.getValue());
+                }
+                sb.append('}');
+                return;
+            }
+            if (o instanceof List<?> l) {
+                sb.append('[');
+                boolean first = true;
+                for (Object v : l) {
+                    if (!first) sb.append(',');
+                    first = false;
+                    write(sb, v);
+                }
+                sb.append(']');
+                return;
+            }
+            sb.append(quote(o.toString()));
+        }
+        static String quote(String s) {
+            StringBuilder sb = new StringBuilder("\"");
+            for (int i = 0; i < s.length(); i++) {
+                char c = s.charAt(i);
+                switch (c) {
+                    case '"':  sb.append("\\\""); break;
+                    case '\\': sb.append("\\\\"); break;
+                    case '\n': sb.append("\\n");  break;
+                    case '\r': sb.append("\\r");  break;
+                    case '\t': sb.append("\\t");  break;
+                    default:
+                        if (c < 0x20) sb.append(String.format("\\u%04x", (int) c));
+                        else sb.append(c);
+                }
+            }
+            sb.append('"');
+            return sb.toString();
+        }
+    }
 }
