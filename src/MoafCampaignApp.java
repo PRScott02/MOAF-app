@@ -31,6 +31,7 @@ public final class MoafCampaignApp {
             try {
                 server = HttpServer.create(new InetSocketAddress("127.0.0.1", PORT), 0);
             } catch (IOException busy) {
+                // Another instance is already running — just open a browser tab to it
                 openBrowser("http://127.0.0.1:" + PORT + "/");
                 return;
             }
@@ -40,7 +41,18 @@ public final class MoafCampaignApp {
             server.createContext("/legacy/", MoafCampaignApp::handleLegacy);
             server.setExecutor(Executors.newCachedThreadPool());
             server.start();
+
+            // Give the server a moment to bind before the browser hits it
+            Thread.sleep(400);
             openBrowser("http://127.0.0.1:" + PORT + "/");
+
+            // Keep the main thread alive so the packaged EXE does not exit.
+            // The server runs on daemon threads; without this the process would
+            // end immediately after openBrowser() returns.
+            Object lock = new Object();
+            synchronized (lock) {
+                lock.wait();
+            }
         } catch (Exception e) {
             try {
                 Files.createDirectories(DATA_DIR);
