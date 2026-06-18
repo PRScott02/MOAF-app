@@ -38,7 +38,7 @@ body::before {
   --mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
   --sans: Inter, ui-sans-serif, system-ui, sans-serif;
 }
-
+ 
 /* ── Sidebar ─────────────────────────────────────────────────────────── */
 .sidebar {
   background: rgba(7, 11, 12, 0.92);
@@ -90,7 +90,7 @@ body::before {
   animation: pulse 1.4s infinite alternate;
 }
 @keyframes pulse { from { opacity: .35; } to { opacity: 1; } }
-
+ 
 /* Tabs */
 .tabs {
   flex: 1; overflow-y: auto;
@@ -116,7 +116,7 @@ body::before {
   border-left-color: var(--green);
 }
 .tab-icon { width: 16px; text-align: center; font-size: 13px; }
-
+ 
 /* Sidebar footer */
 .sidebar-foot {
   border-top: 1px solid var(--line);
@@ -142,7 +142,7 @@ body::before {
   letter-spacing: 0.16em;
   margin-top: 6px; text-align: center;
 }
-
+ 
 /* ── Main panel ──────────────────────────────────────────────────────── */
 .main {
   overflow-y: auto;
@@ -160,7 +160,7 @@ body::before {
   width: min(1240px, calc(100% - 32px));
   margin: 0 auto;
 }
-
+ 
 /* ── Toast notifications ─────────────────────────────────────────────── */
 .toast-host {
   position: fixed; bottom: 22px; right: 22px;
@@ -184,7 +184,7 @@ body::before {
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-
+ 
 /* ── Modal ───────────────────────────────────────────────────────────── */
 .modal-backdrop {
   position: fixed; inset: 0;
@@ -256,7 +256,7 @@ body::before {
 .btn.primary { background: rgba(127,255,197,0.12); border-color: var(--green); }
 .btn.danger { color: var(--red); border-color: var(--red); }
 .btn.danger:hover { background: rgba(255,66,103,0.10); }
-
+ 
 /* ── Admin floating action bar ───────────────────────────────────────── */
 .admin-bar {
   position: fixed; top: 0; left: 280px; right: 0; z-index: 80;
@@ -271,7 +271,7 @@ body::before {
 }
 .admin-bar .left { color: #ffb6b0; }
 .admin-bar .right { display: flex; gap: 8px; }
-
+ 
 /* ── Field reveal toggle (admin only) ────────────────────────────────── */
 .reveal-toggle {
   display: inline-flex; align-items: center; gap: 6px;
@@ -303,7 +303,7 @@ body::before {
   letter-spacing: 0.12em;
 }
 .edit-btn:hover { color: var(--green); border-color: var(--green); }
-
+ 
 /* ── Redacted block (player view of hidden field) ───────────────────── */
 .field-redacted {
   border: 1px solid var(--red);
@@ -333,7 +333,7 @@ body::before {
   background: repeating-linear-gradient(45deg, rgba(255,66,103,0.04) 0 8px, transparent 8px 16px);
   border-radius: 14px;
 }
-
+ 
 /* ── Responsive sidebar (small screens) ─────────────────────────────── */
 @media (max-width: 800px) {
   body { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
@@ -352,12 +352,16 @@ body::before {
   .sidebar-foot { display: none; }
   .admin-bar { left: 0; }
 }
-
+ 
 /* ── Locked item cards ──────────────────────────────────────────────── */
 .locked-card {
   border-color: rgba(255,66,103,0.4) !important;
   background: rgba(28,10,14,0.5) !important;
   position: relative;
+  display: flex !important;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 22px;
 }
 .locked-card::after {
   content: '';
@@ -366,3 +370,4 @@ body::before {
   border-radius: inherit;
 }
 .locked-card:hover { border-color: rgba(255,66,103,0.7) !important; }
+ 
