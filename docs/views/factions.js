@@ -54,17 +54,34 @@ const FactionsView = (() => {
         <section class="matrix-section">
           <h2>▸ Faction Matrix</h2>
           <div class="matrix-grid">
-            ${factions.map(f => `
-              <div class="matrix-card" style="--primary:${f.primary};--accent:${f.accent}" data-faction-jump="${f.id}">
-                <div class="matrix-emblem"><span class="letter">${escapeHtml(f.letter || '?')}</span></div>
+            ${factions.map(f => {
+              const locked = Data.isLocked(f);
+              return `
+              <div class="matrix-card ${locked ? 'locked-card' : ''}" style="--primary:${f.primary};--accent:${f.accent}" data-faction-jump="${f.id}">
+                <div class="matrix-emblem"><span class="letter">${locked ? '🔒' : escapeHtml(f.letter || '?')}</span></div>
                 <div>
-                  <span class="matrix-kicker">${escapeHtml(f.kicker || '')}</span>
-                  <h3>${escapeHtml(f.title)}</h3>
-                  <p class="matrix-sub">${escapeHtml(f.subtitle || '')}</p>
-                  <span class="count">${npcCount[f.id] || 0} NPC Dossiers</span>
+                  ${locked ? `
+                    <span class="matrix-kicker" style="color:var(--red)">▸ CLASSIFIED // NOT YET DISCOVERED</span>
+                    <h3>[ REDACTED ]</h3>
+                    <p class="matrix-sub">This faction's records are sealed. Intelligence will unlock as your investigation progresses.</p>
+                  ` : `
+                    <span class="matrix-kicker">${escapeHtml(f.kicker || '')}</span>
+                    <h3>${escapeHtml(f.title)}</h3>
+                    <p class="matrix-sub">${escapeHtml(f.subtitle || '')}</p>
+                    <span class="count">${npcCount[f.id] || 0} NPC Dossiers</span>
+                  `}
+                  ${Data.canEditCampaign() ? `
+                    <div style="margin-top:10px">
+                      <span class="reveal-toggle ${locked ? 'hidden' : 'revealed'}"
+                            data-faction-lock-toggle data-faction-id="${f.id}"
+                            onclick="event.stopPropagation()">
+                        ${f.locked ? '🔒 LOCKED' : '🔓 UNLOCKED'}
+                      </span>
+                    </div>
+                  ` : ''}
                 </div>
               </div>
-            `).join('')}
+            `;}).join('')}
           </div>
         </section>
  
@@ -74,11 +91,29 @@ const FactionsView = (() => {
   }
  
   function renderFactionSection(f, allNpcs) {
-    const factionTagMap = {
-      bci: 'BCI', cotu: 'CotU', truth: 'Truth Division',
-      redarchive: 'Red Archive', continuance: 'Continuance',
-      greymarket: 'Grey Market', civic: 'Politics'
-    };
+    const locked = Data.isLocked(f);
+ 
+    if (locked) {
+      // Locked placeholder — players see the faction exists but no details
+      return `
+        <section class="faction-section" id="faction-${f.id}" style="--primary:${f.primary};--accent:${f.accent}">
+          <div class="section-header">
+            <div>
+              <div class="kicker" style="color:var(--red)">▸ CLASSIFIED // ACCESS RESTRICTED</div>
+              <h2>[ REDACTED FACTION ]</h2>
+              <p class="section-sub">This dossier is sealed. Records will become available as your investigation uncovers this faction.</p>
+            </div>
+            <div class="section-emblem"><span class="letter">🔒</span></div>
+          </div>
+          <div class="panel">
+            <div class="field-redacted">
+              <b>Classified Intelligence</b>
+              <p>[ CLEARANCE INSUFFICIENT // FACTION NOT YET DISCOVERED ]</p>
+            </div>
+          </div>
+        </section>
+      `;
+    }
  
     return `
       <section class="faction-section" id="faction-${f.id}" style="--primary:${f.primary};--accent:${f.accent}">
@@ -219,6 +254,18 @@ const FactionsView = (() => {
  
   // Click handler wiring
   function wire(container) {
+    // Faction lock/unlock toggle
+    container.querySelectorAll('[data-faction-lock-toggle]').forEach(el => {
+      el.addEventListener('click', async (ev) => {
+        ev.stopPropagation();
+        const fid = el.getAttribute('data-faction-id');
+        const f = Data.getCampaign().factions.find(x => x.id === fid);
+        if (!f) return;
+        f.locked = !f.locked;
+        await pushAndRefresh(f.locked ? 'Faction locked' : 'Faction unlocked');
+      });
+    });
+ 
     // Matrix → jump to faction
     container.querySelectorAll('[data-faction-jump]').forEach(el => {
       el.addEventListener('click', () => {
@@ -314,4 +361,3 @@ const FactionsView = (() => {
  
   return { render, wire };
 })();
- 
