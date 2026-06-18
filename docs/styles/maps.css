@@ -1,0 +1,296 @@
+/* ── Faction view ────────────────────────────────────────────────────── */
+.faction-view { padding: 28px 0 60px; }
+
+.hero {
+  padding: 48px 0 24px;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 28px;
+  align-items: center;
+}
+.hero .kicker {
+  font-family: var(--mono);
+  color: var(--red);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+.hero h1 {
+  font-size: clamp(36px, 6vw, 72px);
+  line-height: 0.92;
+  margin: 14px 0 10px;
+  text-transform: uppercase;
+  letter-spacing: -0.05em;
+  text-shadow: 0 0 28px rgba(127,255,197,0.18);
+}
+.hero h1 span { color: var(--green); }
+.hero .subtitle {
+  font-size: 18px;
+  color: #cfe0d9;
+  max-width: 780px;
+  line-height: 1.5;
+}
+.meta-row {
+  display: flex; flex-wrap: wrap; gap: 10px;
+  margin-top: 18px;
+}
+.pill {
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,0.04);
+  border-radius: 999px;
+  padding: 7px 12px;
+  font-size: 12px; color: #dce9e3;
+  font-family: var(--mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.hero-banner {
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.07), rgba(0,0,0,0.15));
+  padding: 0; overflow: hidden;
+}
+.hero-banner img { width: 100%; display: block; }
+
+/* Matrix */
+.matrix-section {
+  margin-top: 12px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(0,0,0,0.18));
+}
+.matrix-section h2 {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--green);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin: 0 0 18px;
+}
+.matrix-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.matrix-card {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 16px;
+  align-items: center;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.06), rgba(0,0,0,0.15));
+  padding: 16px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.matrix-card:hover { border-color: var(--primary, var(--green)); background: linear-gradient(145deg, rgba(255,255,255,0.09), rgba(0,0,0,0.18)); }
+.matrix-emblem {
+  height: 130px;
+  border-radius: 18px;
+  background: radial-gradient(circle at center, rgba(127,255,197,0.12), transparent 65%);
+  display: grid; place-items: center;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.matrix-emblem .letter {
+  font-family: var(--mono);
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--primary, var(--green));
+  text-shadow: 0 0 20px var(--primary, var(--green));
+}
+.matrix-card h3 {
+  font-size: 22px;
+  margin: 4px 0 6px;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+.matrix-card .matrix-kicker {
+  font-family: var(--mono);
+  color: var(--accent, var(--red));
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 11px;
+  display: block;
+  margin-bottom: 8px;
+}
+.matrix-card .matrix-sub {
+  color: #cbdad4;
+  font-size: 14px;
+  line-height: 1.45;
+  margin: 0;
+}
+.matrix-card .count {
+  font-family: var(--mono);
+  color: var(--accent, var(--red));
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 11px;
+  display: block;
+  margin-top: 10px;
+}
+
+/* Faction sections */
+.faction-section {
+  border: 1px solid var(--line);
+  border-radius: 32px;
+  margin: 32px 0;
+  padding: 28px;
+  background: linear-gradient(145deg,
+    color-mix(in srgb, var(--primary) 6%, transparent),
+    rgba(255,255,255,0.018));
+  box-shadow: 0 20px 70px rgba(0,0,0,0.32);
+}
+.section-header {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 24px;
+  align-items: center;
+  padding: 0 0 18px;
+}
+.section-header .kicker {
+  font-family: var(--mono);
+  color: var(--accent);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+.section-header h2 {
+  font-size: clamp(28px, 4.5vw, 54px);
+  line-height: 0.95;
+  margin: 8px 0;
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+  color: #fff;
+}
+.section-header .section-sub {
+  font-size: 16px;
+  color: #d3e0da;
+  line-height: 1.5;
+}
+.section-emblem {
+  height: 150px;
+  border-radius: 18px;
+  background: radial-gradient(circle at center, rgba(127,255,197,0.10), transparent 65%);
+  display: grid; place-items: center;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.section-emblem .letter {
+  font-family: var(--mono);
+  font-size: 60px;
+  font-weight: 700;
+  color: var(--primary);
+  text-shadow: 0 0 24px var(--primary);
+}
+
+.section-tabs {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  margin: 0 0 16px;
+}
+.section-tabs a {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(0,0,0,0.25);
+  padding: 7px 12px;
+  color: #eaf2ee;
+  font-family: var(--mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  cursor: pointer;
+}
+.section-tabs a:hover { border-color: var(--primary); color: var(--primary); }
+
+.panel {
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(0,0,0,0.12));
+  padding: 22px;
+  margin: 16px 0;
+}
+.panel-title-row {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 10px;
+  margin-bottom: 14px;
+}
+.panel h3 {
+  margin: 0;
+  font-size: 22px;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+
+.twocol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.field {
+  border: 1px solid var(--line-soft);
+  border-radius: 16px;
+  background: rgba(0,0,0,0.22);
+  padding: 16px;
+  position: relative;
+}
+.field.wide { grid-column: 1 / -1; }
+.field b {
+  font-family: var(--mono);
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 11px;
+  display: block;
+  margin-bottom: 10px;
+}
+.field p {
+  margin: 0;
+  color: #d7e4de;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.list li {
+  border-left: 3px solid var(--primary);
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.035);
+  border-radius: 0 12px 12px 0;
+  color: #d7e4de;
+}
+
+/* NPC sub-cards inside a faction */
+.npc-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.npc-card-mini {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(0,0,0,0.25);
+  padding: 16px;
+}
+.npc-card-mini h4 {
+  margin: 0 0 8px;
+  font-size: 17px;
+  color: var(--primary);
+}
+.npc-card-mini p {
+  margin: 0;
+  font-size: 13px;
+  color: #d7e4de;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 1000px) {
+  .hero-grid, .section-header, .twocol { grid-template-columns: 1fr; }
+  .matrix-grid { grid-template-columns: 1fr; }
+  .matrix-card { grid-template-columns: 1fr; }
+  .section-emblem { display: none; }
+  .npc-grid { grid-template-columns: 1fr; }
+}

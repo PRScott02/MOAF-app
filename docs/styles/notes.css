@@ -1,0 +1,150 @@
+/* ── Maps view ───────────────────────────────────────────────────────── */
+.maps-view { padding: 28px 0 60px; }
+.maps-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin-top: 24px;
+}
+.map-card {
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: rgba(0,0,0,0.3);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.map-card:hover { border-color: var(--accent, var(--green)); transform: translateY(-2px); }
+.map-thumb {
+  width: 100%; aspect-ratio: 4/3;
+  background: #050a08 center/cover no-repeat;
+  border-bottom: 1px solid var(--line);
+}
+.map-body { padding: 18px 20px; }
+.map-body .map-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent, var(--green));
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.map-body h3 { font-size: 22px; margin: 6px 0 4px; font-family: var(--mono); }
+.map-body .map-sub {
+  font-family: var(--mono);
+  font-size: 12px; color: var(--muted);
+  margin-bottom: 14px;
+}
+.map-body .map-desc { font-size: 13px; line-height: 1.6; color: #d4e1db; }
+.map-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 14px;
+}
+.map-stat {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: #cbdad4;
+  padding: 6px 10px;
+  background: rgba(0,0,0,0.4);
+  border: 1px solid var(--line-soft);
+  border-radius: 10px;
+}
+.map-stat b {
+  color: var(--accent, var(--green));
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 10px;
+  display: block;
+  margin-bottom: 2px;
+}
+
+/* Map detail full image */
+.map-detail {
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: rgba(0,0,0,0.3);
+  padding: 20px;
+}
+.map-detail img { width: 100%; height: auto; display: block; border-radius: 14px; }
+
+@media (max-width: 1000px) {
+  .maps-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Notes view ──────────────────────────────────────────────────────── */
+.notes-view { padding: 28px 0 60px; }
+.notes-header {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+  margin-bottom: 18px;
+}
+.notes-header h1 {
+  font-family: var(--mono);
+  font-size: 28px;
+  margin: 0;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+.notes-header .eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.session-block {
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.04), rgba(0,0,0,0.18));
+  padding: 24px 26px;
+  margin: 16px 0;
+}
+.session-block .session-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.session-block h3 {
+  margin: 0 0 4px;
+  font-size: 22px;
+  font-family: var(--mono);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+.session-block .session-meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.session-block .session-body {
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--ink);
+  white-space: pre-wrap;
+}
+.session-block .session-actions {
+  display: flex; gap: 8px;
+  margin-top: 14px;
+  justify-content: flex-end;
+}
+
+.notes-empty {
+  text-align: center;
+  padding: 40px;
+  border: 1px dashed var(--line);
+  border-radius: 18px;
+  font-family: var(--mono);
+  color: var(--muted);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
