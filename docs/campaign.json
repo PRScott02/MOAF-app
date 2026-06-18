@@ -1,0 +1,3789 @@
+{
+  "title": "Memories of a Few",
+  "subtitle": "Meridian Spire // Licensed PI Intelligence Index",
+  "publishedAt": null,
+  "factions": [
+    {
+      "id": "bci",
+      "title": "Bureau of Cognitive Integrity",
+      "kicker": "Public Safety Authority // Internal Control Network",
+      "subtitle": "Official Cognitive Safety Authority",
+      "primary": "#8bffb1",
+      "accent": "#ff4f6d",
+      "letter": "B",
+      "fields": {
+        "Faction Overview": {
+          "value": "Public FaceThe BCI presents itself as Meridian Spire’s guardian against cognitive contamination, trauma spirals, dangerous memory instability, and illegal memory technology.\nActual TruthThe BCI protects the edited version of history. It uses surveillance, records manipulation, medicalized memory correction, propaganda, and tactical force to keep the city stable and obedient.\nPlayer-Safe ReadCitizens know the BCI as stern but necessary. Licensed PIs know the BCI can freeze cases, revoke access, lock terminals, and make evidence disappear.\nGM WarningThe BCI should feel lawful before it feels evil. Their scariest power is not violence; it is making everyone agree the violence was necessary.\nTerritoryCivic Core, Cognitive Health Clinics, BCI Processing Towers, patrol zones, black-site annexes, and emergency response corridors.\nwhite BCI letteringred enforcement lightsgreen terminal scansclean geometric armorofficial seals",
+          "revealed": true
+        },
+        "Internal Structure": {
+          "value": "DirectoratePolicy, citywide control, elite coordination, classified continuity orders.\nInternal SecurityLeak suppression, erased case files, black-bag warrants, evidence laundering.\nPatrol DivisionStreet presence, checkpoint authority, PI interference, public compliance.\nEnforcer CorpsHigh-risk tactical response, raids, forced extractions, memory seizure operations.\nCognitive Health DivisionTherapeutic memory correction, compliance medicine, post-incident reconditioning.\nPublic Trust OfficePropaganda, citizen advisories, controlled crisis narratives.",
+          "revealed": true
+        },
+        "Session Hooks": {
+          "value": "• BCI freezes the party’s PI licenses after the Damien Ruiz scene.\n• A witness forgets key details after a “wellness intervention.”\n• Korr’s Enforcers arrive before the party can copy a terminal file.\n• Celia Voss turns the party into dangerous conspiracy agitators on public screens.\nGM Secret Board",
+          "revealed": true
+        },
+        "Faction Secrets": {
+          "value": "• The BCI did not create every lie, but it actively maintains the largest ones.\n• Internal Security has a cleanup classification for family-disappearance cases.\n• Some BCI doctors believe they are reducing trauma, not committing violence.\n• The original massacre records still exist in heavily protected fragments.",
+          "revealed": false
+        }
+      },
+      "npcs": [
+        {
+          "name": "Director Mara Veyne",
+          "body": "Director of the BCI\n“Your memories are protected. Your fear is understood. Your cooperation is required.”\nPublic: Trusted public face of cognitive safety. Appears on citywide broadcasts after crises.\nTruth: Knows memory alteration has been used politically and believes the lie is necessary to preserve Meridian Spire.\nOpen full dossier\nVibe: Cold, elegant, terrifyingly calm.\nSecret: Has seen original massacre records and the edits that followed.\nFirst Appearance: Broadcasts, propaganda screens, official warnings, and terminal overrides.\nDM Use: Use when the party becomes a city-level problem.\nCO\nBCI",
+          "revealed": true
+        },
+        {
+          "name": "Captain Orin Vale",
+          "body": "BCI Patrol Captain\n“Licensed private investigators. Interesting. That makes this unfortunate instead of suspicious.”\nPublic: Field captain assigned to disturbances, suspicious PI activity, and illegal information cases.\nTruth: Ambitious, observant, and willing to use the party as a stepping stone or case file.\nOpen full dossier\nVibe: Professional, sharp, irritatingly reasonable.\nSecret: Suspects BCI hides something larger than routine corruption but lacks courage to pursue it.\nFirst Appearance: Arrives after the Session 1 apartment incident or after a terminal hack alert.\nDM Use: Early recurring antagonist. Threatens licenses, scenes, witnesses, and access.\nDK\nBCI",
+          "revealed": true
+        },
+        {
+          "name": "Commander Darius Korr",
+          "body": "BCI Enforcer Commander\n“End this now. Compliance is your last mercy.”\nPublic: Male commander of high-risk BCI tactical response teams. Known mostly through red-alert footage.\nTruth: Leads black-bag raids, memory seizure operations, forced disappearances, and suppression missions.\nOpen full dossier\nVibe: Tactical hammer of the BCI. Minimal words, maximum pressure.\nSecret: Remembers every major raid, especially the ones involving innocents. He buries guilt under obedience.\nFirst Appearance: Red emergency lights, synchronized Enforcer units, no negotiation posture.\nDM Use: Use sparingly as a major escalation. His arrival means survival mode.\nDH\nBCI",
+          "revealed": true
+        },
+        {
+          "name": "Deputy Director Halden Kreiss",
+          "body": "Internal Security Chief\n“A disappeared file is not evidence. It is an administrative correction.”\nPublic: Senior BCI administrator responsible for internal security and classified investigations.\nTruth: Handles leaks, coverups, disappearances, and political damage control.\nOpen full dossier\nVibe: Bureaucratic monster; can ruin lives with paperwork.\nSecret: Approved cleanup operations tied to family disappearance cases, including Cross and Ruiz threads.\nFirst Appearance: An authorization stamp on a redacted report.\nDM Use: Use when players trace who signed off on ruined lives.\nES\nBCI",
+          "revealed": true
+        },
+        {
+          "name": "Dr. Elian Strake",
+          "body": "Memory Compliance Doctor\n“The mind protects itself. We simply assist the process.”\nPublic: Respected cognitive health specialist involved in trauma treatment and memory stabilization.\nTruth: Performs therapeutic memory correction that hides abuse, erases people, and reframes history.\nOpen full dossier\nVibe: Gentle voice, clean gloves, absolute nightmare.\nSecret: Has treated people who later forgot entire family members.\nFirst Appearance: Interviewing a victim who suddenly cannot remember why they were afraid.\nDM Use: Make memory editing intimate, plausible, and horrifying.\nCV\nBCI",
+          "revealed": true
+        },
+        {
+          "name": "Celia Voss",
+          "body": "Propaganda Minister\n“A frightened public is not unstable. It is receptive.”\nPublic: Media strategist behind BCI safety campaigns and anti-rebel broadcasts.\nTruth: Controls the language people use to fear illegal information, rebels, and memory contamination.\nOpen full dossier\nVibe: Perfect smile, poisonous words.\nSecret: No longer fully believes the propaganda, but is too deep to stop.\nFirst Appearance: A broadcast reframes the party’s investigation as a public safety concern.\nDM Use: Controls public reputation and narrative consequences.",
+          "revealed": true
+        }
+      ]
+    },
+    {
+      "id": "cotu",
+      "title": "Choir of the Unforgotten",
+      "kicker": "BCI Classification: Domestic Extremist Memory-Cult",
+      "subtitle": "Memory Rebels / Grief Movement / Underground Resistance",
+      "primary": "#ffcc66",
+      "accent": "#ff4f6d",
+      "letter": "C",
+      "fields": {
+        "Faction Overview": {
+          "value": "Public FaceThe BCI describes the Choir as dangerous agitators who radicalize the grieving and spread illegal memory material.\nActual TruthThe Choir believes forgotten people have been murdered twice: once in life and once in memory. They fight to recover names, stories, and proof of erased lives.\nPlayer-Safe ReadCitizens know graffiti, hacked screens, and whispers: “The Choir remembers.” PIs hear that they can find witnesses nobody else can.\nGM WarningThe Choir should not be clean heroes. They are right about the crime, but desperation can make them reckless and dangerous.\nTerritoryThe Dregs, runoff tunnels, slum sectors, pirate relay stations, hidden memorial rooms, abandoned civic shelters.\npainted eyesbroken halospirate radio staticundercity muralsnames written over names",
+          "revealed": true
+        },
+        "Internal Structure": {
+          "value": "The Mother’s CircleSenior voices around Aven Sorell; strategy, doctrine, grief rituals.\nRunoff CellsLocal crews that hide people, move shards, and run street actions.\nSignal ChoirHackers, artists, pirate broadcasters, propaganda makers.\nWitness KeepersMembers who protect people with unstable or returning memories.\nRemembrance RitesPublic mourning actions that double as protests and coded messages.",
+          "revealed": true
+        },
+        "Session Hooks": {
+          "value": "• A CotU data page asks the players if they want to know the truth.\n• Bram believes someone inside the Choir sold out Damien.\n• A remembrance mural contains a hidden address.\n• The Hollow Man remembers a version of a PC that should not exist.\nGM Secret Board",
+          "revealed": true
+        },
+        "Faction Secrets": {
+          "value": "• Aven was part of the system before becoming its enemy.\n• The Choir’s younger cells are less disciplined and may hurt innocents.\n• Saint Luma’s erased death links to the original massacre.\n• Someone inside a runoff cell may be feeding BCI information.",
+          "revealed": false
+        }
+      },
+      "npcs": [
+        {
+          "name": "Mother Aven Sorell",
+          "body": "Leader of the Choir\n“They taught you memory is fragile. They never told you who keeps breaking it.”\nPublic: Classified as a radical agitator, cult leader, and domestic extremist.\nTruth: Former BCI grief specialist who learned therapeutic memory practices were being weaponized.\nOpen full dossier\nVibe: Revolutionary grief-preacher; compassionate and dangerous.\nSecret: Helped shape early therapeutic memory correction before seeing what the system became.\nFirst Appearance: A hacked public terminal interrupts a BCI broadcast with her voice.\nDM Use: Make her right about the horror but questionable in what she will sacrifice.\nJV\nCotU",
+          "revealed": true
+        },
+        {
+          "name": "Jessa Vane",
+          "body": "Recruiter and Propagandist\n“You want the truth? Then stop asking politely.”\nPublic: Young dissident blamed for illegal data pages and anti-BCI recruitment messages.\nTruth: Builds contact chains, designs rebellious data drops, and may have helped Damien arrange the failed exchange.\nOpen full dossier\nVibe: Angry, brilliant, reckless hacker-recruiter.\nSecret: Knew Damien personally and is hiding how much she knows about the meet.\nFirst Appearance: A rebellious data page asks if the viewer wants to know the truth.\nDM Use: Hot fuse: useful, emotional, likely to escalate problems.\nBS\nCotU",
+          "revealed": true
+        },
+        {
+          "name": "Bram “Static” Olan",
+          "body": "Runoff Cell Leader\n“The city whispers down here. You just have to hate silence enough to listen.”\nPublic: Rumored undercity agitator linked to illegal broadcasts and tunnel activity.\nTruth: Runs CotU movement in the runoff and suspects Damien was betrayed from inside the Choir.\nOpen full dossier\nVibe: Pirate radio preacher with a shotgun personality.\nSecret: Believes there is a mole inside his cell.\nFirst Appearance: His voice crackles through a hacked runoff speaker before the party sees him.\nDM Use: Ground-level resistance, ugly choices, tunnel politics.\nTH\nCotU",
+          "revealed": true
+        },
+        {
+          "name": "The Hollow Man",
+          "body": "Memory Witness\n“I remember three childhoods. Only one of them has my mother in it.”\nPublic: Used by BCI propaganda as proof illegal memory material causes psychosis.\nTruth: His edited memories are breaking through in incompatible versions.\nOpen full dossier\nVibe: Creepy, tragic, glitching humanity.\nSecret: One memory fragment contains a real name erased from city history.\nFirst Appearance: Found repeating the same address in three different voices.\nDM Use: Disturbing clues, sympathy, impossible testimony.\nSL\nCotU",
+          "revealed": true
+        },
+        {
+          "name": "Saint Luma",
+          "body": "Martyr Symbol\n“Remember Luma. Remember what they buried.”\nPublic: Supposed propaganda invention used by CotU to manipulate the desperate.\nTruth: Luma was real, erased, and turned into a symbol by those who refused to forget.\nOpen full dossier\nVibe: Urban saint, missing-person poster, ghost in the movement.\nSecret: The true record of Luma’s death points toward the original massacre.\nFirst Appearance: A mural in the Dregs, painted over so many times it became holy.\nDM Use: Clue chain and emotional center for the Choir.",
+          "revealed": true
+        }
+      ]
+    },
+    {
+      "id": "truth",
+      "title": "Truth Division",
+      "kicker": "Unregistered Truth Network // Memory Contraband Risk",
+      "subtitle": "Unedited History Cell / Purple-Signal Hackers",
+      "primary": "#b982ff",
+      "accent": "#59e3ff",
+      "letter": "TD",
+      "fields": {
+        "Faction Overview": {
+          "value": "Public FaceMost citizens do not know Truth Division exists. BCI files describe them as conspiracy terrorists spreading corrosive historical falsehoods.\nActual TruthTruth Division wants the unedited past exposed, even if the revelation destabilizes Meridian Spire. They are less emotional than CotU and less patient than the Red Archive.\nPlayer-Safe ReadPlayers first experience them through purple flashes, terminal warnings, and messages like “you aren’t ready.”\nGM WarningTruth Division should be allies who make the party nervous. They value truth more than comfort, safety, or timing.\nTerritoryHidden servers, dead terminals, ghost forums, compromised civic relays, old academic networks, abandoned data vaults.\npurple signal flashesfragmented timelinesquestion marks cut into sealsterminal intrusionsbroken archives",
+          "revealed": true
+        },
+        "Internal Structure": {
+          "value": "Directive CellSmall leadership group deciding which truths can be released.\nSignal CuttersHackers who breach terminals, relays, and surveillance systems.\nWitness ExtractorsField teams who remove targets before BCI can edit them.\nTimeline AnalystsResearchers who compare contradictory records.\nRadical SplintersCells that want a full truth-dump regardless of casualties.",
+          "revealed": true
+        },
+        "Session Hooks": {
+          "value": "• A terminal flashes purple and locks the party out after showing Ash’s name.\n• Nessa Crowe offers BCI counter-surveillance in exchange for a dangerous favor.\n• Kade Morrow offers a complete leak package that will cause riots.\n• Noct demands the party prove they can handle truth before receiving the next file.\nGM Secret Board",
+          "revealed": true
+        },
+        "Faction Secrets": {
+          "value": "• Truth Division may be holding back truth just like the groups they condemn.\n• Lio knows the party is connected to files older than their public records.\n• A radical cell wants to release everything at once.\n• Noct’s partial timeline includes a name linked to one of the PCs.",
+          "revealed": false
+        }
+      },
+      "npcs": [
+        {
+          "name": "Director Ilyra Noct",
+          "body": "Leader of Truth Division\n“Truth is not gentle. That is not an argument against it.”\nPublic: Unknown or misidentified as a fringe conspiracy coordinator.\nTruth: Leads Truth Division and believes the city must see the real past no matter the damage.\nOpen full dossier\nVibe: Cold revolutionary scholar with a knife behind every sentence.\nSecret: Has seen a partial unedited timeline and it broke her faith in gradual reform.\nFirst Appearance: A purple terminal message signs off with only NOCT.\nDM Use: Use when the party needs someone who values truth more than safety.\nLS\nTruth Division",
+          "revealed": true
+        },
+        {
+          "name": "Lio Senn",
+          "body": "Truth Division Hacker\n“You weren’t hacked. You were invited badly.”\nPublic: No official record. Known through purple glitches and impossible terminal intrusions.\nTruth: Responsible for Truth Division hacks, warnings, and distorted terminal messages.\nOpen full dossier\nVibe: Sleep-deprived genius gremlin with a moral injury.\nSecret: Knows Ash’s name appears in files that should not exist.\nFirst Appearance: A purple flash hijacks a terminal and leaves a line only the party understands.\nDM Use: Scary terminal scenes, encrypted clues, unreliable assistance.\nNC\nTruth Division",
+          "revealed": true
+        },
+        {
+          "name": "Nessa Crowe",
+          "body": "Ex-BCI Defector\n“I know how they hunt you because I used to write the hunt orders.”\nPublic: Officially dead, disgraced, or nonexistent depending on the database.\nTruth: Former BCI operative with knowledge of tracking, editing, and threat classification.\nOpen full dossier\nVibe: Burned spy; paranoid, deadly, hard to trust.\nSecret: Helped erase someone once and has tried to undo it ever since.\nFirst Appearance: Saves the party from a BCI trace, then aims a weapon at them.\nDM Use: Teach BCI countermeasures and make trust expensive.\nTW\nTruth Division",
+          "revealed": true
+        },
+        {
+          "name": "Tomas Wren",
+          "body": "Field Archivist\n“I don’t collect evidence. I collect the parts they forgot to erase.”\nPublic: Listed as an antiquarian data thief.\nTruth: Collects old evidence, corrupted files, and erased identities for Truth Division.\nOpen full dossier\nVibe: Tired field scholar with too many dead drops.\nSecret: Carries a physical notebook of names that vanished from digital systems.\nFirst Appearance: Found photographing moldy paper records before BCI scanners arrive.\nDM Use: Gives physical clues and old-world investigative texture.\nKM\nTruth Division",
+          "revealed": true
+        },
+        {
+          "name": "Kade Morrow",
+          "body": "Radical Truth Cell Leader\n“You can’t expose a prison gently. You break the wall.”\nPublic: Violent dissident wanted for data terrorism.\nTruth: Wants immediate mass release of unedited history, consequences be damned.\nOpen full dossier\nVibe: Charismatic, furious, dangerous even when correct.\nSecret: Has a release package that could ignite riots across several sectors.\nFirst Appearance: Offers the party the truth faster than Noct will.\nDM Use: Temptation NPC: easy answers, catastrophic cost.\nV\nTruth Division",
+          "revealed": true
+        },
+        {
+          "name": "Violet",
+          "body": "Ash Calder Contact\n“You aren’t ready. That is not mercy. It is math.”\nPublic: Unknown purple-signal alias.\nTruth: A Truth Division contact monitoring Ash and the transfer-related files around him.\nOpen full dossier\nVibe: Ghost in the terminal, intimate and unsettling.\nSecret: May know what Ash is before Ash does.\nFirst Appearance: Appears as a purple flash when Ash opens the wrong file.\nDM Use: Personalized pressure on Ash’s mystery.",
+          "revealed": true
+        }
+      ]
+    },
+    {
+      "id": "redarchive",
+      "title": "The Red Archive",
+      "kicker": "Deniable Archival Entity // Existence Unconfirmed",
+      "subtitle": "Forbidden Records / Elegant Intelligence Brokers",
+      "primary": "#ff4c5f",
+      "accent": "#ffd27d",
+      "letter": "RA",
+      "fields": {
+        "Faction Overview": {
+          "value": "Public FaceOfficially, the Red Archive does not exist. Unofficially, people whisper that someone kept the records the city tried to bury.\nActual TruthThe Red Archive preserves forbidden records, erased names, and pre-edited history. They believe truth is a weapon and should not be handed to everyone.\nPlayer-Safe ReadPlayers may first encounter the Archive through a refined field agent, impossible document access, or a red mark left at a scene.\nGM WarningThe Archive is not heroic. They protect truth by controlling it. They may help the party while still manipulating them.\nTerritoryHidden archives, locked museums, abandoned libraries, private vaults, gallery fronts, data mausoleums.\nredacted recordscrimson sealswhite glovesold paper scansthin red thread",
+          "revealed": true
+        },
+        "Internal Structure": {
+          "value": "The ArchivistCassian Rell and the final authority on what is released.\nField RetrievalAgents who steal, rescue, or destroy sensitive records.\nHistorical AnalysisResearchers who compare old records against edited timelines.\nMemory CurationSpecialists in damaged memories and transfer-adjacent evidence.\nCleanersQuiet removers of threats to Archive secrecy.\nBrokersPeople who trade controlled truths for leverage.",
+          "revealed": true
+        },
+        "Session Hooks": {
+          "value": "• Seraphine saves a record from destruction, not necessarily the people holding it.\n• Cassian offers one truth in exchange for the party burying another.\n• Len proves Damien’s file was rewritten by comparing imperfect paper records.\n• Enoch Rime appears when the party leaks something too soon.\nGM Secret Board",
+          "revealed": true
+        },
+        "Faction Secrets": {
+          "value": "• The Archive has records the BCI believes were destroyed.\n• Cassian may know the real name behind Saint Luma.\n• The Archive has already classified the PCs as either assets or risks.\n• Some Archive brokers are profiting from the exact system the Archive claims to resist.",
+          "revealed": false
+        }
+      },
+      "npcs": [
+        {
+          "name": "Archivist Cassian Rell",
+          "body": "Head of the Red Archive\n“The truth is not sacred. It is dangerous. That is why it must be kept properly.”\nPublic: Unknown. Officially nonexistent.\nTruth: Keeper of original records, erased names, and pre-edited history fragments.\nOpen full dossier\nVibe: Refined, quiet, deeply unsettling.\nSecret: Possesses names of people completely erased from official history.\nFirst Appearance: Through an intermediary; he should be a later reveal.\nDM Use: Gatekeeper of dangerous truths. The party must earn what he knows.\nAS\nRed Archive",
+          "revealed": true
+        },
+        {
+          "name": "Agent Seraphine Vale",
+          "body": "Field Agent\n“I am not here to save you. I am here to preserve what you found.”\nPublic: No public record that survives more than a day.\nTruth: Elegant operative who retrieves forbidden records and evaluates whether witnesses are assets or liabilities.\nOpen full dossier\nVibe: Sophisticated, minimalistic armor, quiet authority.\nSecret: Has watched the party since the Damien Ruiz incident.\nFirst Appearance: Appears after the party uncovers evidence nobody else should know exists.\nDM Use: First direct contact with the Red Archive.\nLO\nRed Archive",
+          "revealed": true
+        },
+        {
+          "name": "Len Orra",
+          "body": "Historical Analyst\n“Clean records are suspicious. Real history leaves fingerprints.”\nPublic: Obscure researcher with missing credentials.\nTruth: Studies erased timelines, rewritten dates, and altered public records.\nOpen full dossier\nVibe: Nervous academic who knows way too much.\nSecret: Found proof that official city events were rewritten multiple times.\nFirst Appearance: Explains why a perfectly clean record is the dirtiest clue in the room.\nDM Use: Translate record weirdness into usable leads.\nVS\nRed Archive",
+          "revealed": true
+        },
+        {
+          "name": "Dr. Veyra Sol",
+          "body": "Memory Curator\n“A broken memory is not useless. It is evidence with teeth marks.”\nPublic: Former cognitive researcher absent from official boards.\nTruth: Studies damaged memories, identity records, and transfer-adjacent anomalies.\nOpen full dossier\nVibe: Precise, compassionate, unnerving.\nSecret: Has a private theory connecting Ash, ECHO-7, and the first transfer trials.\nFirst Appearance: Examines a corrupted memory shard and refuses to say everything she saw.\nDM Use: Bridge Red Archive research with memory horror.\nER\nRed Archive",
+          "revealed": true
+        },
+        {
+          "name": "Enoch Rime",
+          "body": "Cleaner\n“Some records survive better when witnesses do not.”\nPublic: None.\nTruth: Removes people and evidence that threaten the Archive’s secrecy.\nOpen full dossier\nVibe: Silent assassin with funeral manners.\nSecret: Does not always agree with Cassian’s orders.\nFirst Appearance: Already in the room when the party arrives.\nDM Use: A warning that the Archive can be just as frightening as BCI.\nMG\nRed Archive",
+          "revealed": true
+        },
+        {
+          "name": "Mr. Glass",
+          "body": "Archive Broker\n“Information does not want to be free. Information wants better clients.”\nPublic: Private consultant to wealthy collectors and officials.\nTruth: Trades secrets with politicians, criminals, and corporations while shielding the Archive.\nOpen full dossier\nVibe: Charming, predatory, immaculate.\nSecret: Has sold truths that got people killed.\nFirst Appearance: Offers the party a record, but only if they trade something personal.\nDM Use: Make information feel expensive and morally loaded.",
+          "revealed": true
+        }
+      ]
+    },
+    {
+      "id": "continuance",
+      "title": "Continuance Initiative",
+      "kicker": "Private Research Consortium // Cognitive Continuity Program",
+      "subtitle": "Neural Continuity / Memory Transfer / Elite Survival Science",
+      "primary": "#74e8ff",
+      "accent": "#d9f7ff",
+      "letter": "C",
+      "fields": {
+        "Faction Overview": {
+          "value": "Public FaceContinuance claims to treat neurological decay, trauma loss, identity collapse, and memory deterioration through advanced continuity research.\nActual TruthContinuance is one of the few groups that knows memory transfer is real. Its leadership is obsessed with preserving identity beyond death, especially for the powerful.\nPlayer-Safe ReadTo the public, Continuance sounds hopeful and humane. To people who dig too deep, it feels like death wearing a lab coat.\nGM WarningContinuance should make the party ask whether survival without the original body is mercy, theft, or a copy pretending to be a person.\nTerritoryCorporate labs, private hospitals, sealed research floors, donor clinics, prototype containment, elite gala spaces.\nglass labsblue-white lightsynthetic bodiescontinuity ringsmedical branding",
+          "revealed": true
+        },
+        "Internal Structure": {
+          "value": "Founding BoardWealth, political sponsorship, and strategic protection.\nContinuity ResearchMemory transfer, identity mapping, synthetic housing, neurological backups.\nEthics OfficePublic reassurance, consent frameworks, legal insulation.\nContainment SecurityRetrieval of subjects, witness control, prototype protection.\nDonor ProgramUltra-rich patrons funding immortality-adjacent research.",
+          "revealed": true
+        },
+        "Session Hooks": {
+          "value": "• Mira recognizes Ash and panics.\n• Garran Locke’s team tries to recover a person, not kill them.\n• ECHO-7 begs the party not to let Continuance “continue” anyone else.\n• Kest offers a beautiful explanation of immortality that sounds almost reasonable.\nGM Secret Board",
+          "revealed": true
+        },
+        "Faction Secrets": {
+          "value": "• Memory transfer is real but extremely rare and unstable.\n• The first successful transfer may have suffered.\n• Continuance keeps donor priority lists for powerful people.\n• Ash’s existence may be evidence, property, miracle, or crime depending on who controls the story.",
+          "revealed": false
+        }
+      },
+      "npcs": [
+        {
+          "name": "Dr. Adrian Kest",
+          "body": "Founder\n“Death is only failure with better branding.”\nPublic: Billionaire scientist and philanthropist trying to cure memory loss and identity collapse.\nTruth: Obsessed with defeating death through continuity of self, not simply healing people.\nOpen full dossier\nVibe: Tech prophet with something dead behind the eyes.\nSecret: Knows of, funded, or directly oversaw projects related to Ash’s condition.\nFirst Appearance: Public gala, news broadcast, high-security lab, or Ash-linked records.\nDM Use: Central SOMA-style dilemma NPC.\nMC\nContinuance",
+          "revealed": true
+        },
+        {
+          "name": "Dr. Mira Cale",
+          "body": "Lead Memory Transfer Scientist\n“No... that can’t be right. You shouldn’t exist like this.”\nPublic: Neural continuity researcher known mostly in technical circles.\nTruth: Worked directly on memory transfer and can explain what Ash really is.\nOpen full dossier\nVibe: Brilliant, exhausted, guilty.\nSecret: Remembers the first successful transfer, and it was not peaceful.\nFirst Appearance: Recognizes Ash before he introduces himself.\nDM Use: Emotional and scientific doorway into Ash’s secret.\nE\nContinuance",
+          "revealed": true
+        },
+        {
+          "name": "ECHO-7",
+          "body": "Continuance Prototype\n“I remember dying. I do not remember stopping.”\nPublic: No public existence.\nTruth: Artificial body or continuity vessel containing transferred memory data.\nOpen full dossier\nVibe: Tragic, uncanny, childlike and ancient by turns.\nSecret: May remember events from before its body existed.\nFirst Appearance: Hidden, escaped, or contained in a quiet lab room that should be empty.\nDM Use: Proof that memory transfer is real before the party fully understands Ash.\nSM\nContinuance",
+          "revealed": true
+        },
+        {
+          "name": "Selene Marr",
+          "body": "Ethics Director\n“The question is not whether we should continue. It is who gets to decide what counts as life.”\nPublic: Public-facing conscience of Continuance.\nTruth: Makes horrifying research sound humane and legally survivable.\nOpen full dossier\nVibe: Soft-spoken corporate guilt in a tailored suit.\nSecret: Tried to stop Kest before and failed.\nFirst Appearance: Appears in a polished interview defending Continuance after rumors spread.\nDM Use: Moral ambiguity: complicit but maybe redeemable.\nGL\nContinuance",
+          "revealed": true
+        },
+        {
+          "name": "Garran Locke",
+          "body": "Security Director\n“Recovery is not optional. Neither is silence.”\nPublic: Corporate protection executive.\nTruth: Retrieves escaped subjects, silences witnesses, and protects labs.\nOpen full dossier\nVibe: Private military commander with corporate polish.\nSecret: Has orders to recover Ash alive if the truth surfaces.\nFirst Appearance: Clean SUVs and quiet armed professionals instead of street-level thugs.\nDM Use: Threat when Ash’s existence attracts Continuance attention.\nRT\nContinuance",
+          "revealed": true
+        },
+        {
+          "name": "Commander Rusk Thorne",
+          "body": "Political Donor / Security Hardliner\n“Progress belongs to those with the courage to fund it.”\nPublic: Wealthy sponsor of security expansion and Continuance research.\nTruth: Funds Continuance because he is dying and wants continuity for himself.\nOpen full dossier\nVibe: Old-money authoritarian terrified of mortality.\nSecret: His donor file includes an emergency transfer priority.\nFirst Appearance: Appears at a gala or city hearing arguing for BCI and Continuance partnership.\nDM Use: Tie money, politics, security, and immortality together.",
+          "revealed": true
+        }
+      ]
+    },
+    {
+      "id": "greymarket",
+      "title": "Grey Market & RedWire Cartel",
+      "kicker": "Information Contraband Network // Organized Data Crime",
+      "subtitle": "Information Economy / Criminal Logistics / Red Thread Underworld",
+      "primary": "#ff5a5f",
+      "accent": "#ffd166",
+      "letter": "GMR",
+      "fields": {
+        "Faction Overview": {
+          "value": "Public FaceThe Grey Market is not one organization; it is the illegal economy of secrets. RedWire is one of the more feared cartels inside that economy.\nActual TruthInformation is currency in Meridian Spire. Grey Market brokers buy, steal, launder, and sell data, memory shards, identities, blackmail, surveillance, and BCI tech.\nPlayer-Safe ReadThe party will need the Grey Market when official channels fail. The cost may be money, favors, reputation, or old secrets.\nGM WarningThis faction works best when it is useful and awful at the same time. Let players like these NPCs, then remind them everyone has a price.\nTerritoryBack rooms, nightclubs, market dens, monorail maintenance tunnels, runoff routes, private clinics, abandoned data shops.\nred wiresealed envelopescash chipsblack-market terminalsmaintenance tunnels",
+          "revealed": true
+        },
+        "Internal Structure": {
+          "value": "BrokersDeal secrets, identities, memory shards, and leverage.\nCartelsRedWire and similar crews that control territory and enforce debts.\nFixersConnect clients with smugglers, doctors, hackers, and fences.\nTunnel OperatorsMove people and goods through transit infrastructure.\nBlack ClinicsPatch wounds, remove trackers, alter records, no questions unless paid.\nCollectorsDebt enforcers and reputation managers.",
+          "revealed": true
+        },
+        "Session Hooks": {
+          "value": "• Nyx contacts Colton with an Iron Cross signal.\n• Cricket identifies the broken memory shard container.\n• Varo offers help for a favor that sounds harmless and absolutely is not.\n• Mags has BCI gear containing footage from a raid nobody admits happened.\nGM Secret Board",
+          "revealed": true
+        },
+        "Faction Secrets": {
+          "value": "• RedWire knows more about Colton than Colton wants the party to know.\n• Someone ordered Bell Saint not to kill Colton.\n• The Grey Market has handled memory shards connected to BCI black clinics.\n• Information brokers may sell the party’s investigation to both sides.",
+          "revealed": false
+        }
+      },
+      "npcs": [
+        {
+          "name": "Varo Kline",
+          "body": "Grey Market Kingpin\n“Memory shard? No, no, no. I don’t touch those. Unless you have money. Then I become very brave.”\nPublic: Club owner, fixer, businessman, information logistics consultant.\nTruth: Deals blackmail, stolen BCI tech, surveillance, memory shard movement, fake identities, and dangerous secrets.\nOpen full dossier\nVibe: Charming criminal uncle; expensive coat, cheap morals.\nSecret: May already know Mozzie or the party by reputation.\nFirst Appearance: Backroom beneath a club where music is louder than surveillance equipment.\nDM Use: Recurring underworld contact: helpful, dangerous, never free.\nSV\nGrey Market / RedWire",
+          "revealed": true
+        },
+        {
+          "name": "Silas Varn",
+          "body": "RedWire Cartel Boss\n“Nobody leaves clean. Not even the ones I let walk.”\nPublic: Unknown crime figure.\nTruth: Runs RedWire operations in the Dregs and lower Meridian Spire. Allowed Colton to leave alive.\nOpen full dossier\nVibe: Old-school crime boss with cyberpunk paranoia.\nSecret: Knows Colton was Iron Cross.\nFirst Appearance: Appears when RedWire decides Colton’s detective life has become inconvenient.\nDM Use: The scariest person who can expose Colton’s secret.\nNB\nGrey Market / RedWire",
+          "revealed": true
+        },
+        {
+          "name": "Nyx Bellweather",
+          "body": "RedWire Handler\n“Detective Cross. Cute title. Does Iron still answer?”\nPublic: Street-level information broker.\nTruth: Saw Colton’s talent and recruited him into RedWire. Keeps an Iron Cross file.\nOpen full dossier\nVibe: Friendly until she is not. Always smiling like she knows the last page.\nSecret: Has a sealed file labeled IRON CROSS — DO NOT BURN.\nFirst Appearance: Leaves Colton a message using his old RedWire signal.\nDM Use: Pull Colton’s old shadows back into the story.\nBS\nGrey Market / RedWire",
+          "revealed": true
+        },
+        {
+          "name": "Bell Saint",
+          "body": "RedWire Collector\n“This is going to hurt, and I am sorry about the inconvenience.”\nPublic: None.\nTruth: Debt collector, intimidation specialist, and cleanup man.\nOpen full dossier\nVibe: Polite, stylish, terrifying.\nSecret: Was ordered not to kill Colton years ago and does not know why.\nFirst Appearance: Appears after someone fails to pay or talks too much.\nDM Use: Street-level antagonist with style and menace.\nC\nGrey Market / RedWire",
+          "revealed": true
+        },
+        {
+          "name": "Cricket",
+          "body": "Memory Shard Broker\n“That’s not a drive. That’s a confession someone tried to make portable.”\nPublic: Small-time dealer in old tech and illegal data movement.\nTruth: Can identify shard containers, seals, makers, and who could afford them.\nOpen full dossier\nVibe: Nervous, quick, useful in exactly the way that gets people killed.\nSecret: Saw a similar container linked to a BCI-adjacent black clinic.\nFirst Appearance: Hiding in a market stall, ready to bolt at the word BCI.\nDM Use: Session 1 tech ID and shard lore.\nPN\nGrey Market / RedWire",
+          "revealed": true
+        },
+        {
+          "name": "Dr. Pax Neme",
+          "body": "Street Surgeon\n“Cash first. Sympathy after anesthesia.”\nPublic: Unlicensed medical fixer.\nTruth: Treats wounds, removes trackers, patches cybernetics, and keeps medical events off-record.\nOpen full dossier\nVibe: Back-alley doctor with surprisingly good bedside manner.\nSecret: Once worked in a BCI-approved trauma clinic.\nFirst Appearance: Behind a noodle shop, under humming surgical lights.\nDM Use: Safe-ish healing, tracker removal, off-record consequences.\nID\nGrey Market / RedWire",
+          "revealed": true
+        },
+        {
+          "name": "Ivo Dent",
+          "body": "Transit Smuggler\n“The city has veins. I just know where to cut.”\nPublic: Maintenance worker, courier, tunnel rat depending on who asks.\nTruth: Moves people through monorail maintenance routes and runoff infrastructure.\nOpen full dossier\nVibe: Fast-talking map goblin with a survival grin.\nSecret: Knows a tunnel beneath an abandoned BCI processing site.\nFirst Appearance: Charges the party extra because they look chased.\nDM Use: Movement when official routes are unsafe.\nMR\nGrey Market / RedWire",
+          "revealed": true
+        },
+        {
+          "name": "Mags Rook",
+          "body": "Fence for BCI Gear\n“Stolen? No. Rehomed from fascists. Big difference.”\nPublic: Scrap dealer.\nTruth: Sells stolen armor pieces, terminal parts, weapons, and restricted BCI hardware.\nOpen full dossier\nVibe: Greasy hands, bright eyes, no refund policy.\nSecret: Has a damaged BCI Elite helmet with undeleted raid footage.\nFirst Appearance: In a stall made of armored doors and old transit signs.\nDM Use: Gear, clues hidden in tech, black-market upgrades.",
+          "revealed": true
+        }
+      ]
+    },
+    {
+      "id": "civic",
+      "title": "Meridian Civic Authority & Public Power",
+      "kicker": "Municipal Governance // Public Pressure Channels",
+      "subtitle": "City Politics / Media / Licensing / Public Trust",
+      "primary": "#8fc7ff",
+      "accent": "#ffd27d",
+      "letter": "MCA",
+      "fields": {
+        "Faction Overview": {
+          "value": "Public FaceThis is the visible government of Meridian Spire: mayoral speeches, council votes, news conferences, city safety initiatives, and public order campaigns.\nActual TruthCivic leadership provides legitimacy and political cover for BCI authority, Continuance funding, elite protection, and controlled public narratives.\nPlayer-Safe ReadPlayers know these people from screens, speeches, license offices, and public scandals. They are the smiling face over the machinery.\nGM WarningPolitical NPCs should rarely threaten directly. They make the world move against the party while sounding reasonable.\nTerritoryCivic Core, council chambers, media towers, donor galas, licensing offices, public safety boards.\ncity sealwhite marble towersblue civic screensgold council pinspress lights",
+          "revealed": true
+        },
+        "Internal Structure": {
+          "value": "Mayor’s OfficePublic leadership, crisis addresses, BCI coordination, city image.\nCouncil BlocLaws, hearings, budgets, oversight theater, opposition pressure.\nPublic MediaNarrative control, panic management, heroic framing of state power.\nLicensing BureauLegal status of investigators, case access, permits, penalties.\nDonor ClassCorporate money, research funding, security expansion, elite survival interests.",
+          "revealed": true
+        },
+        "Session Hooks": {
+          "value": "• Mayor Cross frames a BCI crackdown as compassionate stability.\n• Nia Ravel asks the party for evidence she can use in a public hearing.\n• Dax warns the party that one more incident could cost them their PI licenses.\n• Mara Quell receives the Ruiz file and becomes a possible media wild card.\nGM Secret Board",
+          "revealed": true
+        },
+        "Faction Secrets": {
+          "value": "• Political leaders know different amounts of the truth, which makes guilt uneven.\n• The licensing office can be used as a pressure valve against the party.\n• A donor network quietly funds Continuance in exchange for future access.\n• Mayor Cross’s surname may become a Colton pressure point.",
+          "revealed": false
+        }
+      },
+      "npcs": [
+        {
+          "name": "Mayor Evangeline Cross",
+          "body": "Mayor of Meridian Spire\n“Stability is compassion at scale.”\nPublic: Polished, reform-minded mayor focused on public safety, cognitive health, and order.\nTruth: Political bridge between BCI, wealthy families, city government, and Continuance.\nOpen full dossier\nVibe: Elegant, beloved by people who do not know better.\nSecret: May be connected to Colton’s family name or to the systems that erased his parents.\nFirst Appearance: Public broadcasts after BCI incidents or citywide emergency addresses.\nDM Use: Political face of the campaign; decides when players become threats.\nCN\nCivic Power",
+          "revealed": true
+        },
+        {
+          "name": "Councilor Nia Ravel",
+          "body": "Opposition Councilor\n“Oversight that cannot say no is just applause.”\nPublic: Council critic of BCI overreach.\nTruth: Potential ally if the party provides evidence strong enough to risk her career.\nOpen full dossier\nVibe: Brave enough to speak, careful enough to survive.\nSecret: Her sibling was memory-edited after a protest.\nFirst Appearance: A hearing clip questioning BCI authority.\nDM Use: Political ally with limits and consequences.\nMQ\nCivic Power",
+          "revealed": true
+        },
+        {
+          "name": "Mara Quell",
+          "body": "BCI-Approved News Anchor\n“Remain calm. Verified updates will follow.”\nPublic: Trusted voice during crisis broadcasts.\nTruth: Frames events in ways that support BCI narratives and calm public doubt.\nOpen full dossier\nVibe: Warm, fake-safe, professionally soothing.\nSecret: Received an anonymous Ruiz file and has not opened it yet.\nFirst Appearance: Reports on the apartment incident using language that makes the party sound suspicious.\nDM Use: Reputation pressure and possible media crack later.\nDO\nCivic Power",
+          "revealed": true
+        },
+        {
+          "name": "Dax Orro",
+          "body": "PI License Handler\n“I don’t care what you found. I care what you can prove without getting my office raided.”\nPublic: City licensing contact for PI permits, case permissions, and warnings.\nTruth: Knows some cases are cursed and quietly flags them because people vanish around them.\nOpen full dossier\nVibe: Overworked clerk with survival instincts and a permanent headache.\nSecret: Keeps a list of DO NOT TOUCH case numbers that disappear from systems.\nFirst Appearance: Calls the party after Session 1 to warn their licenses are being reviewed.\nDM Use: Legal leash, warning siren, reluctant official access.\nMA\nCivic Power",
+          "revealed": true
+        },
+        {
+          "name": "Minister Alaric Venn",
+          "body": "Minister of Cognitive Safety\n“A safe mind is a loyal city.”\nPublic: Cabinet-level voice for cognitive health and social stability.\nTruth: Uses fear to justify surveillance, memory compliance, and BCI budget expansions.\nOpen full dossier\nVibe: Comforting authoritarian with excellent diction.\nSecret: Knows about non-medical memory correction but calls it emergency stabilization.\nFirst Appearance: Appears beside Veyne after an “illegal memory contamination” alert.\nDM Use: Give BCI policy a political mouthpiece.\nSD\nCivic Power",
+          "revealed": true
+        },
+        {
+          "name": "Seris Dane",
+          "body": "Corporate Lobbyist\n“Everyone hates corruption until they need funding.”\nPublic: High-end policy consultant connecting business and government.\nTruth: Links Continuance, BCI, wealthy families, and city contracts.\nOpen full dossier\nVibe: Velvet handshake, razor ledger.\nSecret: Maintains private donor channels for continuity research.\nFirst Appearance: At a gala, already knowing which PC should not be there.\nDM Use: Connects money trails without looking like a villain.",
+          "revealed": true
+        }
+      ]
+    }
+  ],
+  "npcs": [
+    {
+      "id": "damien-ruiz",
+      "name": "Damien Ruiz",
+      "role": "Session 1 Mystery Figure",
+      "faction": "Session One",
+      "section": "Session One & Immediate Leads",
+      "status": [
+        "Locked",
+        "Session 1 Useful",
+        "Secret"
+      ],
+      "personality": [
+        "Anxious",
+        "Careful",
+        "Guilt-driven",
+        "Not naturally brave"
+      ],
+      "connections": [
+        "Colton Cross",
+        "Ash Calder",
+        "Mozzie Farouk",
+        "CotU",
+        "BCI",
+        "Ruiz Family",
+        "Sarah Farouk",
+        "Nadir Farouk",
+        "Leena Farouk",
+        "Arasaka Security"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "DON’T TRUST CLEAN RECORDS.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "A missing childhood friend from the old school group. Publicly, his family disappearance became one more unresolved case Meridian Spire learned to stop discussing.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Damien was the emotional center of Ash, Colton, and Mozzie’s childhood circle. He found or inherited information tied to his family, the 2074 BCI case, and altered records, then tried to pass it on before he was silenced.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Tragic, nervous, desperate; a normal person pushed into bravery.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "He is the first thread that pulls the party back to the case that broke their childhood: Damien’s disappearance, the Ruiz family silence, and the question of what Colton, Ash, and Mozzie each remember differently.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "Damien may not have been the real target. The BCI may have been watching whoever came to collect what he had.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "A destroyed apartment, a broken memory shard container, a wounded survivor, and a still-warm portable BCI terminal.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use Damien like the campaign’s first ghost. Every answer about him should create two more questions.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "captain-orin-vale",
+      "name": "Captain Orin Vale",
+      "role": "BCI Patrol Captain",
+      "faction": "BCI",
+      "section": "BCI Command & State Control",
+      "status": [
+        "Locked",
+        "Session 1 Useful"
+      ],
+      "personality": [
+        "Polite but threatening",
+        "Detail-oriented",
+        "Ambitious",
+        "Controlled"
+      ],
+      "connections": [
+        "BCI",
+        "Players",
+        "Dax Orro",
+        "Mara Veyne"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Licensed private investigators. Interesting. That makes this unfortunate instead of suspicious.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "A disciplined BCI field captain assigned to disturbances, PI overreach, illegal data activity, and urban incidents.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Ambitious and observant. He sees the party as a stepping stone, a problem, or a case file waiting to happen.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Professional, sharp, and irritatingly reasonable.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "He is the first recurring BCI pressure point the party can actually talk to, evade, or anger.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "He suspects the BCI is hiding something larger than routine corruption, but he is not brave enough to ask the wrong questions yet.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "Arrives after the Session 1 incident or after the terminal warning that BCI authorities are on route.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use him to threaten licenses, interrogate witnesses, freeze scenes, and make the party feel watched.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "dax-orro",
+      "name": "Dax Orro",
+      "role": "PI License Handler",
+      "faction": "Licensing",
+      "section": "Session One & Immediate Leads",
+      "status": [
+        "Session 1 Useful",
+        "Flexible"
+      ],
+      "personality": [
+        "Pragmatic",
+        "Sarcastic",
+        "Cautious",
+        "Secretly helpful"
+      ],
+      "connections": [
+        "Players",
+        "BCI",
+        "City Licensing",
+        "Captain Orin Vale"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "I don’t care what you found. I care what you can prove without getting my office raided.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "A city licensing contact who handles PI permits, case permissions, paperwork, and official warnings.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Dax knows some cases are cursed. He flags them because people who touch them tend to vanish.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Overworked government clerk with survival instincts and a permanent headache.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "He gives legal pressure without every obstacle needing to be a BCI squad.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "He has a private list of cases marked DO NOT TOUCH because those case numbers keep disappearing from city systems.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "Calls the party after the apartment incident: their licenses are being reviewed.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use as a leash, warning siren, and reluctant source of official access.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "cricket",
+      "name": "Cricket",
+      "role": "Memory Shard Broker",
+      "faction": "Grey Market",
+      "section": "Session One & Immediate Leads",
+      "status": [
+        "Session 1 Useful",
+        "Flexible",
+        "Secret"
+      ],
+      "personality": [
+        "Fast-talking",
+        "Cowardly until paid",
+        "Curious",
+        "Resourceful"
+      ],
+      "connections": [
+        "Grey Market",
+        "Varo Kline",
+        "Damien Ruiz",
+        "BCI black clinics"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "That’s not a drive. That’s a confession someone tried to make portable.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "A small-time dealer in old tech, black-market storage, and illegal data movement.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Cricket knows enough about memory shard containers to identify who made one and who could afford it.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Nervous, quick, squirrelly, useful in exactly the way that gets people killed.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "The party needs someone who can identify the broken container from Session 1.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "Cricket has seen one container with the same seal before: it was linked to a BCI-adjacent black clinic.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "Found hiding in a market stall, ready to bolt the second anyone says BCI.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use Cricket for shard lore, illegal tech IDs, and comic relief that can turn tragic.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "director-mara-veyne",
+      "name": "Director Mara Veyne",
+      "role": "Director of the Bureau of Cognitive Integrity",
+      "faction": "BCI",
+      "section": "BCI Command & State Control",
+      "status": [
+        "Locked",
+        "Secret"
+      ],
+      "personality": [
+        "Calm under pressure",
+        "Legally precise",
+        "Mercilessly controlled",
+        "Convinced she is protecting people"
+      ],
+      "connections": [
+        "BCI",
+        "Mayor Evangeline Cross",
+        "Continuance Initiative",
+        "Halden Kreiss"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Your memories are protected. Your fear is understood. Your cooperation is required.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "The trusted face of cognitive safety in Meridian Spire. Appears on official broadcasts after crises.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "She knows memory alteration is not only medical. She knows it has been used politically and believes the lie is necessary to preserve the city.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Cold, elegant, terrifyingly calm.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "She is the face of the system itself.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "She has seen records of the original massacre and the edits that followed. She may not have created the lie, but she maintains it.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "Seen through citywide BCI broadcasts, propaganda screens, and terminal warnings before any in-person meeting.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use when the party becomes a city-level problem.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "commander-darius-korr",
+      "name": "Commander Darius Korr",
+      "role": "BCI Enforcer Commander",
+      "faction": "BCI",
+      "section": "BCI Command & State Control",
+      "status": [
+        "Locked"
+      ],
+      "personality": [
+        "Direct",
+        "Uncompromising",
+        "Emotionally restrained",
+        "Operationally brutal"
+      ],
+      "connections": [
+        "BCI Enforcers",
+        "Mara Veyne",
+        "Halden Kreiss",
+        "Players"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "End this now. Compliance is your last mercy.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Commander of high-risk BCI tactical response teams. Most citizens know him only through red-alert footage.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "He leads black-bag raids, memory seizure operations, forced disappearances, and suppression missions.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Male tactical hammer of the BCI. Minimal words, maximum pressure.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "His arrival means the campaign has escalated from investigation into survival.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "He remembers every major raid he has led, especially the ones involving innocents. He buries guilt under obedience.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "Red emergency lights, heavy boots, synchronized Enforcer units, and no negotiation posture.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use sparingly. He should feel like a boss warning, not a routine patrol officer.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "deputy-director-halden-kreiss",
+      "name": "Deputy Director Halden Kreiss",
+      "role": "BCI Internal Security Chief",
+      "faction": "BCI",
+      "section": "BCI Command & State Control",
+      "status": [
+        "Locked",
+        "Secret"
+      ],
+      "personality": [
+        "Patient",
+        "Cruel by procedure",
+        "Precise",
+        "Unflappable"
+      ],
+      "connections": [
+        "BCI",
+        "Cross accident",
+        "Ruiz disappearance",
+        "Ash transfer file"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "A disappeared file is not evidence. It is an administrative correction.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Senior BCI administrator responsible for internal security and classified investigations.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "He handles leaks, coverups, disappearances, and political damage control.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Bureaucratic monster. Can ruin a life with a form.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "He is the hidden blade behind BCI paperwork.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "He personally approved cleanup operations tied to family disappearance cases.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "His name appears as an authorization stamp on a redacted BCI report.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use him when the party starts tracing who signed off on ruined lives.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "dr.-elian-strake",
+      "name": "Dr. Elian Strake",
+      "role": "BCI Memory Compliance Doctor",
+      "faction": "BCI",
+      "section": "BCI Command & State Control",
+      "status": [
+        "Locked",
+        "Secret"
+      ],
+      "personality": [
+        "Soft-spoken",
+        "Clinical",
+        "Detached",
+        "Convincingly compassionate"
+      ],
+      "connections": [
+        "BCI clinics",
+        "Mara Veyne",
+        "Halden Kreiss",
+        "Memory-edited witnesses"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "The mind protects itself. We simply assist the process.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "A respected cognitive health specialist involved in trauma treatment and memory stabilization.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "He performs therapeutic memory correction that can hide abuse, erase people, and reframe history.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Gentle voice, clean gloves, absolute nightmare.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "He embodies the medical mask of the BCI.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "He has treated people who later forgot entire family members.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "Interviewing a victim who suddenly cannot remember why they were afraid.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use him to make memory editing feel intimate, plausible, and horrifying.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "celia-voss",
+      "name": "Celia Voss",
+      "role": "BCI Propaganda Minister",
+      "faction": "BCI",
+      "section": "BCI Command & State Control",
+      "status": [
+        "Flexible"
+      ],
+      "personality": [
+        "Media-trained",
+        "Elegant",
+        "Manipulative",
+        "More tired than she admits"
+      ],
+      "connections": [
+        "BCI",
+        "Mara Quell",
+        "Mayor Cross",
+        "Public media"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "A frightened public is not unstable. It is receptive.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "The polished media strategist behind BCI safety campaigns and anti-rebel broadcasts.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "She controls the language people use to fear memory contamination, rebels, and illegal information.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Perfect smile, poisonous words.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "She turns the public against the players without firing a shot.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "She does not fully believe the propaganda anymore, but she is too deep to stop.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "A broadcast reframes the party’s investigation as a public safety concern.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use to control narrative consequences and public reputation.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "mother-aven-sorell",
+      "name": "Mother Aven Sorell",
+      "role": "Leader of the Choir of the Unforgotten",
+      "faction": "CotU",
+      "section": "Resistance Networks",
+      "status": [
+        "Locked",
+        "Secret"
+      ],
+      "personality": [
+        "Warm toward the broken",
+        "Ruthless toward power",
+        "Emotionally intense",
+        "Charismatic"
+      ],
+      "connections": [
+        "CotU",
+        "BCI",
+        "Jessa Vane",
+        "Bram Static Olan",
+        "Damien Ruiz"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "They taught you memory is fragile. They never told you who keeps breaking it.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Classified by BCI as a radical agitator, cult leader, and domestic extremist.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "A former BCI grief specialist who discovered therapeutic memory work was being weaponized.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Revolutionary grief-preacher; compassionate and dangerous.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "She gives the rebellion a human, painful, morally complicated face.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "She helped shape early therapeutic memory correction before realizing what the system had become.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "A hacked public terminal interrupts BCI messaging with her voice.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Make her right about the horror but questionable in what she will sacrifice to reveal it.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "jessa-vane",
+      "name": "Jessa Vane",
+      "role": "CotU Recruiter and Propagandist",
+      "faction": "CotU",
+      "section": "Resistance Networks",
+      "status": [
+        "Session 1 Useful"
+      ],
+      "personality": [
+        "Bold",
+        "Impatient",
+        "Protective",
+        "Reckless"
+      ],
+      "connections": [
+        "CotU",
+        "Damien Ruiz",
+        "Mother Aven Sorell",
+        "Bram Static Olan"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "You want the truth? Then stop asking politely.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "A young dissident blamed for illegal data pages and anti-BCI recruitment messages.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "She builds contact chains, designs rebellious data drops, and may have helped Damien arrange the failed exchange.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Angry, brilliant, reckless hacker-recruiter energy.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "She is the party’s most immediate path from Damien to CotU.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "She knew Damien personally and is hiding how much she knows about the meet.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "A rebellious recruitment page asks if the viewer wants to know the truth.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use her as a hot fuse: useful, emotional, and likely to escalate problems.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "bram-static-olan",
+      "name": "Bram “Static” Olan",
+      "role": "CotU Runoff Cell Leader",
+      "faction": "CotU",
+      "section": "Resistance Networks",
+      "status": [
+        "Session 1 Useful"
+      ],
+      "personality": [
+        "Suspicious",
+        "Loud",
+        "Loyal to locals",
+        "Explosive"
+      ],
+      "connections": [
+        "CotU",
+        "Runoff tunnels",
+        "Damien Ruiz",
+        "Jessa Vane"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "The city whispers down here. You just have to hate silence enough to listen.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "A rumored undercity agitator linked to illegal broadcasts and runoff tunnel activity.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "He runs CotU movement in the runoff and suspects Damien was betrayed from inside the Choir.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Pirate radio preacher with a shotgun personality.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "He connects Session 1 to the physical undercity and slum sectors.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "He believes there is a mole inside his cell.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "His voice crackles through a hacked runoff speaker before the players see him.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use him for gritty ground-level resistance and ugly choices.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "the-hollow-man",
+      "name": "The Hollow Man",
+      "role": "Memory Witness",
+      "faction": "CotU",
+      "section": "Resistance Networks",
+      "status": [
+        "Flexible",
+        "Secret"
+      ],
+      "personality": [
+        "Fragmented",
+        "Gentle in flashes",
+        "Terrified",
+        "Prophetic without meaning to be"
+      ],
+      "connections": [
+        "CotU",
+        "BCI clinics",
+        "Red Archive",
+        "Erased records"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "I remember three childhoods. Only one of them has my mother in it.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "A disturbed man used by BCI propaganda as proof that illegal memory material causes psychosis.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "His edited memories are breaking through, leaving him with incompatible versions of his own life.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Creepy, tragic, glitching humanity.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "He makes the horror of memory alteration personal and visible.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "One of his memory fragments contains a real name erased from city history.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "Found repeating the same address in three different voices.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use for disturbing clues, sympathy, and impossible testimony.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "saint-luma",
+      "name": "Saint Luma",
+      "role": "Choir Martyr Symbol",
+      "faction": "CotU",
+      "section": "Resistance Networks",
+      "status": [
+        "Flexible",
+        "Secret"
+      ],
+      "personality": [
+        "Symbolic NPC",
+        "Compassionate in recovered fragments",
+        "Defiant",
+        "Lost"
+      ],
+      "connections": [
+        "CotU",
+        "Red Archive",
+        "Original massacre",
+        "BCI"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Remember Luma. Remember what they buried.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "A supposed propaganda invention used by CotU to manipulate the desperate.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Luma was real, erased, and turned into a symbol by those who refused to forget.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Urban saint, missing-person poster, ghost in the movement.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "Gives CotU a sacred emotional center.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "The true record of Luma’s death points toward the original massacre.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "A mural in the Dregs: a face painted over so many times it has become holy.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use as a clue chain, not just lore. Luma should eventually matter.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "director-ilyra-noct",
+      "name": "Director Ilyra Noct",
+      "role": "Leader of Truth Division",
+      "faction": "Truth Division",
+      "section": "Resistance Networks",
+      "status": [
+        "Flexible",
+        "Secret"
+      ],
+      "personality": [
+        "Principled",
+        "Severe",
+        "Patient",
+        "Willing to burn comfort"
+      ],
+      "connections": [
+        "Truth Division",
+        "Lio Senn",
+        "Nessa Crowe",
+        "Red Archive"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Truth is not gentle. That is not an argument against it.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Unknown or misidentified by authorities as a fringe conspiracy coordinator.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "She leads Truth Division and believes the city must see the real past no matter the damage.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Cold revolutionary scholar with a knife behind every sentence.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "She gives Truth Division a distinct voice separate from CotU emotion and Red Archive secrecy.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "She has already seen a partial unedited timeline and it broke her faith in gradual reform.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "A purple terminal message signs off with only NOCT.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use when the party needs someone who values truth more than safety.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "lio-senn",
+      "name": "Lio Senn",
+      "role": "Truth Division Hacker",
+      "faction": "Truth Division",
+      "section": "Resistance Networks",
+      "status": [
+        "Locked"
+      ],
+      "personality": [
+        "Brilliant",
+        "Jittery",
+        "Deflects with jokes",
+        "Guilty"
+      ],
+      "connections": [
+        "Truth Division",
+        "Ash Calder",
+        "Ilyra Noct",
+        "Nessa Crowe"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "You weren’t hacked. You were invited badly.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "No official record. Known only through purple glitches, corrupted screens, and impossible terminal intrusions.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Responsible for Truth Division hacks, warnings, and distorted terminal messages like 'you aren’t ready.'",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Sleep-deprived genius gremlin with a moral injury.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "He is the party’s tech doorway into Truth Division.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "He knows Ash’s name appears in files that should not exist.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "A purple flash hijacks a terminal and leaves behind a line only the party understands.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use for scary terminal scenes, encrypted clues, and unreliable assistance.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "nessa-crowe",
+      "name": "Nessa Crowe",
+      "role": "Ex-BCI Defector",
+      "faction": "Truth Division",
+      "section": "Resistance Networks",
+      "status": [
+        "Locked",
+        "Secret"
+      ],
+      "personality": [
+        "Practical",
+        "Guarded",
+        "Haunted",
+        "Ruthlessly prepared"
+      ],
+      "connections": [
+        "Truth Division",
+        "BCI",
+        "Halden Kreiss",
+        "Mara Veyne"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "I know how they hunt you because I used to write the hunt orders.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Officially dead, disgraced, or nonexistent depending on the database.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "A former BCI operative who escaped with internal knowledge of tracking, editing, and threat classification.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Burned spy; paranoid, deadly, hard to trust.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "She can teach the party how the BCI really thinks.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "She helped erase someone once and is trying to undo what she did.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "She saves the party from a BCI trap, then aims a weapon at them anyway.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use when the players need insider tactics but should not get easy answers.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "tomas-wren",
+      "name": "Tomas Wren",
+      "role": "Truth Division Field Archivist",
+      "faction": "Truth Division",
+      "section": "Resistance Networks",
+      "status": [
+        "Flexible"
+      ],
+      "personality": [
+        "Earnest",
+        "Anxious",
+        "Obsessive",
+        "Braver than he looks"
+      ],
+      "connections": [
+        "Truth Division",
+        "Damien Ruiz",
+        "Red Archive",
+        "Colton Cross"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Paper lies slower than systems do.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "A missing academic, data preservation specialist, or dead file clerk depending where you look.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Collects physical evidence, corrupted files, analog records, and testimony before they can be edited.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Nervous historian with a backpack full of evidence and bad survival odds.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "He lets the party find truth as physical objects, not just exposition.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "He has a copy of a school record proving Damien did not simply move away.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "Hiding in a storage archive, refusing to leave without one more box.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use for research missions, clue drops, and escort complications.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "violet",
+      "name": "“Violet”",
+      "role": "Truth Division Contact",
+      "faction": "Truth Division",
+      "section": "Resistance Networks",
+      "status": [
+        "Flexible",
+        "Secret"
+      ],
+      "personality": [
+        "Cryptic",
+        "Protective maybe",
+        "Manipulative maybe",
+        "Precise"
+      ],
+      "connections": [
+        "Ash Calder",
+        "Truth Division",
+        "Lio Senn",
+        "Continuance Initiative"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Ash Calder, you are not ready. That does not mean you are safe.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Unknown. Appears only as a handle, color signature, or voice distortion.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "A Truth Division contact tied to Ash’s hidden history and the purple warning messages.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Elegant, frightening, intimate in a way that feels invasive.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "Makes Ash’s personal mystery feel watched and active.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "Violet may not be one person. It could be a shared access identity or an old transfer echo.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "The terminal flashes purple and says: YOU AREN’T READY.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use when you want Ash’s story to intrude without explaining itself yet.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "kade-morrow",
+      "name": "Kade Morrow",
+      "role": "Radical Truth Cell Leader",
+      "faction": "Truth Division",
+      "section": "Resistance Networks",
+      "status": [
+        "Flexible"
+      ],
+      "personality": [
+        "Furious",
+        "Persuasive",
+        "Impatient",
+        "Morally absolute"
+      ],
+      "connections": [
+        "Truth Division",
+        "CotU radicals",
+        "BCI targets",
+        "Ilyra Noct"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "If the city breaks when it hears the truth, then it was already broken.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "A dangerous extremist blamed for data attacks and infrastructure disruption.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "He believes careful exposure is cowardice and wants public revelation by force.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Molotov philosopher; smart enough to be convincing and angry enough to be dangerous.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "Creates tension inside Truth Division and gives the party a bad ally option.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "He is willing to leak unstable memory data even if it hurts innocent people.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "Offers the party exactly what they need, for a price that feels wrong.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use to test whether the party values method as much as truth.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "archivist-cassian-rell",
+      "name": "Archivist Cassian Rell",
+      "role": "Head of the Red Archive",
+      "faction": "Red Archive",
+      "section": "The Red Archive",
+      "status": [
+        "Locked",
+        "Secret"
+      ],
+      "personality": [
+        "Soft-spoken",
+        "Patient",
+        "Testing everyone",
+        "Dangerously informed"
+      ],
+      "connections": [
+        "Red Archive",
+        "Seraphine Vale",
+        "Len Orra",
+        "Truth Division",
+        "Original massacre"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Information is not light. It is a weapon that believes itself holy.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Officially nonexistent. The Red Archive is rumor; Cassian is a rumor inside the rumor.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Keeper of forbidden records, erased names, and fragments of pre-edited history.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Refined, quiet, unsettlingly informed.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "He gates access to the deepest history and decides who deserves dangerous truth.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "He has names of people completely erased from official history, including one tied to the massacre.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "The party meets one of his agents first; Cassian should feel earned.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use him as neither ally nor villain. He is a lock with a pulse.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "agent-seraphine-vale",
+      "name": "Agent Seraphine Vale",
+      "role": "Red Archive Field Agent",
+      "faction": "Red Archive",
+      "section": "The Red Archive",
+      "status": [
+        "Locked"
+      ],
+      "personality": [
+        "Composed",
+        "Discerning",
+        "Dangerously polite",
+        "Hard to impress"
+      ],
+      "connections": [
+        "Red Archive",
+        "Cassian Rell",
+        "Players",
+        "Damien Ruiz"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "I am not here to save you. I am here to decide if you are worth informing.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Unknown, often mistaken for a corporate envoy or private security consultant.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "A sophisticated field operative who retrieves forbidden records and tests potential assets.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Elegant, minimalistic armor, quiet authority.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "She is the party’s first usable Red Archive contact.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "She has watched the party since the Damien incident.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "Appears after the party accesses a record they should not have survived finding.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use her to offer help that feels like an evaluation.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "len-orra",
+      "name": "Len Orra",
+      "role": "Red Archive Historical Analyst",
+      "faction": "Red Archive",
+      "section": "The Red Archive",
+      "status": [
+        "Flexible"
+      ],
+      "personality": [
+        "Nervous",
+        "Brilliant",
+        "Pedantic",
+        "Morally bothered"
+      ],
+      "connections": [
+        "Red Archive",
+        "Cassian Rell",
+        "Truth Division",
+        "City history"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Clean records are suspicious. Real lives leave mess.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "An obscure researcher with no stable employment trail.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Studies erased timelines, false archives, and public records that were rewritten more than once.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Nervous academic who knows way too much.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "Explains why the city’s cleanest files are the most dangerous.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "He found proof that multiple official city events were revised after publication.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "Buried under old printouts, arguing with a terminal that has no network access.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use for research explanations without making them boring.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "dr.-veyra-sol",
+      "name": "Dr. Veyra Sol",
+      "role": "Red Archive Memory Curator",
+      "faction": "Red Archive",
+      "section": "The Red Archive",
+      "status": [
+        "Flexible",
+        "Secret"
+      ],
+      "personality": [
+        "Gentle",
+        "Clinical",
+        "Sad",
+        "Almost reverent"
+      ],
+      "connections": [
+        "Red Archive",
+        "Ash Calder",
+        "Mira Cale",
+        "Memory artifacts"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "A damaged memory is still evidence. It simply bleeds when handled.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "No public-facing record; occasionally appears under academic aliases.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Specialist in damaged memories, identity records, and transfer-adjacent anomalies.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Quiet laboratory oracle; part scientist, part mortician of thoughts.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "Connects Red Archive knowledge to memory science without being Continuance.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "She has studied a memory pattern similar to Ash’s before.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "In an archive lab where memories are treated like fragile relics.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use when the party needs memory analysis that BCI or Continuance would weaponize.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "enoch-rime",
+      "name": "Enoch Rime",
+      "role": "Red Archive Cleaner",
+      "faction": "Red Archive",
+      "section": "The Red Archive",
+      "status": [
+        "Flexible",
+        "Secret"
+      ],
+      "personality": [
+        "Minimal speech",
+        "Efficient",
+        "Emotionless facade",
+        "Obedient to Archive priorities"
+      ],
+      "connections": [
+        "Red Archive",
+        "Cassian Rell",
+        "Seraphine Vale",
+        "Forbidden witnesses"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "The Archive preserves truth. Not witnesses.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "None. No stable identity survives long around him.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Assassin/cleaner who removes threats to the Archive’s secrecy.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Silent, pale, surgical danger.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "Shows that the Red Archive is not morally clean just because it preserves truth.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "He once saved a target instead of eliminating them because the truth required a living witness.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "The aftermath of a clean scene where the only clue is what was intentionally left behind.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use to complicate the Red Archive’s moral position.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "dr.-adrian-kest",
+      "name": "Dr. Adrian Kest",
+      "role": "Founder of the Continuance Initiative",
+      "faction": "Continuance",
+      "section": "Continuance Initiative",
+      "status": [
+        "Locked",
+        "Secret"
+      ],
+      "personality": [
+        "Charismatic",
+        "Philosophical",
+        "Patiently manipulative",
+        "Ethics-as-branding"
+      ],
+      "connections": [
+        "Continuance Initiative",
+        "Dr. Mira Cale",
+        "Ash Calder",
+        "Mayor Cross",
+        "BCI"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Death is a design flaw. We are simply refusing bad engineering.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Billionaire scientist, philanthropic visionary, and public face of neurological continuity research.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "One of the few people who knows memory transfer is real and wants to preserve identity beyond death.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Tech prophet with something dead behind the eyes.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "He anchors the campaign’s SOMA-style identity horror.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "He funded, oversaw, or knows the project that made Ash possible.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "At a gala, broadcast, or secure lab where he sounds more humane than he is.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use when the story asks: if your memories continue, are you still you?",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "dr.-mira-cale",
+      "name": "Dr. Mira Cale",
+      "role": "Lead Memory Transfer Scientist",
+      "faction": "Continuance",
+      "section": "Continuance Initiative",
+      "status": [
+        "Locked",
+        "Secret"
+      ],
+      "personality": [
+        "Sharp",
+        "Nervous",
+        "Guarded",
+        "Crushed by guilt"
+      ],
+      "connections": [
+        "Continuance Initiative",
+        "Ash Calder",
+        "Dr. Adrian Kest",
+        "ECHO-7"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "No. That can’t be right. You shouldn’t exist like this.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "An obscure neurological continuity researcher known mostly through technical papers.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "She directly participated in memory transfer experimentation and may know what Ash really is.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Brilliant, exhausted, guilty.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "She is the emotional and scientific doorway into Ash’s secret.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "She remembers the first successful transfer. It screamed when it woke up.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "She recognizes Ash before he gives a name.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use her for devastating answers rather than easy solutions.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "echo-7",
+      "name": "ECHO-7",
+      "role": "Continuance Prototype",
+      "faction": "Continuance",
+      "section": "Continuance Initiative",
+      "status": [
+        "Locked",
+        "Secret"
+      ],
+      "personality": [
+        "Fragmented",
+        "Curious",
+        "Afraid of sleep",
+        "Unexpectedly gentle"
+      ],
+      "connections": [
+        "Continuance Initiative",
+        "Mira Cale",
+        "Ash Calder",
+        "Garran Locke"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "I remember dying. I do not remember stopping.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "No public record. If mentioned, classified as proprietary therapeutic hardware.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "An artificial body containing transferred memory data. Living proof that transfer works.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Tragic, uncanny, childlike in flashes and ancient in others.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "Proves memory transfer before the party fully understands Ash.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "ECHO-7’s original person may not be dead in the way Continuance claims.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "A containment room where something human asks why it has no fingerprints.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use as foreshadowing and moral horror, not just a robot NPC.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "selene-marr",
+      "name": "Selene Marr",
+      "role": "Continuance Ethics Director",
+      "faction": "Continuance",
+      "section": "Continuance Initiative",
+      "status": [
+        "Flexible"
+      ],
+      "personality": [
+        "Measured",
+        "Diplomatic",
+        "Haunted",
+        "Complicit"
+      ],
+      "connections": [
+        "Continuance Initiative",
+        "Dr. Adrian Kest",
+        "Mira Cale",
+        "Public donors"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Ethics is not a brake. It is steering.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Public-facing moral authority for Continuance research and humanitarian messaging.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "She makes horrifying research sound responsible and has failed to stop Kest before.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Soft-spoken corporate guilt in a tailored suit.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "She lets Continuance defend itself in a way that almost sounds convincing.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "She once tried to halt a transfer project and signed off after pressure anyway.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "On a panel explaining how Continuance protects identity dignity.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use for moral arguments that are not simple villain monologues.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "garran-locke",
+      "name": "Garran Locke",
+      "role": "Continuance Security Director",
+      "faction": "Continuance",
+      "section": "Continuance Initiative",
+      "status": [
+        "Locked"
+      ],
+      "personality": [
+        "Disciplined",
+        "Cold",
+        "Tactically flexible",
+        "Professional threat"
+      ],
+      "connections": [
+        "Continuance Initiative",
+        "Dr. Adrian Kest",
+        "ECHO-7",
+        "Ash Calder"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Recovery alive. Condition negotiable.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Corporate security executive protecting sensitive medical research sites.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Retrieves escaped subjects, silences witnesses, and protects labs from exposure.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Private military commander with corporate polish.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "He becomes dangerous when Ash’s existence attracts Continuance attention.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "He has orders to recover Ash alive if the truth surfaces.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "A security team arrives seconds before a lab record can finish downloading.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use as the Continuance version of tactical pressure, distinct from BCI.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "varo-kline",
+      "name": "Varo Kline",
+      "role": "Grey Market Kingpin",
+      "faction": "Grey Market",
+      "section": "Underworld, Grey Market & RedWire",
+      "status": [
+        "Locked"
+      ],
+      "personality": [
+        "Funny",
+        "Greedy",
+        "Never surprised",
+        "Self-serving but useful"
+      ],
+      "connections": [
+        "Grey Market",
+        "RedWire",
+        "Mozzie Farouk",
+        "Cricket",
+        "Dr. Pax Neme",
+        "Arasaka Security",
+        "Rhea Kade"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "I don’t touch memory shards. Unless you have money. Then I become very brave.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Club owner, fixer, businessman, and nightlife figure in the lower city; he has sold information to corporate security people before.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Major broker of illegal data, blackmail, fake identities, stolen BCI tech, surveillance, and memory contraband. He knows Mozzie by reputation from Arasaka operations.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Charming criminal uncle with excellent survival instincts.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "The party needs someone who can get answers through illegal channels.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "He may already know Mozzie or Colton by reputation.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "A backroom beneath a club where the music is louder than surveillance equipment.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use as a recurring underworld contact who is never free.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "silas-varn",
+      "name": "Silas Varn",
+      "role": "RedWire Cartel Boss",
+      "faction": "RedWire",
+      "section": "Underworld, Grey Market & RedWire",
+      "status": [
+        "Locked",
+        "Secret"
+      ],
+      "personality": [
+        "Controlled",
+        "Traditional",
+        "Paranoid",
+        "Respectful of useful violence"
+      ],
+      "connections": [
+        "RedWire Cartel",
+        "Colton Cross",
+        "Nyx Bellweather",
+        "Bell Saint"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "People don’t leave RedWire. They become investments with legs.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Unknown crime figure with no official structure attached to him.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Leader of RedWire operations in the Dregs and lower Meridian Spire.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Old-school crime boss with cyberpunk paranoia.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "He knows Colton’s Iron Cross past and can expose it.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "He let Colton leave RedWire alive because he still has use for him.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "A private room where every device is dead and every person is armed.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use as the underworld power who can pull Colton’s secret into the present.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "nyx-bellweather",
+      "name": "Nyx Bellweather",
+      "role": "RedWire Handler / Recruiter",
+      "faction": "RedWire",
+      "section": "Underworld, Grey Market & RedWire",
+      "status": [
+        "Locked",
+        "Secret"
+      ],
+      "personality": [
+        "Playful",
+        "Predatory",
+        "Sentimental in dangerous ways",
+        "Blackmail fluent"
+      ],
+      "connections": [
+        "Colton Cross",
+        "RedWire Cartel",
+        "Silas Varn",
+        "Iron Cross"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Detective Cross. Cute title. Does Iron still answer?",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Street-level information broker and charming problem in a leather coat.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "She spotted Colton’s talent and recruited him into RedWire after the ambush.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Friendly until she is not; always smiling like she knows the ending.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "She can pull Colton back toward the mask he tried to bury.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "She still has a sealed file labeled IRON CROSS — DO NOT BURN.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "She leaves Colton a message using an old RedWire signal only he recognizes.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use to tempt, threaten, and emotionally corner Colton.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "bell-saint",
+      "name": "Bell Saint",
+      "role": "RedWire Collector",
+      "faction": "RedWire",
+      "section": "Underworld, Grey Market & RedWire",
+      "status": [
+        "Flexible"
+      ],
+      "personality": [
+        "Courteous",
+        "Violent",
+        "Methodical",
+        "Oddly sincere"
+      ],
+      "connections": [
+        "RedWire Cartel",
+        "Silas Varn",
+        "Colton Cross",
+        "Nyx Bellweather"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "I’m sorry about the wrist. Truly. This part is just policy.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "No public record; an underworld name people say softly.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Debt collector, intimidation specialist, and cleanup man for RedWire.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Polite, stylish, terrifying.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "He is a street-level threat who can hurt contacts without needing BCI involvement.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "He was ordered not to kill Colton years ago and still does not know why.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "Appears after someone fails to pay or says Iron Cross too loudly.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use as a recurring physical danger and a weirdly charismatic antagonist.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "dr.-pax-neme",
+      "name": "Dr. Pax Neme",
+      "role": "Grey Market Street Surgeon",
+      "faction": "Grey Market",
+      "section": "Underworld, Grey Market & RedWire",
+      "status": [
+        "Flexible"
+      ],
+      "personality": [
+        "Dry",
+        "Competent",
+        "Nosy",
+        "Hard to shock"
+      ],
+      "connections": [
+        "Grey Market",
+        "BCI clinics",
+        "Varo Kline",
+        "Players"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "I don’t ask questions. I invoice them.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Off-record medical provider rumored to work below regulated clinics.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Treats wounds, removes trackers, repairs cybernetics, and avoids medical reporting systems.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Back-alley doctor with surprisingly good bedside manner.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "The party needs medical help that does not create official records.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "Pax once worked in a BCI-approved trauma clinic and knows their procedures.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "A hidden clinic behind a vending machine that only sells dead batteries.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use for recovery scenes, tracker reveals, and uneasy sanctuary.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "ivo-dent",
+      "name": "Ivo Dent",
+      "role": "Transit Smuggler",
+      "faction": "Grey Market",
+      "section": "Underworld, Grey Market & RedWire",
+      "status": [
+        "Flexible"
+      ],
+      "personality": [
+        "Energetic",
+        "Cowardly-smart",
+        "Greedy",
+        "Loyal to routes, not causes"
+      ],
+      "connections": [
+        "Grey Market",
+        "Transit tunnels",
+        "Runoff",
+        "BCI old sites"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "The monorail map is for people who enjoy being seen.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Maintenance contractor, trespasser, or ghost depending who is asking.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Moves people through monorail maintenance tunnels, runoff routes, and forgotten transit guts.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Fast-talking tunnel rat with a map in his bones.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "He helps the party move when official paths become unsafe.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "He knows a tunnel beneath an abandoned BCI processing site.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "Drops from a maintenance hatch and immediately asks who is paying.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use for chase routes, hidden entrances, and frantic travel scenes.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "mayor-evangeline-cross",
+      "name": "Mayor Evangeline Cross",
+      "role": "Mayor of Meridian Spire",
+      "faction": "Politics",
+      "section": "Politics, Media & Public Pressure",
+      "status": [
+        "Locked",
+        "Secret"
+      ],
+      "personality": [
+        "Media-trained",
+        "Strategic",
+        "Calm",
+        "Ruthless in practice"
+      ],
+      "connections": [
+        "Meridian Spire government",
+        "BCI",
+        "Continuance Initiative",
+        "Colton Cross maybe"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Stability is not silence. Stability is trust in the systems that keep us alive.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Beloved public leader focused on civic order, prosperity, and cognitive health.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Political bridge between city government, BCI, wealthy families, corporate interests, and Continuance.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Elegant, polished, publicly compassionate, privately strategic.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "She is legitimate power shielding ugly systems.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "Her shared surname with Colton Cross may be politically or personally significant if you want that thread.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "A speech after a BCI incident reframes unrest as a cognitive safety crisis.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use her to escalate the party’s actions into city politics.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "councilor-nia-ravel",
+      "name": "Councilor Nia Ravel",
+      "role": "Opposition Councilor",
+      "faction": "Politics",
+      "section": "Politics, Media & Public Pressure",
+      "status": [
+        "Flexible"
+      ],
+      "personality": [
+        "Measured",
+        "Principled",
+        "Cautious",
+        "Quietly furious"
+      ],
+      "connections": [
+        "City Council",
+        "BCI opposition",
+        "Mara Quell",
+        "Players"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Oversight is not rebellion. Though I understand why the BCI confuses the two.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "A rare public critic of BCI overreach inside city politics.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "She can become an ally, but only with evidence strong enough to risk her career and life.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Brave enough to speak, careful enough to survive.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "She gives the party a political route that is not just guns and hacks.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "Her sibling was memory-edited after a protest years ago.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "Challenges a BCI budget expansion in a public council hearing.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use when the party needs official cover or must decide whether to endanger an ally.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "commander-rusk-thorne",
+      "name": "Commander Rusk Thorne",
+      "role": "Political Donor / Security Hardliner",
+      "faction": "Politics",
+      "section": "Politics, Media & Public Pressure",
+      "status": [
+        "Flexible",
+        "Secret"
+      ],
+      "personality": [
+        "Severe",
+        "Proud",
+        "Fearful under the surface",
+        "Controlling"
+      ],
+      "connections": [
+        "Continuance Initiative",
+        "Mayor Cross",
+        "BCI",
+        "Dr. Adrian Kest"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Freedom is a luxury purchased by people who do not understand consequence.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Wealthy sponsor of security expansion and public-order initiatives.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "He ties money, politics, BCI expansion, and Continuance research together.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Old-money authoritarian with a dying man’s urgency.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "He explains why elite money flows toward memory control and transfer tech.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "He is funding Continuance because he is dying.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "At a fundraiser where security drones outnumber guests.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use as a money trail and moral rot of the elite.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "mara-quell",
+      "name": "Mara Quell",
+      "role": "BCI-Approved News Anchor",
+      "faction": "Media",
+      "section": "Politics, Media & Public Pressure",
+      "status": [
+        "Flexible"
+      ],
+      "personality": [
+        "Professional",
+        "Controlled",
+        "Curious beneath fear",
+        "Careful"
+      ],
+      "connections": [
+        "BCI media",
+        "Celia Voss",
+        "Ruiz file",
+        "Mayor Cross"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Authorities urge citizens to remain calm and avoid spreading unverified memory material.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "The warm, trusted news voice people hear during city crises.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "She filters BCI-approved narratives but has received an anonymous file about the Ruiz case.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Calm, warm, fake-safe.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "She shapes how normal citizens understand the party’s actions.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "She has not opened the Ruiz file because opening it means choosing a side.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "Her broadcast calls the Session 1 scene an illegal information incident.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use for public reputation, leaks, and a possible media ally.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "gideon-cross",
+      "name": "Gideon Cross",
+      "role": "Colton’s Father / Workshop Mechanic",
+      "faction": "Player Thread",
+      "section": "Player Family & Past Lives",
+      "status": [
+        "Locked",
+        "Secret"
+      ],
+      "personality": [
+        "Protective",
+        "Patient",
+        "Resourceful",
+        "Secretive when scared"
+      ],
+      "connections": [
+        "Colton Cross",
+        "Mara Cross",
+        "Uncle Rafe",
+        "BCI records",
+        "Ruiz family"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "If a machine lies, son, it was taught to.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Presumed dead in the same car accident that killed Colton’s mother.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "A resourceful repairman who found corrupted BCI records, missing family files, or memory-edit proof.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Quiet, practical, brilliant with machines, tired hands.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "He is Colton’s first technical link to the larger conspiracy.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "He hid a physical backup somewhere only Colton would understand.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "An old device in his abandoned workshop powers on and links CROSS / RUIZ / CALDER / FAROUK.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use the workshop as a personal dungeon of grief, clues, and broken machines.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "mara-cross",
+      "name": "Mara Cross",
+      "role": "Colton’s Mother / Courier and Fixer",
+      "faction": "Player Thread",
+      "section": "Player Family & Past Lives",
+      "status": [
+        "Locked",
+        "Secret"
+      ],
+      "personality": [
+        "Protective",
+        "Clever",
+        "Streetwise",
+        "Brave under pressure"
+      ],
+      "connections": [
+        "Colton Cross",
+        "Gideon Cross",
+        "CotU contacts",
+        "Damien Ruiz"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Never carry a message you’re not willing to die for. And never let them know which one that is.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Presumed dead in the same accident as Gideon Cross.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "A courier/fixer who moved messages, packages, and information for people quietly resisting BCI control.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Fast-talking, sharp-eyed, warm with Colton, dangerous with everyone else.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "Her routes can lead the party through the Dregs, runoff tunnels, and hidden resistance networks.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "She had contacts in the Choir before it became publicly known.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "An old courier route marker appears near the Session 1 trail.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use to connect Colton’s grief to CotU and the older conspiracy.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "uncle-rafe-cross",
+      "name": "Uncle Rafe Cross",
+      "role": "Colton’s Uncle / Conspiracy Witness",
+      "faction": "Player Thread",
+      "section": "Player Family & Past Lives",
+      "status": [
+        "Locked"
+      ],
+      "personality": [
+        "Paranoid",
+        "Brilliant in flashes",
+        "Loving but difficult",
+        "Analog-obsessed"
+      ],
+      "connections": [
+        "Colton Cross",
+        "Gideon Cross",
+        "Mara Cross",
+        "Damien Ruiz",
+        "Erased families"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Digital records are where truth goes to die.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "A paranoid old man who talks about families vanishing and records changing.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "He was right. He noticed erased-family patterns before Colton had proof.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Cigarette smoke, analog notes, walls of string and paper.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "He is Colton’s living link to the past and a direct source of unstable truth.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "He deliberately damaged parts of his own mind to make memory editing harder.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "Found hiding in a sealed room full of handwritten notes and disconnected terminals.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use him to confirm Colton’s worst fears without making everything easy to verify.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "ash’s-parent-/-guardian",
+      "name": "Ash’s Parent / Guardian",
+      "role": "Parent Involved in Ash’s Transfer",
+      "faction": "Player Thread",
+      "section": "Player Family & Past Lives",
+      "status": [
+        "Needs Name",
+        "Secret"
+      ],
+      "personality": [
+        "Grief-driven",
+        "Protective",
+        "Denial-soaked",
+        "Capable of terrible choices"
+      ],
+      "connections": [
+        "Ash Calder",
+        "Dr. Mira Cale",
+        "Dr. Adrian Kest",
+        "Continuance Initiative"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "We did not lose you. We refused to.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "A grieving parent or guardian with a carefully managed history.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "One of the people involved in Ash’s secret transfer because they could not cope with losing their child.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Tragic love twisted into violation.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "This is the emotional heart of Ash’s reveal.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "They may not know whether the transferred Ash is their child or a copy they chose to love anyway.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "A photo, voice message, or medical consent record that should not exist.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Name later once Ash’s player backstory is locked.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "nadir-farouk",
+      "name": "Nadir Farouk",
+      "role": "Mozzie’s Father / Arasaka Co-Owner",
+      "faction": "Player Thread",
+      "section": "Player Family & Past Lives",
+      "status": [
+        "Locked",
+        "Mozzie Thread"
+      ],
+      "personality": [
+        "Strategic",
+        "Proud",
+        "Protective in the wrong language",
+        "Afraid of losing control"
+      ],
+      "connections": [
+        "Mozzie Farouk",
+        "Leena Farouk",
+        "Sarah Farouk",
+        "Arasaka Security",
+        "Damien Ruiz",
+        "BCI contracts"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "We built a life secure enough that you would never have to learn what security really costs.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "A wealthy, composed business owner tied to the Farouk family’s private security company, Arasaka Security.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Nadir wanted Mozzie to inherit the family’s stability and influence, but he and Leena originally tried to keep him separated from the uglier side of private security work.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Controlled father, corporate polish, love expressed as pressure.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "He creates family pressure for Mozzie: wealth, legacy, disappointment, and access to elite security contracts.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "Nadir may know more about the Ruiz disappearance than he admits because Arasaka Security had indirect contracts near the old investigation routes.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "A tense call after Mozzie’s name appears in a public incident report, asking whether he is dragging the family back into something buried.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use Nadir when you want Mozzie’s old life to feel powerful, useful, and emotionally suffocating.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "leena-farouk",
+      "name": "Leena Farouk",
+      "role": "Mozzie’s Mother / Arasaka Executive Strategist",
+      "faction": "Player Thread",
+      "section": "Player Family & Past Lives",
+      "status": [
+        "Locked",
+        "Mozzie Thread"
+      ],
+      "personality": [
+        "Elegant",
+        "Socially lethal",
+        "Protective of reputation",
+        "Emotionally guarded"
+      ],
+      "connections": [
+        "Mozzie Farouk",
+        "Nadir Farouk",
+        "Sarah Farouk",
+        "Arasaka Security",
+        "Mayor Evangeline Cross",
+        "Corporate elite"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Darling, the truth is not always the same thing as closure.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "A high-society executive and social power broker with deep access to Meridian Spire’s wealthy security and corporate circles.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Leena is warmer than she appears, but she treats reputation like oxygen. She fears Mozzie’s obsession with Damien will destroy the life his family built for him.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Silk gloves, steel teeth, a mother who can weaponize a dinner invitation.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "She gives Mozzie access to gala scenes, corporate meetings, elite hypocrisy, and family wounds that cannot be solved by winning a fight.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "She may have quietly protected Mozzie from consequences during his private security career, creating favors he never knew he owed.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "Appears at an elite function or calls Mozzie after seeing him linked to a BCI incident report.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use Leena as the parent who can open doors while making Mozzie feel like a child again.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "sarah-farouk",
+      "name": "Sarah Farouk",
+      "role": "Mozzie’s Older Sister",
+      "faction": "Player Thread",
+      "section": "Player Family & Past Lives",
+      "status": [
+        "Locked",
+        "Mozzie Thread"
+      ],
+      "personality": [
+        "Observant",
+        "Dry",
+        "Emotionally reserved",
+        "More sympathetic than she sounds"
+      ],
+      "connections": [
+        "Mozzie Farouk",
+        "Nadir Farouk",
+        "Leena Farouk",
+        "Damien Ruiz",
+        "Ash Calder",
+        "Colton Cross"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "You disappeared into that case long before you left school.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Mozzie’s older sister, already away at college when Damien and his family disappeared. Polished, independent, and harder to read than their parents.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Sarah was not close with Mozzie growing up, partly because she was already moving into adulthood when he entered the friend group with Damien, Ash, and Colton. She remembers the family’s version of events, not the kids’ version.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Distant sibling, successful adult, maybe the only Farouk who sees Mozzie clearly.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "She is a personal mirror for Mozzie: someone who knew him before Damien vanished but did not live inside the mystery the way he did.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "Sarah may have old college-era messages or parent-side details about the Ruiz/Farouk connection that Mozzie never heard.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "She contacts Mozzie after hearing he is back in Meridian Spire and digging into Damien again.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use Sarah for family truth, old records, and conversations that hurt because nobody is technically wrong.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "the-damien-circle",
+      "name": "The Damien Circle",
+      "role": "Childhood Friend Group / Shared Wound",
+      "faction": "Player Thread",
+      "section": "Player Family & Past Lives",
+      "status": [
+        "Locked",
+        "Mozzie Thread",
+        "Session 1 Useful"
+      ],
+      "personality": [
+        "Shared grief",
+        "Unfinished childhood",
+        "Fractured trust",
+        "Loyalty under strain"
+      ],
+      "connections": [
+        "Damien Ruiz",
+        "Mozzie Farouk",
+        "Ash Calder",
+        "Colton Cross",
+        "Sarah Farouk",
+        "Uncle Rafe Cross"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "They were kids. They tried anyway.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "Ash, Colton, Mozzie, and Damien were a close school-age friend group before Damien and the Ruiz family disappeared.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Mozzie joined the group through Damien after switching schools. He sometimes felt like the new kid on the outside, even though the others did not intentionally push him there. Damien was the person he felt closest to, which made the disappearance hit differently.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Old friendship turned into a cold case none of them outgrew.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "This card keeps the core emotional geometry clear: Mozzie trusted Damien most, suspected Colton was hiding something, and did not like Ash’s blind defense of Colton.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "The three surviving friends may not remember the same details from their desperate childhood investigation.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "Referenced whenever the party compares what they each remember about Damien’s disappearance.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use this to track emotional pressure between the PCs rather than as a literal NPC.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "arasaka-security",
+      "name": "Arasaka Security",
+      "role": "Farouk-Owned Private Security Company",
+      "faction": "Arasaka",
+      "section": "Arasaka Private Security",
+      "status": [
+        "Locked",
+        "Mozzie Thread"
+      ],
+      "personality": [
+        "Company profile",
+        "Professionally ruthless",
+        "Reputation-conscious",
+        "Useful but dangerous"
+      ],
+      "connections": [
+        "Mozzie Farouk",
+        "Nadir Farouk",
+        "Leena Farouk",
+        "Rhea Kade",
+        "Oren Matsuda",
+        "Sable Korr",
+        "BCI contracts",
+        "Continuance contracts"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Secure the client. Control the narrative. Leave no useful threat standing.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "A small but prominent private security company owned by Mozzie’s parents. It handles executive protection, asset transport, site security, and high-risk corporate accounts.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Arasaka operates in the gray space between legal protection and corporate warfare. Mozzie thrived there, building a reputation as smart, effective, and devastating while keeping a buffer between himself and the dirtiest work.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Corporate security with clean contracts, dirty corridors, and very expensive deniability.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "Arasaka explains Mozzie’s combat training, leadership background, strategic instincts, and industry reputation before he returned home to reopen Damien’s case.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "Some old Arasaka accounts overlap with BCI-adjacent contracts, Continuance logistics, and routes connected to the Ruiz disappearance.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "Mentioned when Mozzie’s old reputation opens a door—or makes someone very nervous.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use Arasaka as Mozzie’s professional past: resources, enemies, favors, old reports, and people who remember what he did for clients.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "commander-rhea-kade",
+      "name": "Commander Rhea Kade",
+      "role": "Mozzie’s Former Arasaka Commander",
+      "faction": "Arasaka",
+      "section": "Arasaka Private Security",
+      "status": [
+        "Locked",
+        "Mozzie Thread"
+      ],
+      "personality": [
+        "Blunt",
+        "Disciplined",
+        "Judgmental",
+        "Competent"
+      ],
+      "connections": [
+        "Mozzie Farouk",
+        "Arasaka Security",
+        "Nadir Farouk",
+        "Continuance contracts",
+        "BCI contracts"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Farouk. You still move like you expect the plan to survive first contact.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "A senior Arasaka field commander known for high-risk escort operations, asset recovery, and corporate threat response.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Rhea oversaw Mozzie during his move from grunt work into tactical leadership. She knows his discipline, his temper, and the exact moment he stopped treating security work like a job and started treating it like preparation.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Hard-edged mentor, professional rival, or future antagonist depending how Mozzie left.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "She ties Mozzie’s old private security life to present-day corporate jobs and BCI-adjacent messes.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "Rhea buried or softened at least one report that could have ended Mozzie’s rise. Whether she did it for him, Arasaka, or herself is unclear.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "Shows up leading security at a Continuance site, elite event, or transport operation where Mozzie recognizes her command style before he sees her face.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use Rhea to challenge Mozzie as a professional: she should know how he thinks and how to counter him.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "oren-matsuda",
+      "name": "Oren Matsuda",
+      "role": "Arasaka Accounts Director",
+      "faction": "Arasaka",
+      "section": "Arasaka Private Security",
+      "status": [
+        "Flexible",
+        "Mozzie Thread"
+      ],
+      "personality": [
+        "Charming",
+        "Predatory",
+        "Practical",
+        "Never speaks without purpose"
+      ],
+      "connections": [
+        "Mozzie Farouk",
+        "Arasaka Security",
+        "Nadir Farouk",
+        "Leena Farouk",
+        "Continuance contracts",
+        "Corporate elite"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "Security is not violence. Security is making sure violence arrives on schedule and belongs to us.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "A polished accounts director who handled Arasaka’s largest clients, sensitive payloads, and high-risk contract negotiations.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Oren knows which clients Mozzie protected, which threats were dismantled, and which corporate accounts were too sensitive to write down plainly.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Smiling contract shark with a memory for signatures and favors.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "He can connect Mozzie’s professional past to corporate trails, client secrets, and old operations tied to BCI or Continuance.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "Oren once routed an account through shell contracts that may point toward the Ruiz family’s disappearance timeline.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "An old Arasaka contact tells Mozzie that Oren wants to speak off-book.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use Oren when you want information wrapped in corporate leverage.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    },
+    {
+      "id": "sable-korr",
+      "name": "Sable Korr",
+      "role": "Arasaka Division Rival / Successor",
+      "faction": "Arasaka",
+      "section": "Arasaka Private Security",
+      "status": [
+        "Flexible",
+        "Mozzie Thread"
+      ],
+      "personality": [
+        "Competitive",
+        "Smart",
+        "Controlled",
+        "Needling"
+      ],
+      "connections": [
+        "Mozzie Farouk",
+        "Arasaka Security",
+        "Rhea Kade",
+        "Oren Matsuda"
+      ],
+      "fields": {
+        "Quote": {
+          "value": "You left your division like a ghost story. I had to make it profitable again.",
+          "revealed": true
+        },
+        "Public Face": {
+          "value": "A rising Arasaka division lead who took over some of Mozzie’s responsibilities after he returned to Meridian Spire to chase Damien’s case.",
+          "revealed": true
+        },
+        "The Truth": {
+          "value": "Sable respects Mozzie’s effectiveness and resents the myth around him. She sees his old obsession as weakness and his return as a liability.",
+          "revealed": false
+        },
+        "Vibe": {
+          "value": "Sharp, ambitious, tactical, and eager to prove she is not his shadow.",
+          "revealed": true
+        },
+        "Why They Matter": {
+          "value": "She gives Mozzie a living consequence of leaving: someone stepped into his role and may not want him back near Arasaka records.",
+          "revealed": true
+        },
+        "Secret": {
+          "value": "Sable has access to one archived operation Mozzie never saw, and it may name a location linked to Damien.",
+          "revealed": false
+        },
+        "First Encounter": {
+          "value": "Runs interference when Mozzie tries to pull Arasaka files or contact former teammates.",
+          "revealed": false
+        },
+        "DM Notes": {
+          "value": "Use Sable for professional rivalry, blocked access, and a mirror of what Mozzie might have become if he stayed.",
+          "revealed": false
+        }
+      },
+      "connectionsRevealed": true
+    }
+  ],
+  "maps": [
+    {
+      "id": "overview",
+      "title": "City Overview",
+      "subtitle": "Meridian Spire Municipal Map",
+      "file": "Meridian_Spire_Overview.png",
+      "accent": "#d24b4b",
+      "fields": {
+        "Description": {
+          "value": "Whole-city tactical overview showing the sector layout, monorail loops, checkpoints, and major directional routes.",
+          "revealed": true
+        },
+        "Population": {
+          "value": "80,000,000 citywide",
+          "revealed": true
+        },
+        "Scale": {
+          "value": "Citywide overlay",
+          "revealed": true
+        },
+        "Elevation": {
+          "value": "Varies by tier",
+          "revealed": true
+        },
+        "Connections": {
+          "value": "All sectors",
+          "revealed": true
+        }
+      }
+    },
+    {
+      "id": "sector1",
+      "title": "The Needle",
+      "subtitle": "Executive Citadel / Central Spire Zone",
+      "file": "Sector_01_The_Needle.png",
+      "accent": "#7cc7e8",
+      "fields": {
+        "Description": {
+          "value": "Central executive citadel built around the Obsidian Needle. Dense radial avenues, civic plazas, skybridges, and transit hubs.",
+          "revealed": true
+        },
+        "Population": {
+          "value": "3,820,000",
+          "revealed": true
+        },
+        "Scale": {
+          "value": "1 : 15,000",
+          "revealed": true
+        },
+        "Elevation": {
+          "value": "+200m to +2,000m",
+          "revealed": true
+        },
+        "Connections": {
+          "value": "Gilded Crown, Midtier Ring, Skyports, The Wall, The Dregs, The Runoff",
+          "revealed": true
+        }
+      }
+    },
+    {
+      "id": "sector2",
+      "title": "Gilded Crown",
+      "subtitle": "Corporate Wealth / Elite Terrace District",
+      "file": "Sector_02_Gilded_Crown.png",
+      "accent": "#d7b46a",
+      "fields": {
+        "Description": {
+          "value": "Ultra-luxury corporate wedge of terraces, sky gardens, embassy blocks, exchange halls, and polished supertowers.",
+          "revealed": true
+        },
+        "Population": {
+          "value": "6,430,000",
+          "revealed": true
+        },
+        "Scale": {
+          "value": "1 : 15,000",
+          "revealed": true
+        },
+        "Elevation": {
+          "value": "+150m to +1,700m",
+          "revealed": true
+        },
+        "Connections": {
+          "value": "The Needle, Market Belt, Midtier Ring, Skyports, The Wall",
+          "revealed": true
+        }
+      }
+    },
+    {
+      "id": "sector3",
+      "title": "Midtier Ring",
+      "subtitle": "Residential / Commercial / Services Core",
+      "file": "Sector_03_Midtier_Ring.png",
+      "accent": "#5cc2c9",
+      "fields": {
+        "Description": {
+          "value": "The dense daily-life heart of Meridian Spire, packed with residences, workers, civic services, bazaars, and commuter lines.",
+          "revealed": true
+        },
+        "Population": {
+          "value": "7,960,000",
+          "revealed": true
+        },
+        "Scale": {
+          "value": "1 : 15,000",
+          "revealed": true
+        },
+        "Elevation": {
+          "value": "+180m to +1,600m",
+          "revealed": true
+        },
+        "Connections": {
+          "value": "Gilded Crown, The Needle, Market Belt, BCI Complex, The Dregs",
+          "revealed": true
+        }
+      }
+    },
+    {
+      "id": "sector4",
+      "title": "Market Belt",
+      "subtitle": "Trade / Nightlife / Transit Arcades",
+      "file": "Sector_04_Market_Belt.png",
+      "accent": "#ff9d39",
+      "fields": {
+        "Description": {
+          "value": "Gigantic commercial ring wrapped around the core, full of bazaars, exchange blocks, neon arcades, and 24/7 transit corridors.",
+          "revealed": true
+        },
+        "Population": {
+          "value": "10,650,000",
+          "revealed": true
+        },
+        "Scale": {
+          "value": "1 : 15,000",
+          "revealed": true
+        },
+        "Elevation": {
+          "value": "+100m to +1,000m",
+          "revealed": true
+        },
+        "Connections": {
+          "value": "Gilded Crown, Midtier Ring, Forgebend, Drainways, The Dregs, The Runoff, Skyports",
+          "revealed": true
+        }
+      }
+    },
+    {
+      "id": "sector5",
+      "title": "Drainways",
+      "subtitle": "Flood Channels / Infrastructure Network",
+      "file": "Sector_05_Drainways.png",
+      "accent": "#93d59a",
+      "fields": {
+        "Description": {
+          "value": "Hydraulic infrastructure district of canals, locks, utility corridors, pump stations, and filtration basins that keep the city alive.",
+          "revealed": true
+        },
+        "Population": {
+          "value": "3,960,000",
+          "revealed": true
+        },
+        "Scale": {
+          "value": "1 : 15,000",
+          "revealed": true
+        },
+        "Elevation": {
+          "value": "-220m to +60m",
+          "revealed": true
+        },
+        "Connections": {
+          "value": "The Needle, Market Belt, Forgebend, The Runoff",
+          "revealed": true
+        }
+      }
+    },
+    {
+      "id": "sector6",
+      "title": "Forgebend",
+      "subtitle": "Industrial Manufacturing / Labor Infrastructure",
+      "file": "Sector_06_Forgebend.png",
+      "accent": "#a66ce1",
+      "fields": {
+        "Description": {
+          "value": "Vast industrial sector of fabrication yards, smoke stacks, freight rails, machineworks, and worker housing.",
+          "revealed": true
+        },
+        "Population": {
+          "value": "7,420,000",
+          "revealed": true
+        },
+        "Scale": {
+          "value": "1 : 20,000",
+          "revealed": true
+        },
+        "Elevation": {
+          "value": "+180m to +1,600m",
+          "revealed": true
+        },
+        "Connections": {
+          "value": "Market Belt, Drainways, Skyports, The Wall",
+          "revealed": true
+        }
+      }
+    },
+    {
+      "id": "sector7",
+      "title": "The Dregs",
+      "subtitle": "Overcrowded Slums / Survival Zone",
+      "file": "Sector_07_The_Dregs.png",
+      "accent": "#f28cc2",
+      "fields": {
+        "Description": {
+          "value": "Dense survival district of stacked tenements, informal markets, salvage courts, alleys, and overcrowded transit nodes.",
+          "revealed": true
+        },
+        "Population": {
+          "value": "6,920,000",
+          "revealed": true
+        },
+        "Scale": {
+          "value": "1 : 15,000",
+          "revealed": true
+        },
+        "Elevation": {
+          "value": "+160m to +560m",
+          "revealed": true
+        },
+        "Connections": {
+          "value": "Market Belt, Midtier Ring, The Runoff, The Wall",
+          "revealed": true
+        }
+      }
+    },
+    {
+      "id": "sector8",
+      "title": "The Runoff",
+      "subtitle": "Toxic Basin / Spillway District Included",
+      "file": "Sector_08_The_Runoff_Spillway.png",
+      "accent": "#b7cc58",
+      "fields": {
+        "Description": {
+          "value": "Toxic runoff basin below the city edge, including Runoff Gate, Blackwater Crossing, Leakside, South Pumps, and the Spillway District where the address is located.",
+          "revealed": true
+        },
+        "Population": {
+          "value": "1,240,000",
+          "revealed": true
+        },
+        "Scale": {
+          "value": "1 : 20,000",
+          "revealed": true
+        },
+        "Elevation": {
+          "value": "-3,200m to -6,800m",
+          "revealed": true
+        },
+        "Connections": {
+          "value": "Drainways, The Dregs, The Wall, Southern Wastes",
+          "revealed": true
+        }
+      }
+    },
+    {
+      "id": "sector9",
+      "title": "The Wall",
+      "subtitle": "Perimeter Defense / Checkpoint Sector",
+      "file": "Sector_09_The_Wall.png",
+      "accent": "#db4d3f",
+      "fields": {
+        "Description": {
+          "value": "Curved defensive perimeter sector with checkpoints, bastions, watchtower arrays, cargo inspection yards, and wallside residential blocks.",
+          "revealed": true
+        },
+        "Population": {
+          "value": "3,950,000",
+          "revealed": true
+        },
+        "Scale": {
+          "value": "1 : 20,000",
+          "revealed": true
+        },
+        "Elevation": {
+          "value": "+150m to +1,800m",
+          "revealed": true
+        },
+        "Connections": {
+          "value": "Gilded Crown, Forgebend, The Dregs, The Runoff, Skyports",
+          "revealed": true
+        }
+      }
+    },
+    {
+      "id": "sector10",
+      "title": "Skyports",
+      "subtitle": "Orbital Access / Air Traffic District",
+      "file": "Sector_10_Skyports.png",
+      "accent": "#55bdea",
+      "fields": {
+        "Description": {
+          "value": "Elevated sky-dock district of landing pads, customs concourses, cargo aprons, aerial routes, and orbital access infrastructure.",
+          "revealed": true
+        },
+        "Population": {
+          "value": "2,740,000",
+          "revealed": true
+        },
+        "Scale": {
+          "value": "1 : 15,000",
+          "revealed": true
+        },
+        "Elevation": {
+          "value": "+1,200m to +2,400m",
+          "revealed": true
+        },
+        "Connections": {
+          "value": "Gilded Crown, The Needle, Forgebend, The Wall, Northern Reach",
+          "revealed": true
+        }
+      }
+    }
+  ],
+  "sectionDescriptions": {
+    "Session One & Immediate Leads": "NPCs the party can run into, research, or hear about right away. These are built to move the opening mystery.",
+    "BCI Command & State Control": "The police-state structure: official power, memory compliance, propaganda, tactical escalation.",
+    "Resistance Networks": "CotU and Truth Division contacts, rebels, radicals, witnesses, and people trying to break the official story.",
+    "The Red Archive": "Keepers of forbidden records. They preserve truth, but that does not make them safe.",
+    "Continuance Initiative": "Memory transfer, artificial continuity, elite immortality, and the SOMA-style identity nightmare.",
+    "Underworld, Grey Market & RedWire": "Illegal information, old contacts, black-market tech, memory shard movement, and Colton’s Iron Cross past.",
+    "Politics, Media & Public Pressure": "Public legitimacy, narrative control, licensing, city politics, and the people who decide what citizens believe.",
+    "Player Family & Past Lives": "Personal NPCs tied to Ash, Colton, and Mozzie. Mozzie’s updated thread now includes his parents, older sister Sarah, the childhood friend group, and the family pressure surrounding Arasaka Security.",
+    "Arasaka Private Security": "Mozzie’s professional past: the Farouk-owned private security company, old commanders, rivals, accounts, and corporate contracts that may point back toward Damien."
+  }
+}
