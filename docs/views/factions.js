@@ -1,8 +1,8 @@
 /**
- * Admin & note-taker PIN dialogs, token management, generic editors.
+ * Factions view — renders the matrix overview + each faction section.
  */
-const AdminPanel = (() => {
-
+const FactionsView = (() => {
+ 
   function escapeHtml(s) {
     if (s == null) return '';
     return String(s)
@@ -12,314 +12,306 @@ const AdminPanel = (() => {
       .replaceAll('"', '&quot;')
       .replaceAll("'", '&#39;');
   }
-
-  function showModal(htmlString) {
-    const host = document.createElement('div');
-    host.innerHTML = htmlString;
-    document.body.appendChild(host.firstElementChild);
-    const backdrop = document.querySelector('.modal-backdrop:last-of-type');
-    backdrop.querySelectorAll('[data-close-modal]').forEach(el =>
-      el.addEventListener('click', () => backdrop.remove()));
-    return backdrop;
-  }
-
-  /** Open the admin login dialog. */
-  function openAdminLogin() {
-    if (Data.getMode() === 'admin') {
-      // Already in admin mode → log out
-      Data.setMode('player');
-      Toast.show('Admin mode closed');
-      App.rerender();
-      return;
-    }
-    const backdrop = showModal(`
-      <div class="modal-backdrop" data-close-modal>
-        <div class="modal" style="max-width:480px" onclick="event.stopPropagation()">
-          <h2>Admin Authorization</h2>
-          <div class="modal-row">
-            <label>Admin PIN</label>
-            <input type="password" id="admin-pin" autofocus>
-          </div>
-          <div class="modal-actions">
-            <button class="btn" data-close-modal>Cancel</button>
-            <button class="btn primary" id="admin-pin-ok">UNLOCK</button>
-          </div>
-        </div>
-      </div>
-    `);
-    const pinInput = backdrop.querySelector('#admin-pin');
-    const submit = () => {
-      const v = pinInput.value;
-      if (v === Data.getAdminPin()) {
-        Data.setMode('admin');
-        Toast.show('Admin mode enabled');
-        backdrop.remove();
-        App.rerender();
-        if (!GitHub.getAdminToken()) {
-          setTimeout(openAdminTokenSetup, 200);
-        }
-      } else {
-        Toast.show('Incorrect PIN', true);
-      }
+ 
+  function render() {
+    const c = Data.getCampaign();
+    if (!c) return '<div class="loading">No data.</div>';
+    const factions = c.factions || [];
+ 
+    // Count NPCs per faction (from npc list, matching by faction tag)
+    const npcCount = {};
+    const factionTagMap = {
+      bci: 'BCI', cotu: 'CotU', truth: 'Truth Division',
+      redarchive: 'Red Archive', continuance: 'Continuance',
+      greymarket: 'Grey Market', civic: 'Politics'
     };
-    backdrop.querySelector('#admin-pin-ok').addEventListener('click', submit);
-    pinInput.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
-  }
-
-  /** Prompt for the admin's GitHub Personal Access Token. */
-  function openAdminTokenSetup() {
-    const current = GitHub.getAdminToken();
-    const backdrop = showModal(`
-      <div class="modal-backdrop" data-close-modal>
-        <div class="modal" onclick="event.stopPropagation()">
-          <h2>GitHub Token Setup</h2>
-          <p style="font-size:13px;color:var(--muted);line-height:1.6">
-            To save changes back to GitHub, this device needs a Personal Access Token.<br><br>
-            Generate one at <code>https://github.com/settings/tokens?type=beta</code>
-            with <strong>Contents: Read & write</strong> access to repo
-            <strong>${GitHub.REPO.owner}/${GitHub.REPO.repo}</strong>.<br><br>
-            The token is stored only in this browser's local storage. It never leaves this device.
-          </p>
-          <div class="modal-row">
-            <label>Token (starts with github_pat_…)</label>
-            <input type="password" id="admin-token" value="${escapeHtml(current)}">
-          </div>
-          <div class="modal-actions">
-            <button class="btn" data-close-modal>Skip</button>
-            <button class="btn" id="admin-token-test">TEST</button>
-            <button class="btn primary" id="admin-token-save">SAVE</button>
-          </div>
-        </div>
-      </div>
-    `);
-    backdrop.querySelector('#admin-token-test').addEventListener('click', async () => {
-      const t = backdrop.querySelector('#admin-token').value.trim();
-      const ok = await GitHub.testToken(t);
-      Toast.show(ok ? 'Token works' : 'Token failed', !ok);
-    });
-    backdrop.querySelector('#admin-token-save').addEventListener('click', () => {
-      GitHub.setAdminToken(backdrop.querySelector('#admin-token').value.trim());
-      Toast.show('Token saved');
-      backdrop.remove();
-    });
-  }
-
-  /** Open the note-taker login dialog. */
-  function openNoteTakerLogin() {
-    if (Data.getMode() === 'notetaker') {
-      Data.setMode('player');
-      Toast.show('Note-taker mode closed');
-      App.rerender();
-      return;
+    for (const npc of (c.npcs || [])) {
+      const tag = npc.faction;
+      const fid = Object.entries(factionTagMap).find(([_, v]) => v === tag)?.[0];
+      if (fid) npcCount[fid] = (npcCount[fid] || 0) + 1;
     }
-    const backdrop = showModal(`
-      <div class="modal-backdrop" data-close-modal>
-        <div class="modal" style="max-width:480px" onclick="event.stopPropagation()">
-          <h2>Note-Taker Authorization</h2>
-          <div class="modal-row">
-            <label>Note-Taker PIN</label>
-            <input type="password" id="nt-pin" autofocus>
-          </div>
-          <div class="modal-actions">
-            <button class="btn" data-close-modal>Cancel</button>
-            <button class="btn primary" id="nt-pin-ok">UNLOCK</button>
-          </div>
-        </div>
-      </div>
-    `);
-    const pinInput = backdrop.querySelector('#nt-pin');
-    const submit = () => {
-      if (pinInput.value === Data.getNotePin()) {
-        Data.setMode('notetaker');
-        Toast.show('Note-taker mode enabled');
-        backdrop.remove();
-        App.rerender();
-        if (!GitHub.getNoteTakerToken()) {
-          setTimeout(openNoteTakerTokenSetup, 200);
-        }
-      } else {
-        Toast.show('Incorrect PIN', true);
-      }
-    };
-    backdrop.querySelector('#nt-pin-ok').addEventListener('click', submit);
-    pinInput.addEventListener('keydown', e => { if (e.key === 'Enter') submit(); });
-  }
-
-  function openNoteTakerTokenSetup() {
-    const current = GitHub.getNoteTakerToken();
-    const backdrop = showModal(`
-      <div class="modal-backdrop" data-close-modal>
-        <div class="modal" onclick="event.stopPropagation()">
-          <h2>Note-Taker GitHub Token</h2>
-          <p style="font-size:13px;color:var(--muted);line-height:1.6">
-            To push session notes to GitHub, this device needs a Personal Access Token.<br><br>
-            Generate one at <code>https://github.com/settings/tokens?type=beta</code>
-            with <strong>Contents: Read & write</strong> on repo
-            <strong>${GitHub.REPO.owner}/${GitHub.REPO.repo}</strong>.<br><br>
-            (You must be added as a collaborator on the repo first.)
-          </p>
-          <div class="modal-row">
-            <label>Token</label>
-            <input type="password" id="nt-token" value="${escapeHtml(current)}">
-          </div>
-          <div class="modal-actions">
-            <button class="btn" data-close-modal>Skip</button>
-            <button class="btn" id="nt-token-test">TEST</button>
-            <button class="btn primary" id="nt-token-save">SAVE</button>
-          </div>
-        </div>
-      </div>
-    `);
-    backdrop.querySelector('#nt-token-test').addEventListener('click', async () => {
-      const t = backdrop.querySelector('#nt-token').value.trim();
-      const ok = await GitHub.testToken(t);
-      Toast.show(ok ? 'Token works' : 'Token failed', !ok);
-    });
-    backdrop.querySelector('#nt-token-save').addEventListener('click', () => {
-      GitHub.setNoteTakerToken(backdrop.querySelector('#nt-token').value.trim());
-      Toast.show('Token saved');
-      backdrop.remove();
-    });
-  }
-
-  /** Generic single-text-area editor. */
-  function openTextEditor({ title, value, onSave }) {
-    const backdrop = showModal(`
-      <div class="modal-backdrop" data-close-modal>
-        <div class="modal" onclick="event.stopPropagation()">
-          <h2>${escapeHtml(title)}</h2>
-          <div class="modal-row">
-            <label>Content</label>
-            <textarea id="te-body" rows="14">${escapeHtml(value || '')}</textarea>
-          </div>
-          <div class="modal-actions">
-            <button class="btn" data-close-modal>Cancel</button>
-            <button class="btn primary" id="te-save">SAVE</button>
-          </div>
-        </div>
-      </div>
-    `);
-    backdrop.querySelector('#te-save').addEventListener('click', async () => {
-      const v = backdrop.querySelector('#te-body').value;
-      backdrop.remove();
-      await onSave(v);
-    });
-  }
-
-  /** Open the full NPC editor with all fields + reveal toggles. */
-  function openNpcEditor(n) {
-    const fields = Object.keys(n.fields || {});
-    const backdrop = showModal(`
-      <div class="modal-backdrop" data-close-modal>
-        <div class="modal" style="max-width:820px" onclick="event.stopPropagation()">
-          <h2>Edit NPC: ${escapeHtml(n.name)}</h2>
-
-          <div class="modal-row">
-            <label>Name</label>
-            <input type="text" id="npc-name" value="${escapeHtml(n.name)}">
-          </div>
-          <div class="modal-row">
-            <label>Role</label>
-            <input type="text" id="npc-role" value="${escapeHtml(n.role || '')}">
-          </div>
-          <div class="modal-row">
-            <label>Faction</label>
-            <input type="text" id="npc-faction" value="${escapeHtml(n.faction || '')}">
-          </div>
-          <div class="modal-row">
-            <label>Section</label>
-            <input type="text" id="npc-section" value="${escapeHtml(n.section || '')}">
-          </div>
-
-          <h2 style="margin-top:20px">Fields</h2>
-          ${fields.map(key => `
-            <div class="modal-row" data-field-block data-key="${escapeHtml(key)}">
-              <label style="display:flex;align-items:center;gap:10px">
-                <span>${escapeHtml(key)}</span>
-                <label style="display:inline-flex;align-items:center;gap:4px;font-size:10px;color:${n.fields[key].revealed ? 'var(--green)' : 'var(--red)'}">
-                  <input type="checkbox" data-reveal-cb data-key="${escapeHtml(key)}" ${n.fields[key].revealed ? 'checked' : ''}>
-                  REVEAL TO PLAYERS
-                </label>
-              </label>
-              <textarea data-field-value data-key="${escapeHtml(key)}" rows="3">${escapeHtml(n.fields[key].value || '')}</textarea>
+ 
+    return `
+      <div class="faction-view wrap">
+        <section class="hero">
+          <div class="hero-grid">
+            <div>
+              <div class="kicker">▸ Unified Faction Intelligence Database</div>
+              <h1>FACTION <span>MATRIX</span></h1>
+              <p class="subtitle">A working dossier on the seven power blocs operating in Meridian Spire's licensed intelligence sector. Click any faction to open the full report.</p>
+              <div class="meta-row">
+                <span class="pill">${factions.length} factions</span>
+                <span class="pill">${c.npcs?.length || 0} NPCs</span>
+                <span class="pill">Meridian Spire // 2089</span>
+              </div>
             </div>
-          `).join('')}
-
-          <div class="modal-actions">
-            <button class="btn" data-close-modal>Cancel</button>
-            <button class="btn primary" id="npc-save">SAVE & PUSH</button>
+            <div class="hero-banner">
+              <img src="banner.png" alt="">
+            </div>
           </div>
+        </section>
+ 
+        <section class="matrix-section">
+          <h2>▸ Faction Matrix</h2>
+          <div class="matrix-grid">
+            ${factions.map(f => `
+              <div class="matrix-card" style="--primary:${f.primary};--accent:${f.accent}" data-faction-jump="${f.id}">
+                <div class="matrix-emblem"><span class="letter">${escapeHtml(f.letter || '?')}</span></div>
+                <div>
+                  <span class="matrix-kicker">${escapeHtml(f.kicker || '')}</span>
+                  <h3>${escapeHtml(f.title)}</h3>
+                  <p class="matrix-sub">${escapeHtml(f.subtitle || '')}</p>
+                  <span class="count">${npcCount[f.id] || 0} NPC Dossiers</span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </section>
+ 
+        ${factions.map(f => renderFactionSection(f, c.npcs || [])).join('')}
+      </div>
+    `;
+  }
+ 
+  function renderFactionSection(f, allNpcs) {
+    const factionTagMap = {
+      bci: 'BCI', cotu: 'CotU', truth: 'Truth Division',
+      redarchive: 'Red Archive', continuance: 'Continuance',
+      greymarket: 'Grey Market', civic: 'Politics'
+    };
+ 
+    return `
+      <section class="faction-section" id="faction-${f.id}" style="--primary:${f.primary};--accent:${f.accent}">
+        <div class="section-header">
+          <div>
+            <div class="kicker">▸ ${escapeHtml(f.kicker || '')}</div>
+            <h2>${escapeHtml(f.title)}</h2>
+            <p class="section-sub">${escapeHtml(f.subtitle || '')}</p>
+          </div>
+          <div class="section-emblem"><span class="letter">${escapeHtml(f.letter || '?')}</span></div>
+        </div>
+ 
+        ${renderOverviewPanel(f)}
+        ${renderStructurePanel(f)}
+ 
+        ${(f.npcs && f.npcs.length) ? `
+          <div class="panel">
+            <div class="panel-title-row">
+              <h3>Key NPC Dossiers</h3>
+              <span class="pill">${f.npcs.length}</span>
+            </div>
+            <div class="npc-grid">
+              ${f.npcs.map((n, i) => renderFactionNpc(f, n, i)).join('')}
+            </div>
+          </div>
+        ` : ''}
+      </section>
+    `;
+  }
+ 
+  function renderOverviewPanel(f) {
+    const keys = Object.keys(f.fields || {});
+    if (keys.length === 0) return '';
+    return `
+      <div class="panel">
+        <div class="panel-title-row"><h3>Faction Overview</h3></div>
+        <div class="twocol">
+          ${keys.map(key => renderFactionField(f, key)).join('')}
         </div>
       </div>
-    `);
-
-    backdrop.querySelector('#npc-save').addEventListener('click', async () => {
-      n.name    = backdrop.querySelector('#npc-name').value.trim() || n.name;
-      n.role    = backdrop.querySelector('#npc-role').value.trim();
-      n.faction = backdrop.querySelector('#npc-faction').value.trim();
-      n.section = backdrop.querySelector('#npc-section').value.trim();
-      backdrop.querySelectorAll('[data-field-value]').forEach(ta => {
-        const key = ta.getAttribute('data-key');
-        if (n.fields[key]) n.fields[key].value = ta.value;
-      });
-      backdrop.querySelectorAll('[data-reveal-cb]').forEach(cb => {
-        const key = cb.getAttribute('data-key');
-        if (n.fields[key]) n.fields[key].revealed = cb.checked;
-      });
-      try {
-        Toast.show('Saving…');
-        await Data.pushCampaign();
-        Toast.show('NPC saved');
-        backdrop.remove();
-        App.rerender();
-      } catch (e) { Toast.show('Save failed: ' + e.message, true); }
-    });
+    `;
   }
-
-  /** Settings dialog — change PINs, manage token. */
-  function openSettings() {
-    const backdrop = showModal(`
-      <div class="modal-backdrop" data-close-modal>
-        <div class="modal" onclick="event.stopPropagation()">
-          <h2>Settings</h2>
-
-          <div class="modal-row">
-            <label>Admin PIN (this device)</label>
-            <input type="text" id="set-admin-pin" value="${escapeHtml(Data.getAdminPin())}">
-          </div>
-          <div class="modal-row">
-            <label>Note-Taker PIN (this device)</label>
-            <input type="text" id="set-note-pin" value="${escapeHtml(Data.getNotePin())}">
-          </div>
-          <p style="font-size:12px;color:var(--muted)">
-            PINs are stored per-device. Share these PINs with players who need access.
-          </p>
-
-          <h2 style="margin-top:20px">GitHub Token</h2>
-          <div class="modal-row">
-            <label>Your token</label>
-            <input type="password" id="set-token" value="${escapeHtml(GitHub.getAdminToken())}">
-          </div>
-
-          <div class="modal-actions">
-            <button class="btn" data-close-modal>Close</button>
-            <button class="btn primary" id="set-save">SAVE</button>
-          </div>
+ 
+  function renderFactionField(f, key) {
+    const field = f.fields[key];
+    const wide = (key === 'Territory' || key === 'Player-Safe Read');
+    const cls = 'field' + (wide ? ' wide' : '');
+    if (Data.isFieldVisible(field)) {
+      return `
+        <div class="${cls}">
+          <b>${escapeHtml(key)}</b>
+          <p>${escapeHtml(field.value)}</p>
+          ${Data.canEditCampaign() ? `
+            <div style="margin-top:10px;display:flex;gap:6px;justify-content:flex-end">
+              <span class="reveal-toggle ${field.revealed ? 'revealed' : 'hidden'}"
+                    data-faction-toggle data-faction-id="${f.id}" data-field-key="${escapeHtml(key)}">
+                ${field.revealed ? '◉ REVEALED' : '◌ HIDDEN'}
+              </span>
+              <button class="edit-btn" data-faction-edit
+                      data-faction-id="${f.id}" data-field-key="${escapeHtml(key)}">EDIT</button>
+            </div>
+          ` : ''}
         </div>
+      `;
+    }
+    return `
+      <div class="field-redacted ${wide ? 'wide' : ''}" style="${wide ? 'grid-column:1/-1' : ''}">
+        <b>${escapeHtml(key)}</b>
+        <p>[ REDACTED // CLEARANCE INSUFFICIENT ]</p>
+        ${Data.canEditCampaign() ? `
+          <div style="margin-top:10px;display:flex;justify-content:flex-end;position:relative;z-index:1">
+            <span class="reveal-toggle hidden"
+                  data-faction-toggle data-faction-id="${f.id}" data-field-key="${escapeHtml(key)}">◌ HIDDEN</span>
+          </div>
+        ` : ''}
       </div>
-    `);
-    backdrop.querySelector('#set-save').addEventListener('click', () => {
-      Data.setAdminPin(backdrop.querySelector('#set-admin-pin').value || '2089');
-      Data.setNotePin(backdrop.querySelector('#set-note-pin').value || '0451');
-      GitHub.setAdminToken(backdrop.querySelector('#set-token').value.trim());
-      Toast.show('Settings saved');
-      backdrop.remove();
+    `;
+  }
+ 
+  function renderStructurePanel(f) {
+    if (!f.structure || f.structure.length === 0) return '';
+    const visibleNodes = f.structure.filter(n => Data.canEditCampaign() || n.revealed !== false);
+    if (visibleNodes.length === 0) return '';
+    return `
+      <div class="panel">
+        <div class="panel-title-row"><h3>Internal Structure</h3></div>
+        <ul class="list">
+          ${f.structure.map((node, idx) => {
+            const visible = Data.canEditCampaign() || node.revealed !== false;
+            if (!visible) return '';
+            return `
+              <li>
+                <strong style="color:var(--primary);font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:0.1em;display:block;margin-bottom:4px">${escapeHtml(node.label)}</strong>
+                ${escapeHtml(node.value)}
+                ${Data.canEditCampaign() ? `
+                  <span class="reveal-toggle ${node.revealed !== false ? 'revealed' : 'hidden'}"
+                        style="margin-left:8px;font-size:9px"
+                        data-faction-struct-toggle data-faction-id="${f.id}" data-node-idx="${idx}">
+                    ${node.revealed !== false ? '◉' : '◌'}
+                  </span>
+                ` : ''}
+              </li>
+            `;
+          }).join('')}
+        </ul>
+      </div>
+    `;
+  }
+ 
+  function renderFactionNpc(f, n, idx) {
+    const visible = Data.canEditCampaign() || n.revealed !== false;
+    if (!visible) {
+      return `
+        <div class="npc-card-mini">
+          <div class="field-redacted">
+            <b>NPC Dossier ${idx + 1}</b>
+            <p>[ REDACTED ]</p>
+          </div>
+        </div>`;
+    }
+    return `
+      <div class="npc-card-mini">
+        ${Data.canEditCampaign() ? `
+          <div style="display:flex;justify-content:flex-end;gap:6px;margin-bottom:8px">
+            <span class="reveal-toggle ${n.revealed === false ? 'hidden' : 'revealed'}"
+                  data-faction-npc-toggle data-faction-id="${f.id}" data-npc-idx="${idx}">
+              ${n.revealed === false ? '◌ HIDDEN' : '◉ REVEALED'}
+            </span>
+            <button class="edit-btn" data-faction-npc-edit
+                    data-faction-id="${f.id}" data-npc-idx="${idx}">EDIT</button>
+          </div>
+        ` : ''}
+        <h4>${escapeHtml(n.name)}</h4>
+        <p>${escapeHtml(n.body)}</p>
+      </div>
+    `;
+  }
+ 
+  // Click handler wiring
+  function wire(container) {
+    // Matrix → jump to faction
+    container.querySelectorAll('[data-faction-jump]').forEach(el => {
+      el.addEventListener('click', () => {
+        const id = el.getAttribute('data-faction-jump');
+        const target = document.getElementById('faction-' + id);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+ 
+    // Toggle reveal flag
+    container.querySelectorAll('[data-faction-toggle]').forEach(el => {
+      el.addEventListener('click', async () => {
+        const fid = el.getAttribute('data-faction-id');
+        const key = el.getAttribute('data-field-key');
+        const f = Data.getCampaign().factions.find(x => x.id === fid);
+        if (!f || !f.fields[key]) return;
+        f.fields[key].revealed = !f.fields[key].revealed;
+        await pushAndRefresh('Updated field visibility');
+      });
+    });
+ 
+    // Edit field
+    container.querySelectorAll('[data-faction-edit]').forEach(el => {
+      el.addEventListener('click', () => {
+        const fid = el.getAttribute('data-faction-id');
+        const key = el.getAttribute('data-field-key');
+        const f = Data.getCampaign().factions.find(x => x.id === fid);
+        if (!f || !f.fields[key]) return;
+        AdminPanel.openTextEditor({
+          title: `Edit: ${f.title} → ${key}`,
+          value: f.fields[key].value,
+          onSave: async (v) => {
+            f.fields[key].value = v;
+            await pushAndRefresh('Updated field content');
+          }
+        });
+      });
+    });
+ 
+    // Toggle NPC reveal
+    container.querySelectorAll('[data-faction-npc-toggle]').forEach(el => {
+      el.addEventListener('click', async () => {
+        const fid = el.getAttribute('data-faction-id');
+        const idx = parseInt(el.getAttribute('data-npc-idx'), 10);
+        const f = Data.getCampaign().factions.find(x => x.id === fid);
+        if (!f || !f.npcs[idx]) return;
+        f.npcs[idx].revealed = !(f.npcs[idx].revealed !== false);
+        await pushAndRefresh('Updated NPC visibility');
+      });
+    });
+ 
+    // Toggle structure node reveal
+    container.querySelectorAll('[data-faction-struct-toggle]').forEach(el => {
+      el.addEventListener('click', async () => {
+        const fid = el.getAttribute('data-faction-id');
+        const idx = parseInt(el.getAttribute('data-node-idx'), 10);
+        const f = Data.getCampaign().factions.find(x => x.id === fid);
+        if (!f || !f.structure[idx]) return;
+        f.structure[idx].revealed = !(f.structure[idx].revealed !== false);
+        await pushAndRefresh('Updated structure visibility');
+      });
+    });
+ 
+    // Edit NPC body
+    container.querySelectorAll('[data-faction-npc-edit]').forEach(el => {
+      el.addEventListener('click', () => {
+        const fid = el.getAttribute('data-faction-id');
+        const idx = parseInt(el.getAttribute('data-npc-idx'), 10);
+        const f = Data.getCampaign().factions.find(x => x.id === fid);
+        if (!f || !f.npcs[idx]) return;
+        AdminPanel.openTextEditor({
+          title: `Edit NPC: ${f.npcs[idx].name}`,
+          value: f.npcs[idx].body,
+          onSave: async (v) => {
+            f.npcs[idx].body = v;
+            await pushAndRefresh('Updated NPC dossier');
+          }
+        });
+      });
     });
   }
-
-  return {
-    openAdminLogin, openNoteTakerLogin,
-    openAdminTokenSetup, openNoteTakerTokenSetup,
-    openTextEditor, openNpcEditor, openSettings
-  };
+ 
+  async function pushAndRefresh(msg) {
+    try {
+      Toast.show('Saving…');
+      await Data.pushCampaign();
+      Toast.show(msg);
+      App.rerender();
+    } catch (e) {
+      Toast.show('Save failed: ' + e.message, true);
+    }
+  }
+ 
+  return { render, wire };
 })();
+ 
