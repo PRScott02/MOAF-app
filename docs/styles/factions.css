@@ -294,3 +294,21 @@
   .section-emblem { display: none; }
   .npc-grid { grid-template-columns: 1fr; }
 }
+
+/* ── Locked item cards ──────────────────────────────────────────────── */
+.locked-card {
+  border-color: rgba(255,66,103,0.4) !important;
+  background: rgba(28,10,14,0.5) !important;
+  position: relative;
+  display: flex !important;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 22px;
+}
+.locked-card::after {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(45deg, rgba(255,66,103,0.04) 0 10px, transparent 10px 20px);
+  border-radius: inherit;
+}
+.locked-card:hover { border-color: rgba(255,66,103,0.7) !important; }
