@@ -1,7 +1,7 @@
 /**
- * Maps view — grid of map cards with full-image detail.
+ * Notes view — session notes with edit access for admin & note-taker.
  */
-const MapsView = (() => {
+const NotesView = (() => {
 
   function escapeHtml(s) {
     if (s == null) return '';
@@ -14,81 +14,97 @@ const MapsView = (() => {
   }
 
   function render() {
-    const c = Data.getCampaign();
-    if (!c) return '<div class="loading">No data.</div>';
-    const maps = c.maps || [];
+    const notes = Data.getNotes() || { sessions: [] };
+    const canEdit = Data.canEditNotes();
+    const sessions = (notes.sessions || []).slice().sort((a, b) => (a.order || 0) - (b.order || 0));
 
     return `
-      <div class="maps-view wrap">
-        <section class="npc-hero">
-          <div class="eyebrow">▸ Tactical Cartography // Meridian Spire</div>
-          <h1>MAP INDEX</h1>
-          <p>Ten sectors and the citywide overlay. Tap a sector for the full tactical map and intelligence brief.</p>
-        </section>
-
-        <div class="maps-grid">
-          ${maps.map(renderMapCard).join('')}
+      <div class="notes-view wrap">
+        <div class="notes-header">
+          <div>
+            <div class="eyebrow">▸ Session Records // Shared Investigation Log</div>
+            <h1>Case Notes</h1>
+          </div>
+          ${canEdit ? `<button class="btn primary" id="new-session">+ NEW SESSION</button>` : ''}
         </div>
+
+        ${sessions.length === 0
+          ? `<div class="notes-empty">No session records yet</div>`
+          : sessions.map(renderSession).join('')}
       </div>
     `;
   }
 
-  function renderMapCard(m) {
-    const accent = m.accent || '#9bd4ff';
-    const desc = m.fields?.Description?.value || '';
+  function renderSession(s) {
+    const canEdit = Data.canEditNotes();
+    const isAdmin = Data.canEditCampaign();
     return `
-      <article class="map-card" data-map-id="${escapeHtml(m.id)}" style="--accent:${accent}">
-        <div class="map-thumb" style="background-image:url('maps/${encodeURIComponent(m.file)}')"></div>
-        <div class="map-body">
-          <span class="map-num">${escapeHtml(m.id)}</span>
-          <h3>${escapeHtml(m.title)}</h3>
-          <div class="map-sub">${escapeHtml(m.subtitle || '')}</div>
-          <p class="map-desc">${escapeHtml(desc.substring(0, 140))}${desc.length > 140 ? '…' : ''}</p>
-          <div class="map-stats">
-            ${['Population', 'Scale', 'Elevation', 'Connections'].map(key => {
-              const f = m.fields?.[key];
-              if (!f) return '';
-              return `<div class="map-stat"><b>${key}</b>${escapeHtml(f.value)}</div>`;
-            }).join('')}
+      <section class="session-block" data-session-id="${escapeHtml(s.id)}">
+        <div class="session-eyebrow">▸ Session Note</div>
+        <h3>${escapeHtml(s.title)}</h3>
+        <div class="session-meta">${s.date ? escapeHtml(s.date) : 'Undated'}</div>
+        <div class="session-body">${escapeHtml(s.body || '(No notes recorded yet.)')}</div>
+        ${canEdit ? `
+          <div class="session-actions">
+            <button class="btn" data-session-edit data-session-id="${escapeHtml(s.id)}">EDIT</button>
+            ${isAdmin ? `<button class="btn danger" data-session-delete data-session-id="${escapeHtml(s.id)}">DELETE</button>` : ''}
           </div>
-        </div>
-      </article>
+        ` : ''}
+      </section>
     `;
   }
 
-  function openMapDetail(id) {
-    const m = Data.getCampaign().maps.find(x => x.id === id);
-    if (!m) return;
-    const accent = m.accent || '#9bd4ff';
+  function wire(container) {
+    const newBtn = container.querySelector('#new-session');
+    if (newBtn) newBtn.addEventListener('click', () => openSessionEditor(null));
+
+    container.querySelectorAll('[data-session-edit]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-session-id');
+        const s = (Data.getNotes()?.sessions || []).find(x => x.id === id);
+        if (s) openSessionEditor(s);
+      });
+    });
+
+    container.querySelectorAll('[data-session-delete]').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        if (!confirm('Delete this session note?')) return;
+        const id = btn.getAttribute('data-session-id');
+        const notes = Data.getNotes();
+        notes.sessions = notes.sessions.filter(x => x.id !== id);
+        try {
+          Toast.show('Saving…');
+          await Data.pushNotes();
+          Toast.show('Session deleted');
+          App.rerender();
+        } catch (e) { Toast.show('Save failed: ' + e.message, true); }
+      });
+    });
+  }
+
+  function openSessionEditor(existing) {
+    const isNew = !existing;
+    const s = existing || { id: 'session-' + Date.now(), title: '', date: '', body: '', order: 0 };
 
     const html = `
       <div class="modal-backdrop" data-close-modal>
-        <div class="modal" style="max-width:1100px" onclick="event.stopPropagation()">
-          <div class="eyebrow" style="color:${accent};font-family:var(--mono);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:8px">
-            ▸ ${escapeHtml(m.id).toUpperCase()}
+        <div class="modal" onclick="event.stopPropagation()">
+          <h2>${isNew ? 'New Session' : 'Edit Session'}</h2>
+          <div class="modal-row">
+            <label>Title</label>
+            <input type="text" id="sess-title" value="${escapeHtml(s.title)}" placeholder="Session 1: The Ruiz Apartment">
           </div>
-          <h2 style="color:${accent}">${escapeHtml(m.title)}</h2>
-          <div style="font-family:var(--mono);color:var(--muted);font-size:12px;letter-spacing:0.14em;margin-bottom:18px">
-            ${escapeHtml(m.subtitle || '')}
+          <div class="modal-row">
+            <label>Date (optional)</label>
+            <input type="text" id="sess-date" value="${escapeHtml(s.date)}" placeholder="2089-04-12">
           </div>
-          <div class="map-detail">
-            <img src="maps/${encodeURIComponent(m.file)}" alt="${escapeHtml(m.title)}">
+          <div class="modal-row">
+            <label>Notes</label>
+            <textarea id="sess-body" rows="14">${escapeHtml(s.body)}</textarea>
           </div>
-          <div class="map-stats" style="margin-top:18px;grid-template-columns:repeat(2,1fr)">
-            ${['Population', 'Scale', 'Elevation', 'Connections'].map(key => {
-              const f = m.fields?.[key];
-              if (!f) return '';
-              return `<div class="map-stat"><b>${key}</b>${escapeHtml(f.value)}</div>`;
-            }).join('')}
-          </div>
-          ${m.fields?.Description ? `
-            <div class="field wide" style="margin-top:18px">
-              <b>Description</b>
-              <p>${escapeHtml(m.fields.Description.value)}</p>
-            </div>
-          ` : ''}
           <div class="modal-actions">
-            <button class="btn" data-close-modal>Close</button>
+            <button class="btn" data-close-modal>Cancel</button>
+            <button class="btn primary" id="sess-save">SAVE & SYNC</button>
           </div>
         </div>
       </div>
@@ -98,14 +114,28 @@ const MapsView = (() => {
     document.body.appendChild(host.firstElementChild);
     const backdrop = document.querySelector('.modal-backdrop');
     backdrop.querySelectorAll('[data-close-modal]').forEach(el => el.addEventListener('click', () => backdrop.remove()));
-  }
 
-  function wire(container) {
-    container.querySelectorAll('.map-card').forEach(card => {
-      card.addEventListener('click', () => {
-        const id = card.getAttribute('data-map-id');
-        openMapDetail(id);
-      });
+    backdrop.querySelector('#sess-save').addEventListener('click', async () => {
+      s.title = (backdrop.querySelector('#sess-title').value || '').trim() || 'Untitled Session';
+      s.date  = (backdrop.querySelector('#sess-date').value || '').trim();
+      s.body  = backdrop.querySelector('#sess-body').value;
+
+      const notes = Data.getNotes() || { sessions: [] };
+      if (!notes.sessions) notes.sessions = [];
+      if (isNew) {
+        s.order = notes.sessions.length + 1;
+        notes.sessions.push(s);
+      } else {
+        const idx = notes.sessions.findIndex(x => x.id === s.id);
+        if (idx >= 0) notes.sessions[idx] = s;
+      }
+      try {
+        Toast.show('Saving…');
+        await Data.pushNotes();
+        Toast.show('Session saved');
+        backdrop.remove();
+        App.rerender();
+      } catch (e) { Toast.show('Save failed: ' + e.message, true); }
     });
   }
 

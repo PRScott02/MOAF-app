@@ -2,7 +2,7 @@
  * Factions view — renders the matrix overview + each faction section.
  */
 const FactionsView = (() => {
- 
+
   function escapeHtml(s) {
     if (s == null) return '';
     return String(s)
@@ -12,12 +12,12 @@ const FactionsView = (() => {
       .replaceAll('"', '&quot;')
       .replaceAll("'", '&#39;');
   }
- 
+
   function render() {
     const c = Data.getCampaign();
     if (!c) return '<div class="loading">No data.</div>';
     const factions = c.factions || [];
- 
+
     // Count NPCs per faction (from npc list, matching by faction tag)
     const npcCount = {};
     const factionTagMap = {
@@ -30,7 +30,7 @@ const FactionsView = (() => {
       const fid = Object.entries(factionTagMap).find(([_, v]) => v === tag)?.[0];
       if (fid) npcCount[fid] = (npcCount[fid] || 0) + 1;
     }
- 
+
     return `
       <div class="faction-view wrap">
         <section class="hero">
@@ -50,7 +50,7 @@ const FactionsView = (() => {
             </div>
           </div>
         </section>
- 
+
         <section class="matrix-section">
           <h2>▸ Faction Matrix</h2>
           <div class="matrix-grid">
@@ -84,15 +84,15 @@ const FactionsView = (() => {
             `;}).join('')}
           </div>
         </section>
- 
+
         ${factions.map(f => renderFactionSection(f, c.npcs || [])).join('')}
       </div>
     `;
   }
- 
+
   function renderFactionSection(f, allNpcs) {
     const locked = Data.isLocked(f);
- 
+
     if (locked) {
       // Locked placeholder — players see the faction exists but no details
       return `
@@ -114,7 +114,7 @@ const FactionsView = (() => {
         </section>
       `;
     }
- 
+
     return `
       <section class="faction-section" id="faction-${f.id}" style="--primary:${f.primary};--accent:${f.accent}">
         <div class="section-header">
@@ -125,10 +125,10 @@ const FactionsView = (() => {
           </div>
           <div class="section-emblem"><span class="letter">${escapeHtml(f.letter || '?')}</span></div>
         </div>
- 
+
         ${renderOverviewPanel(f)}
         ${renderStructurePanel(f)}
- 
+
         ${(f.npcs && f.npcs.length) ? `
           <div class="panel">
             <div class="panel-title-row">
@@ -143,7 +143,7 @@ const FactionsView = (() => {
       </section>
     `;
   }
- 
+
   function renderOverviewPanel(f) {
     const keys = Object.keys(f.fields || {});
     if (keys.length === 0) return '';
@@ -156,7 +156,7 @@ const FactionsView = (() => {
       </div>
     `;
   }
- 
+
   function renderFactionField(f, key) {
     const field = f.fields[key];
     const wide = (key === 'Territory' || key === 'Player-Safe Read');
@@ -192,7 +192,7 @@ const FactionsView = (() => {
       </div>
     `;
   }
- 
+
   function renderStructurePanel(f) {
     if (!f.structure || f.structure.length === 0) return '';
     const visibleNodes = f.structure.filter(n => Data.canEditCampaign() || n.revealed !== false);
@@ -222,7 +222,7 @@ const FactionsView = (() => {
       </div>
     `;
   }
- 
+
   function renderFactionNpc(f, n, idx) {
     const visible = Data.canEditCampaign() || n.revealed !== false;
     if (!visible) {
@@ -251,7 +251,7 @@ const FactionsView = (() => {
       </div>
     `;
   }
- 
+
   // Click handler wiring
   function wire(container) {
     // Faction lock/unlock toggle
@@ -265,7 +265,7 @@ const FactionsView = (() => {
         await pushAndRefresh(f.locked ? 'Faction locked' : 'Faction unlocked');
       });
     });
- 
+
     // Matrix → jump to faction
     container.querySelectorAll('[data-faction-jump]').forEach(el => {
       el.addEventListener('click', () => {
@@ -274,7 +274,7 @@ const FactionsView = (() => {
         if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
- 
+
     // Toggle reveal flag
     container.querySelectorAll('[data-faction-toggle]').forEach(el => {
       el.addEventListener('click', async () => {
@@ -286,7 +286,7 @@ const FactionsView = (() => {
         await pushAndRefresh('Updated field visibility');
       });
     });
- 
+
     // Edit field
     container.querySelectorAll('[data-faction-edit]').forEach(el => {
       el.addEventListener('click', () => {
@@ -304,7 +304,7 @@ const FactionsView = (() => {
         });
       });
     });
- 
+
     // Toggle NPC reveal
     container.querySelectorAll('[data-faction-npc-toggle]').forEach(el => {
       el.addEventListener('click', async () => {
@@ -316,7 +316,7 @@ const FactionsView = (() => {
         await pushAndRefresh('Updated NPC visibility');
       });
     });
- 
+
     // Toggle structure node reveal
     container.querySelectorAll('[data-faction-struct-toggle]').forEach(el => {
       el.addEventListener('click', async () => {
@@ -328,7 +328,7 @@ const FactionsView = (() => {
         await pushAndRefresh('Updated structure visibility');
       });
     });
- 
+
     // Edit NPC body
     container.querySelectorAll('[data-faction-npc-edit]').forEach(el => {
       el.addEventListener('click', () => {
@@ -347,7 +347,7 @@ const FactionsView = (() => {
       });
     });
   }
- 
+
   async function pushAndRefresh(msg) {
     try {
       Toast.show('Saving…');
@@ -358,6 +358,6 @@ const FactionsView = (() => {
       Toast.show('Save failed: ' + e.message, true);
     }
   }
- 
+
   return { render, wire };
 })();

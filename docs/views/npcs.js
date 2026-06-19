@@ -2,11 +2,11 @@
  * NPCs view — searchable, filterable grid grouped by section.
  */
 const NpcsView = (() => {
- 
+
   let searchQuery = '';
   let factionFilter = 'all';
   let sectionFilter = 'all';
- 
+
   function escapeHtml(s) {
     if (s == null) return '';
     return String(s)
@@ -16,7 +16,7 @@ const NpcsView = (() => {
       .replaceAll('"', '&quot;')
       .replaceAll("'", '&#39;');
   }
- 
+
   function factionColor(name) {
     const map = {
       'BCI': '#7fffc5', 'CotU': '#ff4267', 'Truth Division': '#9b76ff',
@@ -27,19 +27,19 @@ const NpcsView = (() => {
     };
     return map[name] || '#7fffc5';
   }
- 
+
   function initials(name) {
     if (!name) return '?';
     const parts = name.split(/\s+/).filter(Boolean);
     if (parts.length === 1) return parts[0][0].toUpperCase();
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   }
- 
+
   function render() {
     const c = Data.getCampaign();
     if (!c) return '<div class="loading">No data.</div>';
     const npcs = c.npcs || [];
- 
+
     // Group by section
     const sections = new Map();
     for (const n of npcs) {
@@ -47,13 +47,13 @@ const NpcsView = (() => {
       if (!sections.has(sec)) sections.set(sec, []);
       sections.get(sec).push(n);
     }
- 
+
     // Collect unique factions for the filter dropdown
     const factionsSet = new Set();
     for (const n of npcs) if (n.faction) factionsSet.add(n.faction);
     const factionOpts = ['all', ...[...factionsSet].sort()];
     const sectionOpts = ['all', ...[...sections.keys()]];
- 
+
     return `
       <div class="npc-view wrap">
         <section class="npc-hero">
@@ -61,7 +61,7 @@ const NpcsView = (() => {
           <h1>NPC INDEX</h1>
           <p>Personnel dossiers for every active, archival, or watched individual in the Meridian Spire investigation. Public records are open; restricted records appear redacted unless GM clearance is provided.</p>
         </section>
- 
+
         <div class="npc-controls">
           <input type="text" id="npc-search" placeholder="Search by name, role, or vibe…" value="${escapeHtml(searchQuery)}">
           <select id="npc-faction-filter">
@@ -72,16 +72,16 @@ const NpcsView = (() => {
           </select>
           <span class="pill" style="text-align:center">${countMatching(npcs)} match</span>
         </div>
- 
+
         ${[...sections.entries()].map(([sec, list]) => renderSection(sec, list)).join('')}
       </div>
     `;
   }
- 
+
   function countMatching(npcs) {
     return npcs.filter(matchesFilters).length;
   }
- 
+
   function matchesFilters(n) {
     if (factionFilter !== 'all' && n.faction !== factionFilter) return false;
     if (sectionFilter !== 'all' && n.section !== sectionFilter) return false;
@@ -94,7 +94,7 @@ const NpcsView = (() => {
     }
     return true;
   }
- 
+
   function renderSection(sec, list) {
     const visible = list.filter(matchesFilters);
     if (visible.length === 0) return '';
@@ -109,11 +109,11 @@ const NpcsView = (() => {
       </section>
     `;
   }
- 
+
   function renderNpc(n) {
     const color = factionColor(n.faction);
     const locked = Data.isLocked(n);
- 
+
     if (locked) {
       return `
         <article class="npc-card locked-card" data-npc-id="${escapeHtml(n.id)}" style="--faction-color:${color}">
@@ -133,7 +133,7 @@ const NpcsView = (() => {
         </article>
       `;
     }
- 
+
     return `
       <article class="npc-card" data-npc-id="${escapeHtml(n.id)}" style="--faction-color:${color}">
         <div class="npc-portrait">${escapeHtml(initials(n.name))}</div>
@@ -155,7 +155,7 @@ const NpcsView = (() => {
       </article>
     `;
   }
- 
+
   function renderNpcField(n, key, style) {
     const f = n.fields?.[key];
     if (!f) return '';
@@ -167,7 +167,7 @@ const NpcsView = (() => {
     }
     return `<div class="mini"><strong>${escapeHtml(key)}</strong>${escapeHtml(f.value)}</div>`;
   }
- 
+
   function wire(container) {
     const search = container.querySelector('#npc-search');
     const ff = container.querySelector('#npc-faction-filter');
@@ -185,7 +185,7 @@ const NpcsView = (() => {
     }
     if (ff) ff.addEventListener('change', () => { factionFilter = ff.value; App.rerender(); });
     if (sf) sf.addEventListener('change', () => { sectionFilter = sf.value; App.rerender(); });
- 
+
     // NPC card click → detail
     container.querySelectorAll('.npc-card').forEach(card => {
       card.addEventListener('click', e => {
@@ -197,7 +197,7 @@ const NpcsView = (() => {
         openNpcDetail(id);
       });
     });
- 
+
     // NPC lock/unlock toggle (admin)
     container.querySelectorAll('[data-npc-lock]').forEach(el => {
       el.addEventListener('click', async e => {
@@ -214,7 +214,7 @@ const NpcsView = (() => {
         } catch (err) { Toast.show('Save failed: ' + err.message, true); }
       });
     });
- 
+
     // Edit NPC
     container.querySelectorAll('[data-npc-edit]').forEach(btn => {
       btn.addEventListener('click', e => {
@@ -225,13 +225,13 @@ const NpcsView = (() => {
       });
     });
   }
- 
+
   function openNpcDetail(id) {
     const n = Data.getCampaign().npcs.find(x => x.id === id);
     if (!n) return;
     const color = factionColor(n.faction);
     const isAdmin = Data.canEditCampaign();
- 
+
     const renderField = (key) => {
       const f = n.fields?.[key];
       if (!f) return '';
@@ -263,9 +263,9 @@ const NpcsView = (() => {
         </div>
       `;
     };
- 
+
     const allFieldKeys = Object.keys(n.fields || {});
- 
+
     const html = `
       <div class="modal-backdrop" data-close-modal>
         <div class="modal" style="max-width:840px" onclick="event.stopPropagation()">
@@ -317,6 +317,6 @@ const NpcsView = (() => {
       });
     }
   }
- 
+
   return { render, wire };
 })();
