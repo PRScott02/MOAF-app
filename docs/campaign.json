@@ -37,7 +37,7 @@
         {
           "label": "Directorate",
           "value": "Policy, citywide control, elite coordination, classified continuity orders.",
-          "revealed": true
+          "revealed": false
         },
         {
           "label": "Internal Security",
