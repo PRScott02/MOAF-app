@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BCI Terminal // Corrupted Line</title>
+  <style>
+    :root {
+      --bg: #020605;
+      --panel: rgba(3, 18, 13, 0.94);
+      --green: #8cffb1;
+      --green-dim: #42dd76;
+      --green-faint: rgba(140, 255, 177, 0.18);
+      --red: #ff3b3b;
+      --red-dark: rgba(95, 0, 0, 0.76);
+      --amber: #ffd36b;
+      --purple: #aa7cff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(58, 255, 134, 0.08), transparent 34%),
+        linear-gradient(135deg, #010302, #04110b 48%, #000000);
+      color: var(--green);
+      font-family: "Courier New", Courier, monospace;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.035) 0px,
+        rgba(255, 255, 255, 0.035) 1px,
+        transparent 2px,
+        transparent 5px
+      );
+      pointer-events: none;
+      opacity: 0.62;
+      z-index: 20;
+      animation: scanFlicker 2.2s infinite;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 54%, rgba(0, 0, 0, 0.76));
+      pointer-events: none;
+      z-index: 21;
+    }
+
+    .noise {
+      position: fixed;
+      inset: -20%;
+      opacity: 0.045;
+      background:
+        linear-gradient(0deg, transparent, rgba(255,255,255,0.18), transparent),
+        linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+      animation: noiseShift 0.24s infinite;
+      pointer-events: none;
+      z-index: 19;
+    }
+
+    .wrap {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      position: relative;
+      z-index: 3;
+    }
+
+    .terminal {
+      width: min(920px, 96vw);
+      height: min(680px, 94vh);
+      border: 1px solid rgba(140, 255, 177, 0.46);
+      background: var(--panel);
+      box-shadow:
+        0 0 42px rgba(66, 221, 118, 0.13),
+        inset 0 0 46px rgba(66, 221, 118, 0.055);
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto auto minmax(0, 1fr) auto;
+      padding: 20px;
+      position: relative;
+    }
+
+    .terminal::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgba(140,255,177,0.04), transparent);
+      transform: translateX(-120%);
+      animation: sweep 4.5s infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .topbar,
+    .ascii,
+    .screen,
+    .footer {
+      position: relative;
+      z-index: 2;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid rgba(140, 255, 177, 0.25);
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .seal {
+      color: var(--amber);
+      text-shadow: 0 0 12px rgba(255, 211, 107, 0.45);
+    }
+
+    .status {
+      color: rgba(140, 255, 177, 0.68);
+      text-align: right;
+    }
+
+    .ascii {
+      white-space: pre;
+      color: rgba(140, 255, 177, 0.72);
+      line-height: 1;
+      font-size: 10px;
+      margin: 0 0 12px 0;
+      text-shadow: 0 0 8px rgba(140, 255, 177, 0.24);
+      flex-shrink: 0;
+    }
+
+    .screen {
+      min-height: 0;
+      overflow: hidden;
+      border-top: 1px solid rgba(140, 255, 177, 0.15);
+      border-bottom: 1px solid rgba(140, 255, 177, 0.15);
+      background: rgba(0, 7, 4, 0.35);
+      padding: 10px 12px;
+      font-size: clamp(13px, 1.75vw, 17px);
+      line-height: 1.48;
+      text-shadow: 0 0 8px rgba(140, 255, 177, 0.37);
+    }
+
+    .log {
+      height: 100%;
+      overflow: hidden;
+      padding-right: 2px;
+    }
+
+    .line {
+      min-height: 24px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .prompt {
+      color: var(--green-dim);
+    }
+
+    .input {
+      color: #ddffe9;
+    }
+
+    .classified {
+      color: var(--amber);
+      text-shadow: 0 0 8px rgba(255, 211, 107, 0.3);
+    }
+
+    .fragment {
+      margin: 8px 0;
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 211, 107, 0.45);
+      background: rgba(255, 211, 107, 0.055);
+      color: var(--amber);
+      box-shadow: inset 0 0 18px rgba(255, 211, 107, 0.05);
+    }
+
+    .error {
+      color: var(--red);
+      font-weight: bold;
+      text-shadow: 0 0 12px rgba(255, 59, 59, 0.75);
+    }
+
+    .glitch {
+      animation: glitch 0.2s infinite;
+    }
+
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      color: rgba(140, 255, 177, 0.42);
+      font-size: 12px;
+      border-top: 1px solid rgba(140, 255, 177, 0.18);
+      padding-top: 12px;
+      margin-top: 12px;
+      letter-spacing: 1px;
+      flex-shrink: 0;
+      background: var(--panel);
+    }
+
+    .fatalOverlay {
+      display: none;
+      position: absolute;
+      inset: 20px;
+      z-index: 8;
+      place-items: center;
+      background:
+        radial-gradient(circle at center, rgba(255, 0, 0, 0.12), rgba(0, 0, 0, 0.93) 62%),
+        rgba(10, 0, 0, 0.92);
+      border: 1px solid rgba(255, 59, 59, 0.75);
+      color: var(--red);
+      text-align: center;
+      text-shadow: 0 0 18px rgba(255, 59, 59, 0.95);
+      letter-spacing: 4px;
+      padding: 26px;
+    }
+
+    .fatalOverlay.show {
+      display: grid;
+      animation: violentIn 0.3s steps(2, end) 1, errorPulse 0.9s infinite;
+    }
+
+    .fatalMain {
+      font-size: clamp(30px, 6vw, 68px);
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
+
+    .fatalSub {
+      font-size: clamp(15px, 2.4vw, 24px);
+      color: rgba(255, 180, 180, 0.9);
+    }
+
+    .cursor::after {
+      content: "█";
+      animation: blink 0.85s steps(2, start) infinite;
+      margin-left: 3px;
+    }
+
+    .shake {
+      animation: shake 0.12s infinite;
+    }
+
+    #bootButton {
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      background: rgba(3, 20, 14, 0.95);
+      color: var(--green);
+      border: 1px solid rgba(140, 255, 177, 0.48);
+      padding: 10px 14px;
+      font-family: inherit;
+      cursor: pointer;
+      z-index: 30;
+      letter-spacing: 1px;
+    }
+
+    #bootButton:hover {
+      background: rgba(30, 70, 45, 0.94);
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    @keyframes scanFlicker {
+      0%, 100% { opacity: 0.62; }
+      50% { opacity: 0.75; }
+      53% { opacity: 0.45; }
+    }
+
+    @keyframes sweep {
+      0% { transform: translateX(-130%); }
+      44%, 100% { transform: translateX(130%); }
+    }
+
+    @keyframes noiseShift {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(-2%, 1%); }
+      50% { transform: translate(1%, -1%); }
+      75% { transform: translate(2%, 2%); }
+      100% { transform: translate(0, 0); }
+    }
+
+    @keyframes errorPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.72; }
+    }
+
+    @keyframes violentIn {
+      0% { transform: translate(0); filter: brightness(1); }
+      20% { transform: translate(8px, -5px); filter: brightness(2.5); }
+      40% { transform: translate(-8px, 4px); filter: brightness(0.6); }
+      60% { transform: translate(5px, 8px); filter: brightness(2); }
+      100% { transform: translate(0); filter: brightness(1); }
+    }
+
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      25% { transform: translate(2px, -1px); }
+      50% { transform: translate(-2px, 1px); }
+      75% { transform: translate(1px, 2px); }
+      100% { transform: translate(0); }
+    }
+
+    @keyframes shake {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(3px, 0); }
+      50% { transform: translate(-3px, 2px); }
+      75% { transform: translate(2px, -2px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    @media (max-height: 610px) {
+      .ascii {
+        display: none;
+      }
+
+      .terminal {
+        height: 94vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+
+  <div class="wrap">
+    <main class="terminal" id="terminal">
+      <section class="topbar">
+        <div class="seal">BCI // Bureau of Cognitive Integrity</div>
+        <div class="status">MERIDIAN SPIRE NODE 07-B<br />DATE: 11.03.2089</div>
+      </section>
+
+      <pre class="ascii">
+██████╗  ██████╗██╗
+██╔══██╗██╔════╝██║
+██████╔╝██║     ██║
+██╔══██╗██║     ██║
+██████╔╝╚██████╗██║
+╚═════╝  ╚═════╝╚═╝
+      </pre>
+
+      <section class="screen">
+        <div class="log" id="log"></div>
+      </section>
+
+      <section class="footer">
+        <span>TRUTH DIVISION ACCESS GATEWAY</span>
+        <span>UNAUTHORIZED VIEWING IS A FEDERAL MEMORY-SECURITY VIOLATION</span>
+      </section>
+
+      <section class="fatalOverlay" id="fatalOverlay">
+        <div>
+          <div class="fatalMain">LINE DISCONNECTED</div>
+          <div class="fatalSub">ERROR. LINE CORRUPTED.</div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <button id="bootButton" onclick="bootTerminal()">START SECURE LINE</button>
+
+  <script>
+    const log = document.getElementById("log");
+    const terminal = document.getElementById("terminal");
+    const fatalOverlay = document.getElementById("fatalOverlay");
+    const bootButton = document.getElementById("bootButton");
+
+    let audioCtx;
+    let masterGain;
+    let running = false;
+    let whisperNode = null;
+
+    const sequence = [
+      { kind: "line", text: "INITIALIZING SECURE LINE...", delay: 350, sound: "boot" },
+      { kind: "line", text: "CONNECTING TO BCI ARCHIVAL RELAY...", delay: 550, sound: "login" },
+      { kind: "line", text: "HANDSHAKE ACCEPTED.", delay: 450, sound: "confirm" },
+      { kind: "line", text: "SESSION ID: MS-2089-COTU-RUNOFF-7731", delay: 500, className: "classified", sound: "login" },
+      { kind: "blank", delay: 220 },
+      { kind: "prompt", prompt: "USERNAME: ", typed: "H.Ruiz", delay: 420, sound: "login" },
+      { kind: "prompt", prompt: "PASSWORD: ", typed: "*************", delay: 420, sound: "login" },
+      { kind: "blank", delay: 240 },
+      { kind: "line", text: "VERIFYING CREDENTIALS...", delay: 550, sound: "login" },
+      { kind: "line", text: "CHECKING CLEARANCE...", delay: 600, sound: "login" },
+      { kind: "line", text: "ACCESS LEVEL: REDACTED", delay: 480, className: "classified", sound: "confirm" },
+      { kind: "line", text: "OPENING SECURE MESSAGE LINE...", delay: 620, sound: "boot" },
+      { kind: "blank", delay: 220 },
+      { kind: "line", text: "ERROR. LINE CORRUPTED.", delay: 260, className: "error", sound: "lineCorrupted" },
+      { kind: "line", text: "ERROR. LINE CORRUPTED.", delay: 180, className: "error", sound: "lineCorrupted" },
+      { kind: "line", text: "SIGNAL INTEGRITY FAILURE.", delay: 260, className: "error", sound: "analogError" },
+      { kind: "line", text: "SOURCE TRACE INTERRUPTED.", delay: 260, className: "error", sound: "analogError" },
+      { kind: "fragmentHeader", text: "MESSAGE FRAGMENT RECOVERED:", delay: 850, sound: "whisperStart" },
+      { kind: "fragment", text: "\"...meet at the runoff. Bring proof. Do not trust the relay...\"", delay: 500, sound: "whisper" },
+      { kind: "hold", delay: 3800 },
+      { kind: "line", text: "CONNECTION TERMINATED BY UNKNOWN PROCESS.", delay: 450, className: "error", sound: "disconnect" },
+      { kind: "final", delay: 800, sound: "disconnect" }
+    ];
+
+    function wait(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function scrollLog() {
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function makeLine(className = "") {
+      const line = document.createElement("div");
+      line.className = "line " + className;
+      log.appendChild(line);
+      scrollLog();
+      return line;
+    }
+
+    function makeFragmentBox() {
+      const box = document.createElement("div");
+      box.className = "fragment glitch";
+      log.appendChild(box);
+      scrollLog();
+      return box;
+    }
+
+    function initAudio() {
+      if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioCtx = new AudioContext();
+        masterGain = audioCtx.createGain();
+        masterGain.gain.value = 0.58;
+        masterGain.connect(audioCtx.destination);
+      }
+
+      if (audioCtx.state === "suspended") {
+        audioCtx.resume();
+      }
+    }
+
+    function makeNoiseBuffer(duration = 0.45) {
+      const sampleRate = audioCtx.sampleRate;
+      const buffer = audioCtx.createBuffer(1, Math.floor(sampleRate * duration), sampleRate);
+      const data = buffer.getChannelData(0);
+
+      for (let i = 0; i < data.length; i++) {
+        data[i] = (Math.random() * 2 - 1) * 0.9;
+      }
+
+      return buffer;
+    }
+
+    function playTone(freq, duration, type = "square", volume = 0.06) {
+      if (!audioCtx) return;
+
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, now);
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(volume, now + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+      osc.connect(gain);
+      gain.connect(masterGain);
+
+      osc.start(now);
+      osc.stop(now + duration + 0.03);
+    }
+
+    function playKeyClick() {
+      if (!audioCtx) return;
+
+      const now = audioCtx.currentTime;
+      const osc = audioCtx.createOscillator();
+      const filter = audioCtx.createBiquadFilter();
+      const gain = audioCtx.createGain();
+
+      osc.type = "square";
+      osc.frequency.setValueAtTime(680 + Math.random() * 220, now);
+
+      filter.type = "bandpass";
+      filter.frequency.value = 1200;
+      filter.Q.value = 8;
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.028, now + 0.004);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.035);
+
+      osc.connect(filter);
+      filter.connect(gain);
+      gain.connect(masterGain);
+
+      osc.start(now);
+      osc.stop(now + 0.04);
+    }
+
+    function playStaticBurst(duration = 0.24, volume = 0.07, frequency = 700) {
+      if (!audioCtx) return;
+
+      const now = audioCtx.currentTime;
+      const src = audioCtx.createBufferSource();
+      const filter = audioCtx.createBiquadFilter();
+      const gain = audioCtx.createGain();
+
+      src.buffer = makeNoiseBuffer(duration);
+
+      filter.type = "bandpass";
+      filter.frequency.value = frequency;
+      filter.Q.value = 3.2;
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(volume, now + 0.018);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+      src.connect(filter);
+      filter.connect(gain);
+      gain.connect(masterGain);
+
+      src.start(now);
+      src.stop(now + duration + 0.02);
+    }
+
+    function playBootChirp() {
+      playTone(190, 0.08, "sawtooth", 0.045);
+      setTimeout(() => playTone(360, 0.08, "square", 0.035), 85);
+      setTimeout(() => playTone(620, 0.055, "triangle", 0.025), 160);
+    }
+
+    function playConfirmBlip() {
+      playTone(500, 0.06, "sine", 0.035);
+      setTimeout(() => playTone(760, 0.07, "sine", 0.025), 65);
+    }
+
+    function playLineCorruptedSound() {
+      if (!audioCtx) return;
+
+      const now = audioCtx.currentTime;
+      const oscA = audioCtx.createOscillator();
+      const oscB = audioCtx.createOscillator();
+      const filter = audioCtx.createBiquadFilter();
+      const gain = audioCtx.createGain();
+
+      oscA.type = "sawtooth";
+      oscB.type = "square";
+
+      oscA.frequency.setValueAtTime(620, now);
+      oscA.frequency.exponentialRampToValueAtTime(90, now + 0.38);
+      oscB.frequency.setValueAtTime(300, now);
+      oscB.frequency.exponentialRampToValueAtTime(45, now + 0.38);
+
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(1000, now);
+      filter.frequency.exponentialRampToValueAtTime(180, now + 0.38);
+      filter.Q.value = 10;
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.13, now + 0.025);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.42);
+
+      oscA.connect(filter);
+      oscB.connect(filter);
+      filter.connect(gain);
+      gain.connect(masterGain);
+
+      oscA.start(now);
+      oscB.start(now);
+      oscA.stop(now + 0.43);
+      oscB.stop(now + 0.43);
+
+      setTimeout(() => playStaticBurst(0.12, 0.09, 500), 100);
+    }
+
+    function playAnalogErrorSound() {
+      if (!audioCtx) return;
+
+      const now = audioCtx.currentTime;
+      const rumble = audioCtx.createOscillator();
+      const drone = audioCtx.createOscillator();
+      const lfo = audioCtx.createOscillator();
+      const lfoGain = audioCtx.createGain();
+      const filter = audioCtx.createBiquadFilter();
+      const gain = audioCtx.createGain();
+
+      rumble.type = "sawtooth";
+      drone.type = "triangle";
+      lfo.type = "sine";
+
+      rumble.frequency.setValueAtTime(42, now);
+      drone.frequency.setValueAtTime(84, now);
+      lfo.frequency.setValueAtTime(6.5, now);
+      lfoGain.gain.value = 28;
+
+      lfo.connect(lfoGain);
+      lfoGain.connect(drone.frequency);
+
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(420, now);
+      filter.Q.value = 14;
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.16, now + 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.03, now + 0.9);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.22);
+
+      rumble.connect(filter);
+      drone.connect(filter);
+      filter.connect(gain);
+      gain.connect(masterGain);
+
+      rumble.start(now);
+      drone.start(now);
+      lfo.start(now);
+      rumble.stop(now + 1.25);
+      drone.stop(now + 1.25);
+      lfo.stop(now + 1.25);
+
+      setTimeout(() => playStaticBurst(0.42, 0.075, 320), 140);
+    }
+
+    function startWhisperLoop() {
+      if (!audioCtx || whisperNode) return;
+
+      const now = audioCtx.currentTime;
+
+      const high = audioCtx.createBufferSource();
+      const low = audioCtx.createBufferSource();
+      const highFilter = audioCtx.createBiquadFilter();
+      const lowFilter = audioCtx.createBiquadFilter();
+      const gain = audioCtx.createGain();
+      const tremolo = audioCtx.createOscillator();
+      const tremoloGain = audioCtx.createGain();
+
+      high.buffer = makeNoiseBuffer(3.5);
+      low.buffer = makeNoiseBuffer(3.5);
+      high.loop = true;
+      low.loop = true;
+
+      highFilter.type = "bandpass";
+      highFilter.frequency.value = 1500;
+      highFilter.Q.value = 1.1;
+
+      lowFilter.type = "bandpass";
+      lowFilter.frequency.value = 330;
+      lowFilter.Q.value = 1.6;
+
+      tremolo.type = "sine";
+      tremolo.frequency.value = 8.7;
+      tremoloGain.gain.value = 0.04;
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.linearRampToValueAtTime(0.105, now + 0.42);
+
+      tremolo.connect(tremoloGain);
+      tremoloGain.connect(gain.gain);
+
+      high.connect(highFilter);
+      low.connect(lowFilter);
+      highFilter.connect(gain);
+      lowFilter.connect(gain);
+      gain.connect(masterGain);
+
+      high.start(now);
+      low.start(now);
+      tremolo.start(now);
+
+      whisperNode = { high, low, tremolo, gain };
+    }
+
+    function stopWhisperLoop() {
+      if (!audioCtx || !whisperNode) return;
+
+      const now = audioCtx.currentTime;
+      whisperNode.gain.gain.cancelScheduledValues(now);
+      whisperNode.gain.gain.setValueAtTime(whisperNode.gain.gain.value, now);
+      whisperNode.gain.gain.linearRampToValueAtTime(0.0001, now + 0.55);
+
+      const node = whisperNode;
+      whisperNode = null;
+
+      setTimeout(() => {
+        try { node.high.stop(); } catch (e) {}
+        try { node.low.stop(); } catch (e) {}
+        try { node.tremolo.stop(); } catch (e) {}
+      }, 650);
+    }
+
+    function playHeavyDisconnect() {
+      if (!audioCtx) return;
+
+      const now = audioCtx.currentTime;
+      const sub = audioCtx.createOscillator();
+      const alarm = audioCtx.createOscillator();
+      const grind = audioCtx.createOscillator();
+      const filter = audioCtx.createBiquadFilter();
+      const gain = audioCtx.createGain();
+
+      sub.type = "sawtooth";
+      alarm.type = "square";
+      grind.type = "sawtooth";
+
+      sub.frequency.setValueAtTime(78, now);
+      sub.frequency.exponentialRampToValueAtTime(23, now + 1.25);
+
+      alarm.frequency.setValueAtTime(112, now);
+      alarm.frequency.setValueAtTime(72, now + 0.26);
+      alarm.frequency.setValueAtTime(112, now + 0.52);
+      alarm.frequency.setValueAtTime(60, now + 0.78);
+      alarm.frequency.exponentialRampToValueAtTime(30, now + 1.3);
+
+      grind.frequency.setValueAtTime(49, now);
+      grind.detune.value = -22;
+
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(580, now);
+      filter.frequency.exponentialRampToValueAtTime(140, now + 1.3);
+      filter.Q.value = 12;
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.28, now + 0.045);
+      gain.gain.setValueAtTime(0.28, now + 0.25);
+      gain.gain.exponentialRampToValueAtTime(0.18, now + 0.78);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.42);
+
+      sub.connect(filter);
+      alarm.connect(filter);
+      grind.connect(filter);
+      filter.connect(gain);
+      gain.connect(masterGain);
+
+      sub.start(now);
+      alarm.start(now);
+      grind.start(now);
+
+      sub.stop(now + 1.48);
+      alarm.stop(now + 1.48);
+      grind.stop(now + 1.48);
+
+      setTimeout(() => playStaticBurst(0.44, 0.1, 240), 280);
+      setTimeout(() => playStaticBurst(0.35, 0.08, 175), 850);
+    }
+
+    function playSequenceSound(sound) {
+      if (!audioCtx || !sound) return;
+
+      if (sound === "boot") playBootChirp();
+      if (sound === "login") playTone(300, 0.05, "triangle", 0.022);
+      if (sound === "confirm") playConfirmBlip();
+      if (sound === "lineCorrupted") playLineCorruptedSound();
+      if (sound === "analogError") playAnalogErrorSound();
+      if (sound === "whisperStart") startWhisperLoop();
+      if (sound === "whisper") {
+        startWhisperLoop();
+        playStaticBurst(0.3, 0.05, 1800);
+      }
+      if (sound === "disconnect") playHeavyDisconnect();
+    }
+
+    async function typeText(element, text, speed = 34) {
+      element.classList.add("cursor");
+
+      for (let i = 0; i < text.length; i++) {
+        element.textContent += text[i];
+
+        if (text[i] !== " ") {
+          playKeyClick();
+        }
+
+        scrollLog();
+        await wait(speed + Math.random() * 25);
+      }
+
+      element.classList.remove("cursor");
+      scrollLog();
+    }
+
+    async function runSequence() {
+      if (running) return;
+      running = true;
+
+      log.innerHTML = "";
+      fatalOverlay.classList.remove("show");
+      terminal.classList.remove("shake");
+      stopWhisperLoop();
+
+      for (const item of sequence) {
+        await wait(item.delay);
+        playSequenceSound(item.sound);
+
+        if (item.kind === "blank") {
+          makeLine().innerHTML = "&nbsp;";
+        }
+
+        if (item.kind === "line" || item.kind === "fragmentHeader") {
+          const line = makeLine(item.className || (item.kind === "fragmentHeader" ? "classified" : ""));
+          await typeText(line, item.text, item.className === "error" ? 18 : 26);
+        }
+
+        if (item.kind === "prompt") {
+          const line = makeLine();
+          const prompt = document.createElement("span");
+          const input = document.createElement("span");
+
+          prompt.className = "prompt";
+          input.className = "input";
+
+          prompt.textContent = item.prompt;
+
+          line.appendChild(prompt);
+          line.appendChild(input);
+
+          await typeText(input, item.typed, 48);
+        }
+
+        if (item.kind === "fragment") {
+          const box = makeFragmentBox();
+          await typeText(box, item.text, 48);
+        }
+
+        if (item.kind === "hold") {
+          await wait(item.delay);
+          stopWhisperLoop();
+        }
+
+        if (item.kind === "final") {
+          terminal.classList.add("shake");
+          fatalOverlay.classList.add("show");
+          playHeavyDisconnect();
+
+          await wait(1800);
+          terminal.classList.remove("shake");
+        }
+
+        scrollLog();
+      }
+
+      running = false;
+      bootButton.textContent = "RESTART SEQUENCE";
+    }
+
+    function bootTerminal() {
+      initAudio();
+      runSequence();
+    }
+  </script>
+</body>
+</html>

@@ -206,13 +206,43 @@ const AdminPanel = (() => {
     });
   }
 
+  /** Create a brand-new blank NPC and open the editor on it. */
+  function createNpc() {
+    const c = Data.getCampaign();
+    if (!c.npcs) c.npcs = [];
+    const id = 'npc-' + Date.now().toString(36);
+    const n = {
+      id: id,
+      name: 'New NPC',
+      role: '',
+      faction: '',
+      section: 'Unsorted',
+      status: [],
+      personality: [],
+      connections: [],
+      locked: true,           // new NPCs start locked
+      fields: {
+        'Quote':           { value: '', revealed: false },
+        'Public Face':     { value: '', revealed: false },
+        'The Truth':       { value: '', revealed: false },
+        'Vibe':            { value: '', revealed: false },
+        'Why They Matter': { value: '', revealed: false },
+        'Secret':          { value: '', revealed: false },
+        'First Encounter': { value: '', revealed: false },
+        'DM Notes':        { value: '', revealed: false }
+      }
+    };
+    c.npcs.push(n);
+    openNpcEditor(n, { isNew: true });
+  }
+
   /** Open the full NPC editor with all fields + reveal toggles. */
-  function openNpcEditor(n) {
+  function openNpcEditor(n, opts = {}) {
     const fields = Object.keys(n.fields || {});
     const backdrop = showModal(`
       <div class="modal-backdrop" data-close-modal>
         <div class="modal" style="max-width:820px" onclick="event.stopPropagation()">
-          <h2>Edit NPC: ${escapeHtml(n.name)}</h2>
+          <h2>${opts.isNew ? 'New NPC' : 'Edit NPC: ' + escapeHtml(n.name)}</h2>
 
           <div class="modal-row">
             <label>Name</label>
@@ -253,12 +283,21 @@ const AdminPanel = (() => {
           `).join('')}
 
           <div class="modal-actions">
-            <button class="btn" data-close-modal>Cancel</button>
+            ${opts.isNew ? '' : '<button class="btn danger" id="npc-delete">DELETE NPC</button>'}
+            <button class="btn" data-close-modal id="npc-cancel">Cancel</button>
             <button class="btn primary" id="npc-save">SAVE & PUSH</button>
           </div>
         </div>
       </div>
     `);
+
+    // If this is a new NPC and the user cancels, remove the blank entry we added
+    if (opts.isNew) {
+      backdrop.querySelector('#npc-cancel').addEventListener('click', () => {
+        const c = Data.getCampaign();
+        c.npcs = c.npcs.filter(x => x.id !== n.id);
+      });
+    }
 
     backdrop.querySelector('#npc-save').addEventListener('click', async () => {
       n.name    = backdrop.querySelector('#npc-name').value.trim() || n.name;
@@ -277,11 +316,27 @@ const AdminPanel = (() => {
       try {
         Toast.show('Saving…');
         await Data.pushCampaign();
-        Toast.show('NPC saved');
+        Toast.show(opts.isNew ? 'NPC created' : 'NPC saved');
         backdrop.remove();
         App.rerender();
       } catch (e) { Toast.show('Save failed: ' + e.message, true); }
     });
+
+    const delBtn = backdrop.querySelector('#npc-delete');
+    if (delBtn) {
+      delBtn.addEventListener('click', async () => {
+        if (!confirm('Permanently delete ' + n.name + '? This cannot be undone.')) return;
+        const c = Data.getCampaign();
+        c.npcs = c.npcs.filter(x => x.id !== n.id);
+        try {
+          Toast.show('Deleting…');
+          await Data.pushCampaign();
+          Toast.show('NPC deleted');
+          backdrop.remove();
+          App.rerender();
+        } catch (e) { Toast.show('Delete failed: ' + e.message, true); }
+      });
+    }
   }
 
   /** Settings dialog — change PINs, manage token. */
@@ -328,6 +383,6 @@ const AdminPanel = (() => {
   return {
     openAdminLogin, openNoteTakerLogin,
     openAdminTokenSetup, openNoteTakerTokenSetup,
-    openTextEditor, openNpcEditor, openSettings
+    openTextEditor, openNpcEditor, createNpc, openSettings
   };
 })();

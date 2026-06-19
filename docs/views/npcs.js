@@ -60,6 +60,11 @@ const NpcsView = (() => {
           <div class="eyebrow">▸ Unified Personnel Index // Meridian Spire</div>
           <h1>NPC INDEX</h1>
           <p>Personnel dossiers for every active, archival, or watched individual in the Meridian Spire investigation. Public records are open; restricted records appear redacted unless GM clearance is provided.</p>
+          ${Data.canEditCampaign() ? `
+            <div style="margin-top:16px">
+              <button class="btn primary" id="npc-add">+ ADD NPC</button>
+            </div>
+          ` : ''}
         </section>
 
         <div class="npc-controls">
@@ -169,6 +174,9 @@ const NpcsView = (() => {
   }
 
   function wire(container) {
+    const addBtn = container.querySelector('#npc-add');
+    if (addBtn) addBtn.addEventListener('click', () => AdminPanel.createNpc());
+
     const search = container.querySelector('#npc-search');
     const ff = container.querySelector('#npc-faction-filter');
     const sf = container.querySelector('#npc-section-filter');

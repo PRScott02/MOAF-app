@@ -9,6 +9,7 @@ const App = (() => {
     { id: 'factions', label: 'Factions', icon: '◈' },
     { id: 'npcs',     label: 'NPCs',     icon: '◎' },
     { id: 'maps',     label: 'Maps',     icon: '⌖' },
+    { id: 'evidence', label: 'Files / Evidence', icon: '▦' },
     { id: 'notes',    label: 'Notes',    icon: '▤' }
   ];
 
@@ -48,6 +49,7 @@ const App = (() => {
       case 'factions': view = FactionsView; break;
       case 'npcs':     view = NpcsView;     break;
       case 'maps':     view = MapsView;     break;
+      case 'evidence': view = EvidenceView; break;
       case 'notes':    view = NotesView;    break;
     }
     if (view) {

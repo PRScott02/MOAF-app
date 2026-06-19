@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Arasaka // Lock Override</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@300;500;700&display=swap');
+
+:root{
+  --bg:#050000;--red:#e8000a;--red-dim:#9a0007;--red-faint:rgba(232,0,10,0.12);
+  --red-glow:rgba(232,0,10,0.4);--amber:#ff6b00;--white:#f0e6e6;
+  --panel:rgba(8,1,1,0.97);--border:rgba(232,0,10,0.35);
+  --font-mono:'Share Tech Mono',monospace;--font-ui:'Rajdhani',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;background:var(--bg);color:var(--white);
+  font-family:var(--font-mono);overflow:hidden;user-select:none}
+
+/* scanlines */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:50;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,0.08) 0px,rgba(0,0,0,0.08) 1px,transparent 1px,transparent 4px);
+  mix-blend-mode:multiply}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:51;
+  background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,0.8) 100%)}
+
+/* arasaka noise texture */
+.noise{position:fixed;inset:-50%;width:200%;height:200%;pointer-events:none;z-index:49;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity:0.04;animation:ndrift 9s steps(4) infinite}
+@keyframes ndrift{to{transform:translate(3%,-3%)}}
+
+.page{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 50% 30%,rgba(120,0,0,0.2),transparent 55%)}
+
+/* main shell */
+.shell{width:min(860px,96vw);height:min(680px,94vh);
+  border:1px solid var(--border);position:relative;overflow:hidden;
+  background:var(--panel);display:flex;flex-direction:column;
+  box-shadow:0 0 60px rgba(232,0,10,0.15),inset 0 0 60px rgba(232,0,10,0.04)}
+
+/* corner brackets */
+.shell::before,.shell::after{content:"";position:absolute;width:22px;height:22px;
+  border-color:var(--red);border-style:solid;z-index:5}
+.shell::before{top:8px;left:8px;border-width:2px 0 0 2px}
+.shell::after{bottom:8px;right:8px;border-width:0 2px 2px 0}
+
+/* header */
+.hdr{height:52px;display:flex;justify-content:space-between;align-items:center;
+  padding:0 20px;border-bottom:1px solid var(--border);
+  background:rgba(0,0,0,0.5);flex-shrink:0;position:relative}
+.hdr::after{content:"";position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--red),transparent);opacity:0.6}
+.hdr-brand{display:flex;align-items:center;gap:12px}
+.hdr-logo{font-family:var(--font-ui);font-weight:700;font-size:22px;
+  letter-spacing:.2em;color:var(--red);text-shadow:0 0 20px var(--red-glow);
+  text-transform:lowercase}
+.hdr-logo span{font-size:11px;display:block;letter-spacing:.3em;
+  color:rgba(232,0,10,0.6);font-weight:300;margin-top:-4px}
+.hdr-status{font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(232,0,10,0.6);text-align:right}
+.hdr-status .val{color:var(--red);font-size:13px;display:block;
+  text-shadow:0 0 10px var(--red-glow)}
+
+/* body */
+.body{flex:1;display:grid;grid-template-columns:1fr 280px;min-height:0}
+
+/* left — main lock view */
+.lock-col{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:20px;gap:16px;border-right:1px solid var(--border)}
+
+/* lock cylinder visual */
+.cylinder-wrap{position:relative;width:320px;flex-shrink:0}
+.cylinder-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(232,0,10,0.45);text-align:center;margin-bottom:8px}
+
+.cylinder{width:100%;height:80px;background:rgba(0,0,0,0.7);
+  border:1px solid rgba(232,0,10,0.3);position:relative;overflow:hidden;
+  box-shadow:inset 0 0 20px rgba(0,0,0,0.8)}
+.cylinder-inner{position:absolute;inset:0;background:
+  repeating-linear-gradient(90deg,rgba(232,0,10,0.04) 0px,rgba(232,0,10,0.04) 1px,transparent 1px,transparent 20px)}
+
+/* tension fill inside cylinder */
+.tension-fill{position:absolute;left:0;top:0;bottom:0;width:0%;
+  background:linear-gradient(90deg,rgba(232,0,10,0.15),rgba(232,0,10,0.35));
+  transition:width .04s linear;border-right:1px solid rgba(232,0,10,0.5)}
+
+/* rotation indicator */
+.barrel{position:absolute;inset:8px;border:1px solid rgba(232,0,10,0.2);
+  border-radius:2px;display:flex;align-items:center;justify-content:center;
+  transform-origin:center;transition:transform .08s ease}
+.barrel-notch{width:4px;height:26px;background:rgba(232,0,10,0.5);
+  box-shadow:0 0 8px rgba(232,0,10,0.3);border-radius:2px}
+
+/* tension meter */
+.tension-wrap{width:320px;flex-shrink:0}
+.tension-bar-outer{height:16px;background:rgba(0,0,0,0.6);
+  border:1px solid rgba(232,0,10,0.25);position:relative;overflow:hidden}
+.tension-bar-fill{height:100%;width:0%;
+  background:linear-gradient(90deg,#660000,var(--red));
+  transition:width .04s linear;position:relative}
+.tension-bar-fill::after{content:"";position:absolute;right:0;top:0;bottom:0;
+  width:3px;background:#fff;box-shadow:0 0 6px #fff;opacity:0.7}
+.tension-zones{position:absolute;inset:0;display:flex}
+.zone{flex:1;border-right:1px solid rgba(255,255,255,0.06)}
+.zone:last-child{border-right:none}
+/* sweet spot markers on tension bar */
+.sweet-marker{position:absolute;top:0;bottom:0;
+  background:rgba(255,140,0,0.18);
+  border-left:2px solid rgba(255,140,0,0.7);
+  border-right:2px solid rgba(255,140,0,0.7);
+  pointer-events:none;transition:background .1s}
+.sweet-marker.active{background:rgba(255,140,0,0.38);
+  box-shadow:0 0 10px rgba(255,140,0,0.5)}
+.tension-meta{display:flex;justify-content:space-between;margin-top:4px;
+  font-size:10px;color:rgba(232,0,10,0.45);letter-spacing:.1em}
+
+/* pins area */
+.pins-wrap{width:320px;flex-shrink:0}
+.pins-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(232,0,10,0.45);margin-bottom:8px;display:flex;justify-content:space-between}
+.pins-row{display:flex;gap:8px;justify-content:center}
+
+.pin-unit{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+.pin-num{font-size:11px;color:rgba(232,0,10,0.5);letter-spacing:.06em}
+.pin-shaft{width:28px;height:90px;background:rgba(0,0,0,0.6);
+  border:1px solid rgba(232,0,10,0.2);position:relative;overflow:hidden}
+.pin-body{position:absolute;bottom:0;left:2px;right:2px;
+  background:linear-gradient(180deg,rgba(180,0,0,0.6),rgba(80,0,0,0.8));
+  border-top:2px solid rgba(232,0,10,0.6);transition:height .12s ease;
+  box-shadow:0 -2px 8px rgba(232,0,10,0.2)}
+.pin-set-line{position:absolute;left:0;right:0;height:2px;
+  background:rgba(232,0,10,0.25);border-top:1px dashed rgba(232,0,10,0.3)}
+.pin-set-zone{position:absolute;left:0;right:0;
+  background:rgba(255,107,0,0.22);
+  border-top:2px solid rgba(255,140,0,0.9);
+  border-bottom:2px solid rgba(255,140,0,0.9);
+  box-shadow:inset 0 0 8px rgba(255,107,0,0.3),0 0 6px rgba(255,107,0,0.2)}
+
+/* pin states */
+.pin-unit.set .pin-body{background:linear-gradient(180deg,rgba(0,180,60,0.7),rgba(0,80,20,0.8));
+  border-top-color:rgba(0,255,80,0.7);box-shadow:0 -2px 10px rgba(0,255,80,0.3)}
+.pin-unit.set .pin-shaft{border-color:rgba(0,255,80,0.3)}
+.pin-unit.broken .pin-body{background:linear-gradient(180deg,rgba(80,80,80,0.5),rgba(30,30,30,0.7));
+  border-top-color:rgba(120,120,120,0.4)}
+
+.pin-state{font-size:10px;letter-spacing:.08em;color:rgba(232,0,10,0.45);
+  text-transform:uppercase;min-height:14px}
+.pin-unit.set .pin-state{color:rgba(0,255,80,0.7)}
+
+/* instructions */
+.inst-box{width:320px;border:1px solid rgba(232,0,10,0.18);
+  padding:10px 14px;background:rgba(0,0,0,0.4);flex-shrink:0}
+.inst-line{font-size:11px;line-height:1.65;color:rgba(240,230,230,0.6);
+  display:flex;gap:8px}
+.inst-key{color:var(--red);min-width:28px;text-align:center;
+  border:1px solid rgba(232,0,10,0.35);padding:0 3px;font-size:10px;
+  background:rgba(232,0,10,0.06)}
+
+/* right panel */
+.right-col{padding:16px;display:flex;flex-direction:column;gap:14px;
+  background:rgba(0,0,0,0.25)}
+
+/* picks display */
+.picks-box{border:1px solid var(--border);padding:12px 14px;
+  background:rgba(0,0,0,0.5)}
+.picks-label{font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(232,0,10,0.5);margin-bottom:10px}
+.picks-icons{display:flex;gap:8px}
+.pick-icon{width:36px;height:36px;border:1px solid rgba(232,0,10,0.4);
+  display:grid;place-items:center;font-size:18px;
+  background:rgba(232,0,10,0.06);transition:all .2s}
+.pick-icon.broken{opacity:0.2;filter:grayscale(1);border-color:rgba(232,0,10,0.1)}
+
+/* arasaka stamp */
+.stamp-box{border:1px solid rgba(232,0,10,0.2);padding:12px;
+  text-align:center;background:rgba(0,0,0,0.4);position:relative;overflow:hidden}
+.stamp-kanji{font-size:38px;line-height:1;color:rgba(232,0,10,0.18);
+  letter-spacing:.1em;display:block;margin-bottom:4px}
+.stamp-text{font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(232,0,10,0.4)}
+
+/* log */
+.log-box{flex:1;border:1px solid rgba(232,0,10,0.15);
+  background:rgba(0,0,0,0.5);padding:8px 10px;overflow-y:auto;
+  font-size:11px;line-height:1.6;scrollbar-width:none;min-height:0}
+.log-box::-webkit-scrollbar{display:none}
+.log-line{display:block;color:rgba(240,200,200,0.55);margin-bottom:1px}
+.log-line.ok{color:rgba(0,220,70,0.75)}
+.log-line.bad{color:rgba(232,0,10,0.85)}
+.log-line.warn{color:rgba(255,107,0,0.8)}
+.log-line.dim{color:rgba(240,200,200,0.3)}
+
+/* status bar */
+.status-bar{font-size:11px;letter-spacing:.1em;color:rgba(232,0,10,0.6);
+  text-transform:uppercase;border:1px solid rgba(232,0,10,0.2);
+  padding:8px 12px;background:rgba(0,0,0,0.5);text-align:center}
+.status-bar .sv{color:var(--red);font-size:14px;display:block;margin-top:2px;
+  text-shadow:0 0 10px var(--red-glow)}
+
+/* footer */
+.footer{height:36px;border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 18px;background:rgba(0,0,0,0.6);font-size:10px;
+  letter-spacing:.14em;text-transform:uppercase;color:rgba(232,0,10,0.4);
+  flex-shrink:0}
+
+/* overlays */
+.overlay{position:absolute;inset:0;display:flex;align-items:center;
+  justify-content:center;z-index:20;opacity:0;pointer-events:none;
+  transition:opacity .3s;background:rgba(0,0,0,0.85)}
+.overlay.show{opacity:1;pointer-events:auto}
+
+.card{width:min(520px,88%);border:1px solid var(--border);
+  background:rgba(5,0,0,0.98);padding:28px;position:relative;
+  box-shadow:0 0 50px rgba(232,0,10,0.2),inset 0 0 40px rgba(232,0,10,0.04)}
+.card::before,.card::after{content:"";position:absolute;width:16px;height:16px;
+  border-color:var(--red);border-style:solid}
+.card::before{top:6px;left:6px;border-width:2px 0 0 2px}
+.card::after{bottom:6px;right:6px;border-width:0 2px 2px 0}
+.card h1{font-family:var(--font-ui);font-size:clamp(20px,3vw,30px);
+  font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--red);text-shadow:0 0 20px var(--red-glow);margin-bottom:6px}
+.card .sub{font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(232,0,10,0.5);margin-bottom:16px}
+.card p{font-size:13px;line-height:1.65;color:rgba(240,210,210,0.8);margin-bottom:8px}
+.card .kanji-line{font-size:24px;letter-spacing:.3em;color:rgba(232,0,10,0.3);
+  text-align:center;margin:14px 0 8px}
+.card-warn{border:1px solid rgba(255,107,0,0.3);background:rgba(255,107,0,0.05);
+  padding:8px 12px;font-size:11px;color:rgba(255,107,0,0.8);
+  letter-spacing:.06em;margin:10px 0;line-height:1.6}
+
+button.cta{margin-top:14px;width:100%;padding:13px;
+  border:1px solid var(--red);background:rgba(232,0,10,0.08);
+  color:var(--red);font-family:var(--font-mono);font-size:13px;
+  letter-spacing:.16em;text-transform:uppercase;cursor:pointer;
+  transition:background .15s,box-shadow .15s;
+  text-shadow:0 0 8px var(--red-glow)}
+button.cta:hover{background:rgba(232,0,10,0.15);
+  box-shadow:0 0 20px rgba(232,0,10,0.15)}
+button.cta:disabled{opacity:.3;cursor:not-allowed}
+
+.success-card{border-color:rgba(0,220,70,0.5) !important;
+  box-shadow:0 0 50px rgba(0,220,70,0.15) !important}
+.success-card h1{color:rgba(0,220,70,0.9) !important;
+  text-shadow:0 0 20px rgba(0,220,70,0.4) !important}
+.success-card::before,.success-card::after{border-color:rgba(0,220,70,0.5) !important}
+
+.seize-card h1{animation:redpls .5s steps(1) infinite}
+@keyframes redpls{50%{opacity:0.4}}
+</style>
+</head>
+<body>
+<div class="noise"></div>
+<div class="page">
+<div class="shell" id="shell">
+
+  <div class="hdr">
+    <div class="hdr-brand">
+      <div class="hdr-logo">arasaka<span>セキュリティシステム</span></div>
+      <div style="width:1px;height:28px;background:rgba(232,0,10,0.3)"></div>
+      <div style="font-size:11px;color:rgba(232,0,10,0.5);letter-spacing:.1em">LOCK OVERRIDE INTERFACE</div>
+    </div>
+    <div class="hdr-status">
+      UNIT STATUS<span class="val" id="hdrStatus">LOCKED</span>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- LEFT: LOCK -->
+    <div class="lock-col">
+
+      <div class="cylinder-wrap">
+        <div class="cylinder-label">Tension Barrel — Hold <span style="color:var(--red)">SPACE</span></div>
+        <div class="cylinder">
+          <div class="cylinder-inner"></div>
+          <div class="tension-fill" id="tensionFill"></div>
+          <div class="barrel" id="barrel">
+            <div class="barrel-notch"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tension-wrap">
+        <div class="tension-bar-outer">
+          <div class="tension-zones">
+            <div class="zone"></div><div class="zone"></div><div class="zone"></div>
+            <div class="zone"></div><div class="zone"></div>
+          </div>
+          <div id="sweetMarkers"></div>
+          <div class="tension-bar-fill" id="tensionBar"></div>
+        </div>
+        <div class="tension-meta">
+          <span>LOW</span>
+          <span id="zoneLabel" style="color:rgba(255,140,0,0);transition:color .1s;letter-spacing:.14em">● IN ZONE</span>
+          <span>HIGH</span>
+        </div>
+      </div>
+
+      <div class="pins-wrap">
+        <div class="pins-label">
+          <span>Pin Tumblers</span>
+          <span style="color:rgba(232,0,10,0.35)">Press 1–5 to jiggle</span>
+        </div>
+        <div class="pins-row" id="pinsRow"></div>
+      </div>
+
+      <div class="inst-box">
+        <div class="inst-line"><span class="inst-key">SPC</span>Hold to build tension. Release to drop.</div>
+        <div class="inst-line" style="margin-top:4px"><span class="inst-key">1-5</span>Jiggle a pin. Set it while tension is in the sweet spot.</div>
+        <div class="inst-line" style="margin-top:4px"><span class="inst-key">R</span>Reset — costs one pick.</div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: INFO -->
+    <div class="right-col">
+
+      <div class="picks-box">
+        <div class="picks-label">Picks Remaining</div>
+        <div class="picks-icons" id="picksIcons">
+          <div class="pick-icon" id="pick0">🔧</div>
+          <div class="pick-icon" id="pick1">🔧</div>
+          <div class="pick-icon" id="pick2">🔧</div>
+        </div>
+      </div>
+
+      <div class="status-bar">
+        PINS SET
+        <span class="sv" id="pinsSetVal">0 / 5</span>
+      </div>
+
+      <div class="stamp-box">
+        <span class="stamp-kanji">錠前</span>
+        <div class="stamp-text">Arasaka Security // AES-77<br>Unauthorized access prohibited</div>
+      </div>
+
+      <div>
+        <div style="font-size:10px;letter-spacing:.18em;text-transform:uppercase;
+          color:rgba(232,0,10,0.45);margin-bottom:6px">Override Log</div>
+        <div class="log-box" id="logBox"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer">
+    <span id="footerL">Awaiting operator input</span>
+    <span>Arasaka Corp // AES-77-SEC // Unauthorized access is a capital offense</span>
+  </div>
+
+  <!-- START OVERLAY -->
+  <div class="overlay show" id="startOverlay">
+    <div class="card">
+      <h1>Arasaka Lock</h1>
+      <div class="sub">AES-77 // Security Grade 4 // 5-Pin Tumbler</div>
+      <div class="kanji-line">錠前解除システム</div>
+      <p>Apply tension with <strong style="color:var(--red)">SPACE</strong> and jiggle each pin with <strong style="color:var(--red)">1–5</strong>. When tension is in the sweet spot for that pin, it sets.</p>
+      <p>Each pin has a different sweet spot. Find it by feel — the pin will click into place when the tension is right.</p>
+      <div class="card-warn">
+        ⚠ Wrong tension when jiggling breaks the pick.<br>
+        You have <strong>3 picks</strong>. Lose all three and the lock seizes permanently.
+      </div>
+      <button class="cta" id="startBtn">Begin Override</button>
+    </div>
+  </div>
+
+  <!-- SUCCESS OVERLAY -->
+  <div class="overlay" id="successOverlay">
+    <div class="card success-card">
+      <h1>Lock Open</h1>
+      <div class="sub">All pins set // Barrel rotated // Access granted</div>
+      <div class="kanji-line" style="color:rgba(0,220,70,0.3)">解錠完了</div>
+      <p style="color:rgba(0,220,70,0.7)">Security seal disengaged.<br>Whatever Arasaka locked away — it's open now.</p>
+    </div>
+  </div>
+
+  <!-- SEIZED OVERLAY -->
+  <div class="overlay" id="seizeOverlay">
+    <div class="card seize-card">
+      <h1>Lock Seized</h1>
+      <div class="sub">All picks broken // Hard lockout active</div>
+      <div class="kanji-line">封鎖</div>
+      <p>The lock has seized. No further mechanical override is possible.</p>
+      <p style="margin-top:8px;color:rgba(232,0,10,0.6);font-size:12px">Find another way in. Or find someone who has a key.</p>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<script>
+// ── AUDIO ──────────────────────────────────────────────────────────────────
+let audioCtx, masterGain, tensionOsc, tensionGain;
+function initAudio(){
+  if(audioCtx)return;
+  audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  masterGain=audioCtx.createGain(); masterGain.gain.value=0.7;
+  masterGain.connect(audioCtx.destination);
+  // tension hum osc
+  tensionOsc=audioCtx.createOscillator(); tensionGain=audioCtx.createGain();
+  tensionOsc.type='sawtooth'; tensionOsc.frequency.value=80;
+  tensionGain.gain.value=0;
+  tensionOsc.connect(tensionGain); tensionGain.connect(masterGain);
+  tensionOsc.start();
+}
+function setTensionHum(level){ // 0-1
+  if(!tensionGain)return;
+  tensionGain.gain.setTargetAtTime(level*0.04,audioCtx.currentTime,0.05);
+  tensionOsc.frequency.setTargetAtTime(60+level*120,audioCtx.currentTime,0.05);
+}
+function beep(f,d,v=0.06,type='square',when=0){
+  if(!audioCtx)return;
+  const t=audioCtx.currentTime+when;
+  const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+  o.type=type; o.frequency.setValueAtTime(f,t);
+  g.gain.setValueAtTime(0.0001,t);
+  g.gain.exponentialRampToValueAtTime(v,t+0.012);
+  g.gain.exponentialRampToValueAtTime(0.0001,t+d);
+  o.connect(g); g.connect(masterGain); o.start(t); o.stop(t+d+0.04);
+}
+function noise(d=0.08,v=0.04){
+  if(!audioCtx)return;
+  const buf=audioCtx.createBuffer(1,Math.floor(audioCtx.sampleRate*d),audioCtx.sampleRate);
+  const data=buf.getChannelData(0);
+  for(let i=0;i<data.length;i++) data[i]=(Math.random()*2-1)*Math.exp(-i/data.length*5);
+  const s=audioCtx.createBufferSource(),g=audioCtx.createGain();
+  g.gain.value=v; s.buffer=buf; s.connect(g); g.connect(masterGain); s.start();
+}
+function pinSetSound(){ beep(1320,0.06,0.05,'triangle'); beep(1760,0.1,0.04,'sine',0.07); noise(0.03,0.02); }
+function pinDropSound(){ noise(0.05,0.03); beep(200,0.1,0.05,'sawtooth'); }
+function pickBreakSound(){ noise(0.1,0.06); beep(160,0.25,0.07,'sawtooth'); beep(80,0.3,0.05,'sawtooth',0.1); }
+function jiggleSound(){ beep(400+Math.random()*200,0.03,0.03,'square'); }
+function successSound(){
+  beep(660,0.15,0.07,'triangle',0); beep(880,0.18,0.06,'triangle',0.15);
+  beep(1100,0.22,0.05,'sine',0.32); beep(1320,0.28,0.04,'sine',0.52);
+  setTensionHum(0);
+}
+function seizeSound(){ noise(0.15,0.08); beep(100,0.5,0.08,'sawtooth'); beep(60,0.6,0.06,'sawtooth',0.2); setTensionHum(0); }
+
+// ── GAME STATE ─────────────────────────────────────────────────────────────
+const PIN_COUNT=5;
+let pins=[];          // {sweetSpot:0-1, set:false, height:0-1}
+let tension=0;        // 0-1
+let picksLeft=3;
+let holding=false;
+let gameActive=false;
+let animFrame=null;
+let lastTime=0;
+
+// Sweet spots — each pin has a band of tension [lo, hi] that sets it
+function generatePins(){
+  pins=[];
+  for(let i=0;i<PIN_COUNT;i++){
+    const lo=0.15+Math.random()*0.45;  // band start 15%-60%
+    const width=0.18+Math.random()*0.16; // band width 18%-34% (wider sweet spots)
+    const hi=Math.min(lo+width,0.92);
+    pins.push({lo,hi,set:false,height:0.3+Math.random()*0.4,jiggled:false});
+  }
+}
+
+// ── LOG ────────────────────────────────────────────────────────────────────
+function log(msg,cls=''){
+  const lb=document.getElementById('logBox');
+  const d=document.createElement('span');
+  d.className='log-line'+(cls?' '+cls:'');
+  d.textContent='> '+msg; lb.appendChild(d);
+  lb.scrollTop=lb.scrollHeight;
+}
+
+// ── PINS UI ────────────────────────────────────────────────────────────────
+function buildPinsUI(){
+  const row=document.getElementById('pinsRow');
+  row.innerHTML='';
+  pins.forEach((p,i)=>{
+    const unit=document.createElement('div');
+    unit.className='pin-unit'; unit.id='pin'+i;
+    unit.innerHTML=`
+      <div class="pin-num">${i+1}</div>
+      <div class="pin-shaft">
+        <div class="pin-set-zone" id="pzone${i}"></div>
+        <div class="pin-body" id="pbody${i}"></div>
+      </div>
+      <div class="pin-state" id="pstate${i}"></div>`;
+    row.appendChild(unit);
+  });
+  buildSweetMarkers();
+  renderPins();
+}
+
+function buildSweetMarkers(){
+  const container=document.getElementById('sweetMarkers');
+  container.innerHTML='';
+  pins.forEach((p,i)=>{
+    if(p.set)return;
+    const marker=document.createElement('div');
+    marker.className='sweet-marker';
+    marker.id='smark'+i;
+    marker.style.left=(p.lo*100)+'%';
+    marker.style.width=((p.hi-p.lo)*100)+'%';
+    container.appendChild(marker);
+  });
+}
+
+function renderPins(){
+  pins.forEach((p,i)=>{
+    const unit=document.getElementById('pin'+i);
+    const body=document.getElementById('pbody'+i);
+    const pzone=document.getElementById('pzone'+i);
+    const pstate=document.getElementById('pstate'+i);
+    const shaftH=90;
+
+    // pin body height (0=bottom, 1=top)
+    const h=Math.round(p.height*shaftH);
+    body.style.height=h+'px';
+
+    // sweet spot zone (shown subtly)
+    const zoneTop=Math.round((1-p.hi)*shaftH);
+    const zoneH=Math.round((p.hi-p.lo)*shaftH);
+    pzone.style.top=zoneTop+'px';
+    pzone.style.height=zoneH+'px';
+
+    if(p.set){
+      unit.classList.add('set'); unit.classList.remove('broken');
+      pstate.textContent='SET';
+      // remove this pin's marker from tension bar
+      const marker=document.getElementById('smark'+i);
+      if(marker) marker.remove();
+    } else {
+      unit.classList.remove('set');
+      pstate.textContent='';
+    }
+  });
+
+  const setCount=pins.filter(p=>p.set).length;
+  document.getElementById('pinsSetVal').textContent=setCount+' / '+PIN_COUNT;
+}
+
+// ── TENSION ────────────────────────────────────────────────────────────────
+const TENSION_RATE=0.18;   // per second, holding (slower build = more control)
+const TENSION_DROP=0.45;   // per second, released
+
+function updateTension(dt){
+  if(holding){
+    tension=Math.min(1,tension+TENSION_RATE*dt);
+  } else {
+    tension=Math.max(0,tension-TENSION_DROP*dt);
+  }
+  // barrel rotation
+  const deg=tension*35;
+  document.getElementById('barrel').style.transform=`rotate(${deg}deg)`;
+  // tension bar
+  document.getElementById('tensionBar').style.width=(tension*100)+'%';
+  document.getElementById('tensionFill').style.width=(tension*100)+'%';
+  // hum
+  setTensionHum(tension);
+  // color shifts
+  const tb=document.getElementById('tensionBar');
+  if(tension>0.85) tb.style.background='linear-gradient(90deg,#660000,#ff0000,#ff6666)';
+  else if(tension>0.6) tb.style.background='linear-gradient(90deg,#660000,var(--red))';
+  else tb.style.background='linear-gradient(90deg,#440000,var(--red-dim))';
+
+  // highlight sweet spot markers and IN ZONE label
+  let anyInZone=false;
+  pins.forEach((p,i)=>{
+    if(p.set)return;
+    const inZone=tension>=p.lo&&tension<=p.hi;
+    if(inZone) anyInZone=true;
+    const marker=document.getElementById('smark'+i);
+    if(marker) marker.classList.toggle('active',inZone);
+  });
+  const zoneLabel=document.getElementById('zoneLabel');
+  zoneLabel.style.color=anyInZone?'rgba(255,140,0,0.95)':'rgba(255,140,0,0)';
+  zoneLabel.style.textShadow=anyInZone?'0 0 10px rgba(255,140,0,0.6)':'none';
+}
+
+// ── PIN JIGGLE ─────────────────────────────────────────────────────────────
+function jigglePin(i){
+  if(!gameActive)return;
+  const p=pins[i];
+  if(p.set)return;
+  if(tension<0.05){ log('No tension — hold SPACE first.','warn'); return; }
+
+  jiggleSound();
+
+  // move pin up slightly to simulate jiggle
+  const prevH=p.height;
+  p.height=Math.min(1,p.height+0.15+Math.random()*0.1);
+  renderPins();
+
+  setTimeout(()=>{
+    if(!gameActive)return;
+    // check if tension is in sweet spot
+    if(tension>=p.lo && tension<=p.hi){
+      // SET
+      p.set=true; p.height=p.lo+0.05;
+      pinSetSound();
+      log(`Pin ${i+1} set.`,'ok');
+      renderPins();
+      checkWin();
+    } else {
+      // MISS — does tension break pick?
+      const dist=Math.min(Math.abs(tension-p.lo),Math.abs(tension-p.hi));
+      const breakChance = dist > 0.25 ? 0.4 : dist > 0.12 ? 0.15 : 0.04;
+      p.height=prevH*0.6;
+      renderPins();
+      pinDropSound();
+      if(Math.random()<breakChance){
+        breakPick();
+      } else {
+        log(`Pin ${i+1} didn't catch. Try different tension.`,'warn');
+      }
+    }
+  },100);
+}
+
+function breakPick(){
+  picksLeft--;
+  pickBreakSound();
+  updatePicksUI();
+  log(`Pick broken! ${picksLeft} remaining.`,'bad');
+  // shake
+  const shell=document.getElementById('shell');
+  shell.style.animation='none';
+  shell.style.transform='translate(4px,0)';
+  setTimeout(()=>{shell.style.transform='translate(-4px,0)';},60);
+  setTimeout(()=>{shell.style.transform='translate(2px,0)';},120);
+  setTimeout(()=>{shell.style.transform='';},180);
+  tension=0;
+  if(picksLeft<=0) endGame(false);
+  else {
+    // reset un-set pins slightly
+    pins.forEach(p=>{ if(!p.set) p.height=Math.max(0.2,p.height*0.5); });
+    renderPins();
+  }
+}
+
+function updatePicksUI(){
+  for(let i=0;i<3;i++){
+    const el=document.getElementById('pick'+i);
+    if(i>=picksLeft) el.classList.add('broken');
+    else el.classList.remove('broken');
+  }
+}
+
+function checkWin(){
+  if(pins.every(p=>p.set)) endGame(true);
+}
+
+function endGame(success){
+  gameActive=false; holding=false; setTensionHum(0);
+  cancelAnimationFrame(animFrame);
+  if(success){
+    successSound();
+    document.getElementById('hdrStatus').textContent='UNLOCKED';
+    document.getElementById('hdrStatus').style.color='rgba(0,220,70,0.9)';
+    document.getElementById('footerL').textContent='Access granted — lock disengaged';
+    log('All pins set. Lock open.','ok');
+    setTimeout(()=>document.getElementById('successOverlay').classList.add('show'),700);
+  } else {
+    seizeSound();
+    document.getElementById('hdrStatus').textContent='SEIZED';
+    document.getElementById('footerL').textContent='Lock seized — no further override possible';
+    log('Lock seized. All picks broken.','bad');
+    setTimeout(()=>document.getElementById('seizeOverlay').classList.add('show'),900);
+  }
+}
+
+function resetLock(){
+  if(picksLeft<=0)return;
+  breakPick();
+  if(picksLeft<=0)return;
+  pins.forEach(p=>{ if(!p.set){ p.height=0.3+Math.random()*0.3; } });
+  tension=0;
+  renderPins();
+  log('Pick reset. Configuration scrambled.','warn');
+}
+
+// ── GAME LOOP ──────────────────────────────────────────────────────────────
+function loop(ts){
+  if(!gameActive)return;
+  const dt=Math.min((ts-lastTime)/1000,0.05);
+  lastTime=ts;
+  updateTension(dt);
+  animFrame=requestAnimationFrame(loop);
+}
+
+// ── INPUT ──────────────────────────────────────────────────────────────────
+const keysHeld=new Set();
+document.addEventListener('keydown',e=>{
+  if(!gameActive)return;
+  if(e.code==='Space'&&!keysHeld.has('Space')){
+    e.preventDefault(); holding=true; keysHeld.add('Space');
+  }
+  if(e.key>='1'&&e.key<='5'){
+    e.preventDefault();
+    jigglePin(parseInt(e.key)-1);
+  }
+  if(e.key.toLowerCase()==='r'){
+    e.preventDefault(); resetLock();
+  }
+});
+document.addEventListener('keyup',e=>{
+  if(e.code==='Space'){ holding=false; keysHeld.delete('Space'); }
+});
+
+// ── START ──────────────────────────────────────────────────────────────────
+document.getElementById('startBtn').addEventListener('click',()=>{
+  initAudio();
+  document.getElementById('startBtn').disabled=true;
+  document.getElementById('startOverlay').classList.remove('show');
+  generatePins(); buildPinsUI(); updatePicksUI();
+  gameActive=true; tension=0; lastTime=performance.now();
+  log('Interface online. Lock type: AES-77 5-pin tumbler.','dim');
+  log('Apply tension and jiggle pins to find sweet spots.','dim');
+  document.getElementById('hdrStatus').textContent='OVERRIDE ACTIVE';
+  document.getElementById('footerL').textContent='Hold SPACE + press 1-5 to set pins';
+  animFrame=requestAnimationFrame(loop);
+});
+
+// prevent space scrolling
+window.addEventListener('keydown',e=>{ if(e.code==='Space') e.preventDefault(); });
+</script>
+</body>
+</html>

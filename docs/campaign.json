@@ -97,7 +97,7 @@
           "revealed": true
         }
       ],
-      "locked": false
+      "locked": true
     },
     {
       "id": "cotu",
@@ -4087,5 +4087,70 @@
     "Politics, Media & Public Pressure": "Public legitimacy, narrative control, licensing, city politics, and the people who decide what citizens believe.",
     "Player Family & Past Lives": "Personal NPCs tied to Ash, Colton, and Mozzie. Mozzie’s updated thread now includes his parents, older sister Sarah, the childhood friend group, and the family pressure surrounding Arasaka Security.",
     "Arasaka Private Security": "Mozzie’s professional past: the Farouk-owned private security company, old commanders, rivals, accounts, and corporate contracts that may point back toward Damien."
-  }
+  },
+  "evidence": [
+    {
+      "id": "ash-see-the-doc",
+      "title": "Incoming Cricket // Ash",
+      "subtitle": "BCI Legacy Terminal // Node 14",
+      "file": "ash-see-the-doc.html",
+      "desc": "An intercepted message routed through legacy analog relay hardware. Acoustic output enabled. Addressed to Ash.",
+      "accent": "#7fffc5",
+      "locked": true
+    },
+    {
+      "id": "mozzie-cricket-message",
+      "title": "Incoming Cricket // Mozzie",
+      "subtitle": "BCI Legacy Terminal // Node 14",
+      "file": "mozzie-cricket-message.html",
+      "desc": "A second legacy-relay transmission captured on the same node. Origin obscured. Addressed to Mozzie Farouk.",
+      "accent": "#7fffc5",
+      "locked": true
+    },
+    {
+      "id": "bci-memory-shard",
+      "title": "Memory Shard Access",
+      "subtitle": "BCI Portable Civic Access Node",
+      "file": "bci-memory-shard.html",
+      "desc": "Unauthorized terminal session. Spoofed credentials loaded, signal masked through an idle proxy chain. Memory shard recovery in progress.",
+      "accent": "#ff4267",
+      "locked": true
+    },
+    {
+      "id": "td-terminal-letter",
+      "title": "Portable Terminal // Ash Calder",
+      "subtitle": "Truth Division Intercept",
+      "file": "td-terminal-letter.html",
+      "desc": "A letter recovered from a BCI portable terminal belonging to Ash Calder. Flagged by Truth Division signal watchers.",
+      "accent": "#b982ff",
+      "locked": true
+    },
+    {
+      "id": "redwire-terminal",
+      "title": "RedWire Cartel Index",
+      "subtitle": "BCI Index // Contraband Network",
+      "file": "redwire-terminal.html",
+      "desc": "A BCI intelligence index on the RedWire Cartel's data-smuggling operations. Cross-referenced contraband routes and contacts.",
+      "accent": "#ff5a5f",
+      "locked": true
+    },
+    {
+      "id": "cotu-letter-fragment",
+      "title": "Corrupted Line // Fragment",
+      "subtitle": "BCI Terminal // Choir Intercept",
+      "file": "cotu-letter-fragment.html",
+      "desc": "A partially corrupted letter fragment intercepted from Choir of the Unforgotten channels. Recovery incomplete.",
+      "accent": "#ffcc66",
+      "locked": true
+    },
+    {
+      "id": "arasaka-lock-override",
+      "title": "Lock Override",
+      "subtitle": "Arasaka Security System",
+      "file": "arasaka-lock-override.html",
+      "desc": "An Arasaka private-security lock override interface. Live access node. Handle with care.",
+      "accent": "#d11f2f",
+      "locked": true
+    }
+  ]
 }

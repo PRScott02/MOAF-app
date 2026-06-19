@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BCI Index // Redwire Cartel</title>
+  <style>
+    :root {
+      --bg: #050607;
+      --panel: rgba(14, 16, 18, 0.92);
+      --red: #ff173d;
+      --red-dark: #4a0812;
+      --text: #d7dde1;
+      --muted: #7c858d;
+      --green: #76ffb2;
+      --yellow: #ffd166;
+      --border: rgba(255, 23, 61, 0.35);
+      --shadow: rgba(255, 23, 61, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 15%, rgba(255, 23, 61, 0.10), transparent 28%),
+        radial-gradient(circle at 80% 10%, rgba(255, 23, 61, 0.08), transparent 28%),
+        linear-gradient(180deg, #060708 0%, #030303 100%);
+      font-family: "Courier New", Courier, monospace;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.025),
+        rgba(255, 255, 255, 0.025) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+      mix-blend-mode: screen;
+      opacity: 0.35;
+      z-index: 10;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(90deg, transparent, rgba(255, 23, 61, 0.05), transparent);
+      animation: sweep 7s linear infinite;
+      z-index: 11;
+    }
+
+    @keyframes sweep {
+      0% { transform: translateX(-120%); }
+      100% { transform: translateX(120%); }
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 28px auto;
+      border: 1px solid var(--border);
+      background: rgba(3, 4, 5, 0.84);
+      box-shadow: 0 0 45px var(--shadow), inset 0 0 24px rgba(255, 23, 61, 0.04);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 23, 61, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 23, 61, 0.05) 1px, transparent 1px);
+      background-size: 42px 42px;
+      opacity: 0.17;
+      pointer-events: none;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      padding: 22px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(90deg, rgba(255, 23, 61, 0.14), rgba(0, 0, 0, 0.25));
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      color: var(--muted);
+      letter-spacing: 0.18em;
+      font-size: 0.76rem;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 8px 0 0;
+      font-size: clamp(2rem, 6vw, 4.6rem);
+      line-height: 0.9;
+      letter-spacing: -0.08em;
+      text-transform: uppercase;
+      color: #f4f5f6;
+      text-shadow: 3px 0 rgba(255, 23, 61, 0.75), -2px 0 rgba(92, 0, 12, 0.8);
+      animation: titleGlitch 6s infinite;
+    }
+
+    @keyframes titleGlitch {
+      0%, 91%, 100% { transform: translate(0); filter: none; }
+      92% { transform: translate(2px, -1px); filter: blur(0.5px); }
+      93% { transform: translate(-4px, 1px); }
+      94% { transform: translate(3px, 0); }
+      95% { transform: translate(0); }
+    }
+
+    .status-box {
+      align-self: start;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.55);
+      padding: 12px 14px;
+      min-width: 245px;
+      box-shadow: inset 0 0 18px rgba(255, 23, 61, 0.08);
+    }
+
+    .status-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      font-size: 0.86rem;
+      margin: 6px 0;
+    }
+
+    .status-row span:first-child { color: var(--muted); }
+    .status-row span:last-child { color: var(--red); text-align: right; }
+
+    main {
+      position: relative;
+      z-index: 1;
+      padding: 22px;
+    }
+
+    .terminal-line {
+      border: 1px solid rgba(255, 23, 61, 0.25);
+      background: rgba(0, 0, 0, 0.55);
+      padding: 14px;
+      margin-bottom: 18px;
+      color: var(--green);
+      min-height: 52px;
+      line-height: 1.45;
+    }
+
+    .terminal-line::before {
+      content: "> ";
+      color: var(--red);
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(255, 23, 61, 0.22);
+      background: rgba(0, 0, 0, 0.35);
+      padding: 10px;
+    }
+
+    button {
+      background: rgba(255, 23, 61, 0.10);
+      border: 1px solid rgba(255, 23, 61, 0.55);
+      color: #fff;
+      font-family: inherit;
+      padding: 10px 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      cursor: pointer;
+      transition: 160ms ease;
+    }
+
+    button:hover,
+    button.active {
+      background: rgba(255, 23, 61, 0.32);
+      box-shadow: 0 0 22px rgba(255, 23, 61, 0.28);
+      transform: translateY(-1px);
+    }
+
+    .main-page { display: none; }
+    .main-page.active { display: block; animation: flickerIn 500ms ease both; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 18px;
+    }
+
+    .three-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      border: 1px solid rgba(255, 23, 61, 0.28);
+      background: var(--panel);
+      padding: 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 0 22px rgba(0, 0, 0, 0.35), inset 0 0 18px rgba(255, 23, 61, 0.035);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(var(--red), transparent);
+      opacity: 0.8;
+    }
+
+    .card h2, .card h3 {
+      margin: 0 0 12px;
+      color: #fff;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .card h2 { font-size: 1rem; }
+    .card h3 { font-size: 0.9rem; color: var(--yellow); }
+
+    .card p {
+      line-height: 1.55;
+      color: #c4cbd0;
+      margin: 0 0 12px;
+    }
+
+    .quote {
+      color: var(--yellow);
+      border-left: 2px solid var(--red);
+      padding-left: 14px;
+      font-style: italic;
+      margin: 14px 0;
+    }
+
+    .tag-list, .data-list, .timeline {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .tag-list li, .data-list li, .timeline li {
+      border: 1px solid rgba(255, 23, 61, 0.20);
+      background: rgba(255, 23, 61, 0.045);
+      padding: 10px 12px;
+      margin-bottom: 9px;
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+    }
+
+    .tag-list li::before, .timeline li::before {
+      content: "//";
+      color: var(--red);
+      flex: 0 0 auto;
+    }
+
+    .data-list li strong {
+      color: var(--red);
+      min-width: 125px;
+      font-weight: normal;
+    }
+
+    .warning {
+      background: linear-gradient(90deg, rgba(255, 23, 61, 0.18), rgba(20, 0, 3, 0.75));
+      border-color: rgba(255, 23, 61, 0.55);
+    }
+
+    .redacted {
+      color: transparent;
+      background: linear-gradient(90deg, #151515, #070707, #151515);
+      border-radius: 1px;
+      padding: 0 6px;
+      box-shadow: 0 0 0 1px rgba(255, 23, 61, 0.2);
+      user-select: none;
+    }
+
+    .file-card {
+      cursor: pointer;
+      transition: 160ms ease;
+    }
+
+    .file-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 28px rgba(255, 23, 61, 0.18);
+    }
+
+    .file-card .small {
+      color: var(--muted);
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.78);
+      z-index: 40;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+    }
+
+    .modal.active { display: flex; }
+
+    .modal-box {
+      width: min(720px, 100%);
+      border: 1px solid rgba(255, 23, 61, 0.65);
+      background: rgba(7, 7, 8, 0.98);
+      box-shadow: 0 0 70px rgba(255, 23, 61, 0.22);
+      padding: 20px;
+      animation: modalGlitch 300ms ease both;
+    }
+
+    @keyframes modalGlitch {
+      0% { transform: translate(-4px, 2px); opacity: 0; filter: blur(2px); }
+      60% { transform: translate(3px, -1px); opacity: 1; }
+      100% { transform: translate(0); filter: none; }
+    }
+
+    .modal-box h2 {
+      margin: 0 0 12px;
+      color: var(--red);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .modal-box p {
+      line-height: 1.6;
+      color: #cdd3d7;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .signal {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 4px;
+      height: 66px;
+      align-items: end;
+      margin-top: 14px;
+    }
+
+    .bar {
+      background: var(--red);
+      opacity: 0.55;
+      box-shadow: 0 0 15px rgba(255, 23, 61, 0.55);
+      animation: pulseBars 1.4s infinite alternate;
+    }
+
+    .bar:nth-child(1) { height: 18%; animation-delay: 0.1s; }
+    .bar:nth-child(2) { height: 48%; animation-delay: 0.2s; }
+    .bar:nth-child(3) { height: 32%; animation-delay: 0.3s; }
+    .bar:nth-child(4) { height: 88%; animation-delay: 0.4s; }
+    .bar:nth-child(5) { height: 40%; animation-delay: 0.5s; }
+    .bar:nth-child(6) { height: 70%; animation-delay: 0.6s; }
+    .bar:nth-child(7) { height: 25%; animation-delay: 0.7s; }
+    .bar:nth-child(8) { height: 96%; animation-delay: 0.8s; }
+    .bar:nth-child(9) { height: 52%; animation-delay: 0.9s; }
+    .bar:nth-child(10) { height: 34%; animation-delay: 1s; }
+    .bar:nth-child(11) { height: 74%; animation-delay: 1.1s; }
+    .bar:nth-child(12) { height: 20%; animation-delay: 1.2s; }
+
+    @keyframes pulseBars {
+      from { opacity: 0.25; transform: scaleY(0.76); }
+      to { opacity: 0.9; transform: scaleY(1); }
+    }
+
+    .trace-output {
+      margin-top: 14px;
+      border-top: 1px dashed rgba(255, 23, 61, 0.35);
+      padding-top: 14px;
+      color: var(--muted);
+      display: none;
+      line-height: 1.55;
+    }
+
+    .trace-output.active {
+      display: block;
+      animation: flickerIn 600ms ease both;
+    }
+
+    @keyframes flickerIn {
+      0% { opacity: 0; transform: translateY(4px); }
+      20% { opacity: 1; }
+      35% { opacity: 0.3; }
+      55% { opacity: 1; }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .threat-meter {
+      height: 18px;
+      border: 1px solid rgba(255, 23, 61, 0.45);
+      background: rgba(0, 0, 0, 0.5);
+      padding: 3px;
+      margin-top: 12px;
+    }
+
+    .threat-fill {
+      height: 100%;
+      width: 86%;
+      background: repeating-linear-gradient(90deg, var(--red), var(--red) 12px, var(--red-dark) 12px, var(--red-dark) 18px);
+      box-shadow: 0 0 18px rgba(255, 23, 61, 0.55);
+      animation: threatPulse 900ms infinite alternate;
+    }
+
+    @keyframes threatPulse {
+      from { filter: brightness(0.75); }
+      to { filter: brightness(1.25); }
+    }
+
+    .access-screen {
+      min-height: 315px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255, 23, 61, 0.28);
+      background:
+        linear-gradient(135deg, rgba(255, 23, 61, 0.08), transparent 35%),
+        rgba(0, 0, 0, 0.45);
+      padding: 22px;
+      text-align: center;
+    }
+
+    .access-screen h2 {
+      color: var(--red);
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .pass-input {
+      margin-top: 10px;
+      width: min(420px, 100%);
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(255, 23, 61, 0.45);
+      color: var(--green);
+      font-family: inherit;
+      text-align: center;
+      letter-spacing: 0.12em;
+    }
+
+    .restricted-content { display: none; }
+    .restricted-content.active { display: block; animation: flickerIn 500ms ease both; }
+
+    .glitch-sequence {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.97);
+      z-index: 100;
+      overflow: hidden;
+      display: none;
+      pointer-events: none;
+    }
+
+    .glitch-sequence.active {
+      display: block;
+      animation: glitchScreenFlash 0.06s steps(2, end) infinite;
+    }
+
+    .glitch-sequence::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.07),
+        rgba(255,255,255,0.07) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+      opacity: 0.4;
+    }
+
+    .trace-grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 23, 61, 0.22) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 23, 61, 0.18) 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity: 0.28;
+      animation: traceGridMove 0.4s linear infinite;
+    }
+
+    @keyframes traceGridMove {
+      from { transform: translate(0, 0); }
+      to { transform: translate(28px, 28px); }
+    }
+
+    .trace-banner {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 8%;
+      padding: 14px 18px;
+      color: #fff;
+      background: rgba(255, 23, 61, 0.34);
+      border-top: 1px solid rgba(255,255,255,0.35);
+      border-bottom: 1px solid rgba(255,255,255,0.35);
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      font-size: clamp(1rem, 2.8vw, 2.4rem);
+      text-shadow: 0 0 16px rgba(255,255,255,0.85), 4px 0 rgba(255, 23, 61, 0.9);
+      animation: bannerSlice 0.22s steps(2, end) infinite;
+    }
+
+    @keyframes bannerSlice {
+      0% { transform: translateX(-3px); clip-path: inset(0 0 0 0); }
+      40% { transform: translateX(5px); clip-path: inset(20% 0 12% 0); }
+      70% { transform: translateX(-6px); clip-path: inset(5% 0 45% 0); }
+      100% { transform: translateX(0); clip-path: inset(0 0 0 0); }
+    }
+
+    .trace-warning {
+      position: absolute;
+      left: 50%;
+      bottom: 8%;
+      width: min(760px, calc(100% - 28px));
+      transform: translateX(-50%);
+      border: 1px solid rgba(255, 23, 61, 0.85);
+      background: rgba(0,0,0,0.76);
+      padding: 16px;
+      color: var(--green);
+      line-height: 1.5;
+      box-shadow: 0 0 40px rgba(255, 23, 61, 0.4);
+      text-align: left;
+      animation: warningPulse 0.18s steps(2, end) infinite;
+    }
+
+    @keyframes warningPulse {
+      0% { opacity: 0.65; }
+      50% { opacity: 1; }
+      100% { opacity: 0.75; }
+    }
+
+    .scare-popup {
+      position: absolute;
+      min-width: 180px;
+      max-width: 320px;
+      border: 1px solid rgba(255, 23, 61, 0.9);
+      background: rgba(0, 0, 0, 0.92);
+      box-shadow:
+        0 0 30px rgba(255, 23, 61, 0.4),
+        inset 0 0 18px rgba(255, 23, 61, 0.12);
+      color: #fff;
+      padding: 10px 12px 12px;
+      opacity: 0;
+      transform: scale(0.92) skewX(-3deg);
+      animation: popupFlicker 0.42s ease forwards;
+    }
+
+    .scare-popup.final-breach {
+      min-width: min(580px, calc(100% - 36px));
+      max-width: min(680px, calc(100% - 36px));
+      text-align: center;
+      border-width: 2px;
+      background: rgba(18, 0, 4, 0.96);
+      box-shadow:
+        0 0 60px rgba(255, 23, 61, 0.85),
+        inset 0 0 28px rgba(255, 23, 61, 0.24);
+      animation: finalPopupHit 0.8s steps(2, end) infinite;
+    }
+
+    .scare-popup.final-breach .popup-body {
+      font-size: clamp(1.15rem, 3.5vw, 2rem);
+      color: #fff;
+      text-shadow:
+        0 0 18px rgba(255,255,255,0.75),
+        0 0 32px rgba(255,23,61,0.95);
+    }
+
+    .scare-popup .popup-head {
+      color: var(--red);
+      font-size: 0.76rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 23, 61, 0.35);
+      padding-bottom: 6px;
+    }
+
+    .scare-popup .popup-body {
+      font-size: 0.95rem;
+      line-height: 1.4;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      text-shadow: 0 0 12px rgba(255, 23, 61, 0.55);
+    }
+
+    @keyframes popupFlicker {
+      0% { opacity: 0; transform: scale(0.7) skewX(-10deg); }
+      18% { opacity: 1; transform: scale(1.05) skewX(3deg); }
+      30% { opacity: 0.45; }
+      45% { opacity: 1; }
+      70% { opacity: 0.85; }
+      100% { opacity: 0.95; transform: scale(1) skewX(0deg); }
+    }
+
+    @keyframes finalPopupHit {
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(1.08) skewX(1deg); }
+      25% { opacity: 0.7; transform: translate(-51%, -49%) scale(1.14) skewX(-2deg); }
+      50% { opacity: 1; transform: translate(-49%, -50%) scale(1.1) skewX(2deg); }
+      75% { opacity: 0.85; transform: translate(-50%, -51%) scale(1.16) skewX(-1deg); }
+      100% { opacity: 1; transform: translate(-50%, -50%) scale(1.08) skewX(1deg); }
+    }
+
+    @keyframes glitchScreenFlash {
+      0% { filter: brightness(1); }
+      25% { filter: brightness(1.5); }
+      50% { filter: brightness(0.45); }
+      75% { filter: brightness(1.3); }
+      100% { filter: brightness(1); }
+    }
+
+    body.trace-hacked {
+      animation: bodyPanic 0.06s steps(2, end) infinite;
+    }
+
+    body.trace-hacked .shell {
+      animation: hardShake 0.045s steps(2, end) infinite;
+      border-color: rgba(255, 23, 61, 0.95);
+      box-shadow:
+        0 0 80px rgba(255, 23, 61, 0.45),
+        inset 0 0 42px rgba(255, 23, 61, 0.20);
+    }
+
+    @keyframes bodyPanic {
+      0% { filter: brightness(0.8) contrast(1.2); }
+      35% { filter: brightness(1.75) contrast(1.8) hue-rotate(-12deg); }
+      70% { filter: brightness(0.5) contrast(2.1); }
+      100% { filter: brightness(1.1) contrast(1.4); }
+    }
+
+    @keyframes hardShake {
+      0% { transform: translate(0, 0) skewX(0deg); }
+      20% { transform: translate(-8px, 4px) skewX(2deg); }
+      40% { transform: translate(7px, -5px) skewX(-2deg); }
+      60% { transform: translate(-4px, -2px) skewX(1deg); }
+      80% { transform: translate(6px, 3px) skewX(-1deg); }
+      100% { transform: translate(0, 0) skewX(0deg); }
+    }
+
+    .flash {
+      position: fixed;
+      inset: 0;
+      background: rgba(255, 23, 61, 0.25);
+      pointer-events: none;
+      opacity: 0;
+      z-index: 20;
+    }
+
+    .flash.active { animation: redFlash 360ms ease; }
+
+    @keyframes redFlash {
+      0%, 100% { opacity: 0; }
+      25% { opacity: 1; }
+      45% { opacity: 0.15; }
+      60% { opacity: 0.8; }
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 16px 22px;
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.84rem;
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    @media (max-width: 900px) {
+      header, .grid, .three-grid { grid-template-columns: 1fr; }
+      .status-box { min-width: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="flash" id="flash"></div>
+  <div class="glitch-sequence" id="glitchSequence"></div>
+
+  <div class="modal" id="modal" onclick="closeModal(event)">
+    <div class="modal-box">
+      <h2 id="modalTitle">File</h2>
+      <p id="modalText">...</p>
+      <div class="button-row">
+        <button onclick="hideModal()">Close File</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="shell">
+    <header>
+      <div>
+        <div class="eyebrow">BCI Criminal Network Index // Meridian Spire // 2089</div>
+        <h1>Redwire Cartel</h1>
+      </div>
+      <aside class="status-box" aria-label="file status">
+        <div class="status-row"><span>FILE TYPE</span><span>UNDERCITY INTEL</span></div>
+        <div class="status-row"><span>ACCESS</span><span>FIELD VIEW</span></div>
+        <div class="status-row"><span>THREAT</span><span>HIGH</span></div>
+        <div class="status-row"><span>TRACE STATUS</span><span>UNSTABLE</span></div>
+      </aside>
+    </header>
+
+    <main>
+      <div class="terminal-line" id="typing"></div>
+
+      <nav class="nav" aria-label="database pages">
+        <button id="overviewBtn" class="active" onclick="showPage('overview', this)">Overview</button>
+        <button onclick="showPage('operations', this)">Operations</button>
+        <button onclick="showPage('casefiles', this)">Case Files</button>
+        <button onclick="showPage('intercepts', this)">Intercepts</button>
+        <button onclick="showPage('restricted', this)">Restricted</button>
+      </nav>
+
+      <section class="main-page active" id="overview">
+        <section class="grid">
+          <div>
+            <article class="card warning">
+              <h2>Origin Note</h2>
+              <p>The name <strong>Redwire</strong> comes from an old saying in the undercity. No verified source has claimed ownership of the phrase, and most witnesses refuse to repeat it twice.</p>
+              <p class="quote">“Cut the red wire, and everything goes dark.”</p>
+              <p>Interpretations vary. Some say it refers to bomb circuitry. Others say communication lines. A few older sources claim it was once tied to a founding bloodline, though those records have been <span class="redacted">removed</span> from public review.</p>
+            </article>
+
+            <article class="card">
+              <h2>Primary Economy</h2>
+              <p>In Meridian Spire, information is currency. Redwire does not simply sell secrets. They purchase, steal, barter, bury, and weaponize them.</p>
+              <ul class="tag-list">
+                <li>Corporate blackmail material</li>
+                <li>Government records</li>
+                <li>Personal leverage files</li>
+                <li>Surveillance intercepts</li>
+                <li>Financial laundering trails</li>
+              </ul>
+            </article>
+          </div>
+
+          <div>
+            <article class="card">
+              <h2>Known Calling Cards</h2>
+              <p>Scenes linked to Redwire activity often include one or more repeated markers:</p>
+              <ul class="tag-list">
+                <li>Red wire left on a victim’s wrist</li>
+                <li>Envelopes wrapped in red thread</li>
+                <li>Radios emitting static before arrival</li>
+              </ul>
+              <div class="signal" aria-hidden="true">
+                <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+              </div>
+            </article>
+
+            <article class="card">
+              <h2>BCI Threat Assessment</h2>
+              <p>Redwire’s danger does not come from numbers alone. It comes from leverage. A Redwire threat can look like a missed payment, a police visit, a broken marriage, or a burning storefront.</p>
+              <div class="threat-meter" aria-label="threat meter"><div class="threat-fill"></div></div>
+              <div class="button-row">
+                <button onclick="runTrace()">Run Trace</button>
+                <button onclick="clearTrace()">Clear Output</button>
+              </div>
+              <div class="trace-output" id="traceOutput">
+                TRACE RETURNED: signal bounced through 14 undercity relays. Origin unresolved. Final packet contained only static and a single line:<br><br>
+                <span style="color: var(--red);">DO NOT PULL THE WIRE.</span>
+              </div>
+            </article>
+          </div>
+        </section>
+      </section>
+
+      <section class="main-page" id="operations">
+        <section class="grid">
+          <article class="card">
+            <h2>Protection Operations</h2>
+            <p>Businesses under Redwire “protection” receive services that resemble law enforcement, private security, and organized extortion depending on who is asked.</p>
+            <ul class="data-list">
+              <li><strong>Security</strong><span>Visible deterrence, armed presence, and quiet removal of threats.</span></li>
+              <li><strong>Debt Mediation</strong><span>Disputes settled fast. Terms are rarely negotiable twice.</span></li>
+              <li><strong>Resolution</strong><span>Local arguments, vendor conflicts, and gang pressure handled off-record.</span></li>
+            </ul>
+          </article>
+
+          <article class="card warning">
+            <h2>Refusal Pattern</h2>
+            <p>Individuals and businesses who refuse Redwire terms are commonly linked to one or more retaliatory events.</p>
+            <ul class="data-list">
+              <li><strong>Financial</strong><span>Frozen accounts, lost invoices, fabricated debts, missing deposits.</span></li>
+              <li><strong>Property</strong><span>Arson, utility failure, broken locks, staged break-ins.</span></li>
+              <li><strong>Legal</strong><span>False criminal accusations supported by planted records.</span></li>
+              <li><strong>Family</strong><span>Threats delivered indirectly, usually with proof of surveillance.</span></li>
+            </ul>
+          </article>
+        </section>
+
+        <section class="three-grid">
+          <article class="card">
+            <h3>Red Market</h3>
+            <p>Lower-street couriers move sealed envelopes, broken radios, and drive shards through market crowds. Most runners do not know what they carry.</p>
+          </article>
+          <article class="card">
+            <h3>Wire Rooms</h3>
+            <p>Temporary listening posts built inside abandoned service closets. They appear for a night, harvest a block, then vanish before dawn.</p>
+          </article>
+          <article class="card">
+            <h3>Quiet Courts</h3>
+            <p>Backroom dispute hearings where debts, apologies, and disappearances are negotiated by people who never give their real names.</p>
+          </article>
+        </section>
+      </section>
+
+      <section class="main-page" id="casefiles">
+        <section class="three-grid">
+          <article class="card file-card" onclick="openFile('Case Fragment 17-A', 'A noodle shop owner refused Redwire protection. Three days later, their account history showed a debt to a shell lender that had not existed the week before. The family left Meridian Spire before BCI could interview them.')">
+            <div class="small">Open File</div>
+            <h2>Case Fragment 17-A</h2>
+            <p>False debt trail. Commercial pressure. Witness relocation.</p>
+          </article>
+
+          <article class="card file-card" onclick="openFile('Case Fragment 22-C', 'BCI arrived at an arson scene in Sector 7. No accelerant was found. A single red thread had been tied around the sprinkler valve. Nearby radios played static for eight minutes after power was cut.')">
+            <div class="small">Open File</div>
+            <h2>Case Fragment 22-C</h2>
+            <p>Arson marker. Static signal. Suppression system tampering.</p>
+          </article>
+
+          <article class="card file-card" onclick="openFile('Case Fragment 31-F', 'A corporate compliance officer attempted to sell Redwire-owned records to a rival buyer. Their office was untouched, but every photograph on their desk had been replaced with surveillance stills of their own home.')">
+            <div class="small">Open File</div>
+            <h2>Case Fragment 31-F</h2>
+            <p>Internal theft. Psychological pressure. No physical assault.</p>
+          </article>
+        </section>
+
+        <article class="card warning">
+          <h2>Pattern Warning</h2>
+          <p>Redwire prefers consequences that can be explained away. Nothing supernatural. Nothing theatrical in public. Just enough evidence to convince the target that they are already surrounded.</p>
+        </article>
+      </section>
+
+      <section class="main-page" id="intercepts">
+        <section class="grid">
+          <article class="card">
+            <h2>Intercepted Radio Traffic</h2>
+            <ul class="timeline">
+              <li><span><strong>00:13</strong> — “Package accepted. Thread is clean.”</span></li>
+              <li><span><strong>00:19</strong> — “Client thinks this is about money. Let them.”</span></li>
+              <li><span><strong>00:27</strong> — “If they ask who owns the file, remind them who owns the silence.”</span></li>
+              <li><span><strong>00:31</strong> — Static. Repeating tone. Signal loss.</span></li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h2>Recovered Envelope</h2>
+            <p class="quote">You are not being threatened. You are being informed of the shape of your situation.</p>
+            <p>Envelope was wrapped in red thread. No fingerprints. Paper stock matched eleven unrelated extortion cases.</p>
+            <div class="button-row">
+              <button onclick="scrambleIntercept()">Decrypt Margin Note</button>
+            </div>
+            <div class="trace-output" id="decryptOutput"></div>
+          </article>
+        </section>
+      </section>
+
+      <section class="main-page" id="restricted">
+        <div class="access-screen" id="accessScreen">
+          <div>
+            <h2>Restricted Redwire Subfile</h2>
+            <p>Enter passphrase. Hint: old undercity saying.</p>
+            <input class="pass-input" id="passInput" placeholder="TYPE PASSPHRASE" onkeydown="checkEnter(event)" />
+            <div class="button-row" style="justify-content:center;">
+              <button onclick="checkPassphrase()">Submit</button>
+            </div>
+          </div>
+        </div>
+
+        <section class="restricted-content" id="restrictedContent">
+          <section class="grid">
+            <article class="card warning">
+              <h2>Subfile Opened</h2>
+              <p>BCI analysts believe Redwire is not a traditional gang. It behaves more like a decentralized archive with weapons. Leadership may not be a single person, but a chain of handlers who each control one section of the network.</p>
+              <p>Confirmed hierarchy remains <span class="redacted">withheld</span>. Field agents are advised not to ask who leads Redwire unless they already know what Redwire has on them.</p>
+            </article>
+
+            <article class="card">
+              <h2>Possible Inner Terms</h2>
+              <ul class="tag-list">
+                <li><strong>Splicers</strong> — data thieves and record forgers</li>
+                <li><strong>Collectors</strong> — leverage brokers and debt handlers</li>
+                <li><strong>Threaders</strong> — couriers, watchers, and signal runners</li>
+                <li><strong>Cutters</strong> — enforcement assets used only when silence fails</li>
+              </ul>
+            </article>
+          </section>
+
+          <article class="card file-card warning" onclick="triggerIronCross()">
+            <div class="small">Open File</div>
+            <h2>Iron Cross</h2>
+            <p>Corrupted subfile. Accessing this data may compromise session integrity.</p>
+          </article>
+        </section>
+      </section>
+    </main>
+
+    <footer>
+      <span>BCI FIELD DOSSIER // REDWIRE CARTEL</span>
+      <span>WARNING: ACTIVE LEVERAGE NETWORK DETECTED</span>
+    </footer>
+  </section>
+
+  <script>
+    const lines = [
+      "Opening restricted index...",
+      "Cross-checking undercity aliases...",
+      "Redwire activity confirmed in commercial sectors...",
+      "Signal interference detected. Proceed with caution."
+    ];
+
+    const typing = document.getElementById("typing");
+    const flash = document.getElementById("flash");
+    const traceOutput = document.getElementById("traceOutput");
+    const decryptOutput = document.getElementById("decryptOutput");
+    const modal = document.getElementById("modal");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalText = document.getElementById("modalText");
+    const accessScreen = document.getElementById("accessScreen");
+    const restrictedContent = document.getElementById("restrictedContent");
+    const glitchSequence = document.getElementById("glitchSequence");
+    const overviewBtn = document.getElementById("overviewBtn");
+
+    let lineIndex = 0;
+    let charIndex = 0;
+    let restrictedUnlocked = false;
+    let ironTimers = [];
+    let popupIntervals = [];
+
+    function typeText() {
+      if (lineIndex >= lines.length) return;
+      if (charIndex === 0) typing.innerHTML += lineIndex > 0 ? "<br>> " : "";
+      typing.innerHTML += lines[lineIndex].charAt(charIndex);
+      charIndex++;
+
+      if (charIndex < lines[lineIndex].length) {
+        setTimeout(typeText, 28 + Math.random() * 35);
+      } else {
+        lineIndex++;
+        charIndex = 0;
+        setTimeout(typeText, 450);
+      }
+    }
+
+    function showPage(pageId, button) {
+      document.querySelectorAll(".main-page").forEach(page => page.classList.remove("active"));
+      document.querySelectorAll(".nav button").forEach(btn => btn.classList.remove("active"));
+
+      const page = document.getElementById(pageId);
+      if (page) page.classList.add("active");
+      if (button) button.classList.add("active");
+
+      if (pageId === "restricted") {
+        if (restrictedUnlocked) {
+          accessScreen.style.display = "none";
+          restrictedContent.classList.add("active");
+        } else {
+          accessScreen.style.display = "grid";
+          restrictedContent.classList.remove("active");
+        }
+      }
+
+      redFlash();
+      playClickTone();
+    }
+
+    function redFlash() {
+      flash.classList.remove("active");
+      void flash.offsetWidth;
+      flash.classList.add("active");
+    }
+
+    function runTrace() {
+      redFlash();
+      traceOutput.classList.add("active");
+      playStaticBurst();
+    }
+
+    function clearTrace() {
+      traceOutput.classList.remove("active");
+      redFlash();
+    }
+
+    function openFile(title, text) {
+      modalTitle.textContent = title;
+      modalText.textContent = text;
+      modal.classList.add("active");
+      redFlash();
+      playStaticBurst(0.18);
+    }
+
+    function hideModal() {
+      modal.classList.remove("active");
+      playClickTone();
+    }
+
+    function closeModal(event) {
+      if (event.target === modal) hideModal();
+    }
+
+    function scrambleIntercept() {
+      redFlash();
+      playStaticBurst(0.22);
+      decryptOutput.classList.add("active");
+      decryptOutput.innerHTML = "MARGIN NOTE DECRYPTED:<br><br><span style='color: var(--red);'>THEY PAID FOR PROTECTION. THEY DID NOT PAY FOR MERCY.</span>";
+    }
+
+    function checkEnter(event) {
+      if (event.key === "Enter") checkPassphrase();
+    }
+
+    function checkPassphrase() {
+      const input = document.getElementById("passInput").value.trim().toLowerCase();
+      if (input.includes("cut the red wire") || input.includes("red wire")) {
+        restrictedUnlocked = true;
+        accessScreen.style.display = "none";
+        restrictedContent.classList.add("active");
+        redFlash();
+        playStaticBurst(0.3);
+      } else {
+        redFlash();
+        playStaticBurst(0.16);
+        document.getElementById("passInput").value = "";
+        document.getElementById("passInput").placeholder = "ACCESS DENIED";
+      }
+    }
+
+    function triggerIronCross() {
+      redFlash();
+      playStaticBurst(0.38);
+      playIronCrossTone();
+      startIronCrossSequence();
+    }
+
+    function startIronCrossSequence() {
+      const popupMessages = [
+        "TRACE DETECTED",
+        "REMOTE ACCESS ACCEPTED",
+        "WHO IS WATCHING YOU",
+        "SESSION COMPROMISED",
+        "FIREWALL FAILURE",
+        "REDWIRE IS INSIDE",
+        "DO NOT DISCONNECT",
+        "LOCAL ADDRESS EXPOSED",
+        "SIGNAL HOOKED",
+        "INTRUSION CONFIRMED",
+        "YOU OPENED THE WRONG FILE",
+        "TERMINAL TAKEN",
+        "WE SEE YOU",
+        "ROUTE SPLIT DETECTED",
+        "CONNECTION NOT PRIVATE",
+        "FORCED RESET PENDING"
+      ];
+
+      ironTimers.forEach(timer => clearTimeout(timer));
+      popupIntervals.forEach(interval => clearInterval(interval));
+      ironTimers = [];
+      popupIntervals = [];
+
+      document.body.classList.add("trace-hacked");
+      glitchSequence.innerHTML = "";
+      glitchSequence.classList.add("active");
+
+      const grid = document.createElement("div");
+      grid.className = "trace-grid";
+      glitchSequence.appendChild(grid);
+
+      const banner = document.createElement("div");
+      banner.className = "trace-banner";
+      banner.textContent = "CONNECTION TRACE DETECTED";
+      glitchSequence.appendChild(banner);
+
+      const warning = document.createElement("div");
+      warning.className = "trace-warning";
+      warning.innerHTML = "> TRACE ROUTE OPENED<br>> REDWIRE HANDSHAKE ACCEPTED<br>> FIREWALL RESPONSE: FAILED<br>> REMOTE PROCESS WRITING TO TERMINAL<br>> DISCONNECT DISCONNECT DISCONNECT";
+      glitchSequence.appendChild(warning);
+
+      function spawnPopup(message = null, isFinal = false) {
+        const popup = document.createElement("div");
+        popup.className = isFinal ? "scare-popup final-breach" : "scare-popup";
+
+        const head = document.createElement("div");
+        head.className = "popup-head";
+        head.textContent = isFinal ? "TERMINAL BREACH" : "WARNING";
+
+        const body = document.createElement("div");
+        body.className = "popup-body";
+        body.textContent = message || popupMessages[Math.floor(Math.random() * popupMessages.length)];
+
+        popup.appendChild(head);
+        popup.appendChild(body);
+
+        if (isFinal) {
+          popup.style.left = "50%";
+          popup.style.top = "50%";
+          popup.style.transform = "translate(-50%, -50%) scale(1.08)";
+          popup.style.zIndex = "999";
+        } else {
+          popup.style.left = `${5 + Math.random() * 70}%`;
+          popup.style.top = `${8 + Math.random() * 72}%`;
+        }
+
+        glitchSequence.appendChild(popup);
+
+        redFlash();
+        playStaticBurst(isFinal ? 0.26 : 0.08 + Math.random() * 0.12);
+
+        const removeTimer = setTimeout(() => {
+          if (popup.parentNode && !isFinal) popup.remove();
+        }, isFinal ? 1200 : 450 + Math.random() * 350);
+        ironTimers.push(removeTimer);
+      }
+
+      for (let i = 0; i < 5; i++) {
+        const timer = setTimeout(() => spawnPopup(), i * 120);
+        ironTimers.push(timer);
+      }
+
+      const popupInterval = setInterval(() => {
+        for (let i = 0; i < 2; i++) spawnPopup();
+      }, 160);
+      popupIntervals.push(popupInterval);
+
+      const terminalPanic = [
+        "TRACE WARNING // REMOTE SIGNAL ENTERING SESSION",
+        "BCI FIREWALL FAILURE // ROUTE SPLIT DETECTED",
+        "REDWIRE HANDSHAKE COMPLETE // TERMINAL NO LONGER PRIVATE",
+        "COLTON CROSS TERMINAL COMPROMISED // FORCED RESET IMMINENT"
+      ];
+
+      terminalPanic.forEach((line, i) => {
+        const timer = setTimeout(() => { typing.innerHTML = line; }, 260 + i * 420);
+        ironTimers.push(timer);
+      });
+
+      ironTimers.push(setTimeout(() => {
+        banner.textContent = "REMOTE OVERRIDE ACCEPTED";
+      }, 1100));
+
+      ironTimers.push(setTimeout(() => {
+        banner.textContent = "COLTON CROSS TERMINAL COMPROMISED";
+        spawnPopup("COLTON CROSS'S TERMINAL COMPROMISED", true);
+      }, 1900));
+
+      ironTimers.push(setTimeout(() => {
+        banner.textContent = "FORCED RESET";
+      }, 2550));
+
+      ironTimers.push(setTimeout(() => {
+        resetToHomepage();
+      }, 3450));
+    }
+
+    function resetToHomepage() {
+      ironTimers.forEach(timer => clearTimeout(timer));
+      popupIntervals.forEach(interval => clearInterval(interval));
+      ironTimers = [];
+      popupIntervals = [];
+
+      document.body.classList.remove("trace-hacked");
+      glitchSequence.classList.remove("active");
+      glitchSequence.innerHTML = "";
+
+      document.querySelectorAll(".main-page").forEach(page => page.classList.remove("active"));
+      document.querySelectorAll(".nav button").forEach(btn => btn.classList.remove("active"));
+
+      document.getElementById("overview").classList.add("active");
+      overviewBtn.classList.add("active");
+
+      if (traceOutput) traceOutput.classList.remove("active");
+      if (decryptOutput) {
+        decryptOutput.classList.remove("active");
+        decryptOutput.innerHTML = "";
+      }
+
+      restrictedUnlocked = false;
+      restrictedContent.classList.remove("active");
+      accessScreen.style.display = "grid";
+
+      const passInput = document.getElementById("passInput");
+      passInput.value = "";
+      passInput.placeholder = "TYPE PASSPHRASE";
+
+      typing.innerHTML = "SESSION RESET // HOME PAGE RESTORED // TRACE PURGED";
+      redFlash();
+    }
+
+    function playClickTone() {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "square";
+      osc.frequency.value = 140;
+      gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.045, ctx.currentTime + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.08);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.08);
+    }
+
+    function playStaticBurst(volume = 0.16) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      const ctx = new AudioContext();
+      const bufferSize = ctx.sampleRate * 0.45;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+      }
+
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+      const filter = ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.value = 600;
+      filter.Q.value = 3.5;
+      const gain = ctx.createGain();
+      gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(volume, ctx.currentTime + 0.03);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.45);
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      noise.start();
+      noise.stop(ctx.currentTime + 0.45);
+    }
+
+    function playIronCrossTone() {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+
+      const ctx = new AudioContext();
+      const master = ctx.createGain();
+      const compressor = ctx.createDynamicsCompressor();
+      compressor.threshold.value = -18;
+      compressor.knee.value = 18;
+      compressor.ratio.value = 12;
+      compressor.attack.value = 0.003;
+      compressor.release.value = 0.22;
+      master.gain.setValueAtTime(0.0001, ctx.currentTime);
+      master.gain.exponentialRampToValueAtTime(0.34, ctx.currentTime + 0.035);
+      master.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 2.45);
+      master.connect(compressor);
+      compressor.connect(ctx.destination);
+
+      const lowAlarm = ctx.createOscillator();
+      const lowGain = ctx.createGain();
+      lowAlarm.type = "sawtooth";
+      lowAlarm.frequency.setValueAtTime(58, ctx.currentTime);
+      lowAlarm.frequency.linearRampToValueAtTime(44, ctx.currentTime + 0.7);
+      lowAlarm.frequency.linearRampToValueAtTime(70, ctx.currentTime + 1.35);
+      lowAlarm.frequency.linearRampToValueAtTime(38, ctx.currentTime + 2.2);
+      lowGain.gain.value = 0.17;
+      lowAlarm.connect(lowGain);
+      lowGain.connect(master);
+
+      const siren = ctx.createOscillator();
+      const sirenGain = ctx.createGain();
+      siren.type = "square";
+      siren.frequency.setValueAtTime(780, ctx.currentTime);
+      siren.frequency.linearRampToValueAtTime(1280, ctx.currentTime + 0.25);
+      siren.frequency.linearRampToValueAtTime(420, ctx.currentTime + 0.55);
+      siren.frequency.linearRampToValueAtTime(1600, ctx.currentTime + 0.95);
+      siren.frequency.linearRampToValueAtTime(260, ctx.currentTime + 1.55);
+      siren.frequency.linearRampToValueAtTime(90, ctx.currentTime + 2.25);
+      sirenGain.gain.value = 0.09;
+      siren.connect(sirenGain);
+      sirenGain.connect(master);
+
+      const shriek = ctx.createOscillator();
+      const shriekGain = ctx.createGain();
+      shriek.type = "sawtooth";
+      shriek.frequency.setValueAtTime(2400, ctx.currentTime);
+      shriek.frequency.exponentialRampToValueAtTime(170, ctx.currentTime + 1.8);
+      shriekGain.gain.setValueAtTime(0.0001, ctx.currentTime);
+      shriekGain.gain.exponentialRampToValueAtTime(0.06, ctx.currentTime + 0.18);
+      shriekGain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.9);
+      shriek.connect(shriekGain);
+      shriekGain.connect(master);
+
+      const bufferSize = ctx.sampleRate * 2.35;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        const decay = 1 - i / bufferSize;
+        const bitCrush = Math.round((Math.random() * 2 - 1) * 6) / 6;
+        data[i] = bitCrush * decay * 0.55;
+      }
+
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+      const filter = ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.setValueAtTime(1200, ctx.currentTime);
+      filter.frequency.exponentialRampToValueAtTime(180, ctx.currentTime + 2.15);
+      filter.Q.value = 6;
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.0001, ctx.currentTime);
+      noiseGain.gain.exponentialRampToValueAtTime(0.13, ctx.currentTime + 0.08);
+      noiseGain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 2.35);
+      noise.connect(filter);
+      filter.connect(noiseGain);
+      noiseGain.connect(master);
+
+      lowAlarm.start();
+      siren.start();
+      shriek.start();
+      noise.start();
+
+      lowAlarm.stop(ctx.currentTime + 2.45);
+      siren.stop(ctx.currentTime + 2.2);
+      shriek.stop(ctx.currentTime + 1.9);
+      noise.stop(ctx.currentTime + 2.35);
+    }
+
+    window.addEventListener("load", () => {
+      setTimeout(typeText, 400);
+      setInterval(() => {
+        if (Math.random() > 0.72) redFlash();
+      }, 5200);
+    });
+  </script>
+</body>
+</html>
