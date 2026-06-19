@@ -40,43 +40,60 @@ const GitHub = (() => {
   async function fetchNotes()    { return fetchJson(REPO.notesPath); }
 
   // ── Write via Contents API ───────────────────────────────────────────
+  async function getSha(apiBase, token) {
+    // Cache-bust so we always get the CURRENT sha, never a stale cached one.
+    const res = await fetch(`${apiBase}?ref=${REPO.branch}&t=${Date.now()}`, {
+      headers: {
+        'Accept': 'application/vnd.github+json',
+        'Authorization': `Bearer ${token}`,
+        'Cache-Control': 'no-cache'
+      },
+      cache: 'no-store'
+    });
+    if (res.ok) {
+      const j = await res.json();
+      return j.sha;
+    }
+    return null;
+  }
+
   async function writeFile(path, dataObj, message, token) {
     if (!token) throw new Error('No token set');
     const apiBase = `https://api.github.com/repos/${REPO.owner}/${REPO.repo}/contents/${path}`;
 
-    // Get current sha so the PUT updates instead of creating
-    let sha = null;
-    const head = await fetch(`${apiBase}?ref=${REPO.branch}`, {
-      headers: {
-        'Accept': 'application/vnd.github+json',
-        'Authorization': `Bearer ${token}`
-      }
-    });
-    if (head.ok) {
-      const j = await head.json();
-      sha = j.sha;
-    }
-
     const json = JSON.stringify(dataObj, null, 2);
     const contentB64 = btoa(unescape(encodeURIComponent(json)));
 
-    const body = { message, content: contentB64, branch: REPO.branch };
-    if (sha) body.sha = sha;
+    // Try the PUT; if GitHub reports a sha conflict (409/422), re-fetch the
+    // current sha and retry once. This handles the case where the file changed
+    // since we last loaded it (e.g. edited elsewhere or a stale cache).
+    let sha = await getSha(apiBase, token);
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const body = { message, content: contentB64, branch: REPO.branch };
+      if (sha) body.sha = sha;
 
-    const put = await fetch(apiBase, {
-      method: 'PUT',
-      headers: {
-        'Accept': 'application/vnd.github+json',
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    });
-    if (!put.ok) {
+      const put = await fetch(apiBase, {
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/vnd.github+json',
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (put.ok) return put.json();
+
+      // On a conflict, refresh the sha and loop to retry once.
+      if ((put.status === 409 || put.status === 422) && attempt === 0) {
+        sha = await getSha(apiBase, token);
+        continue;
+      }
+
       const err = await put.text();
       throw new Error(`PUT ${path} failed: HTTP ${put.status} — ${err}`);
     }
-    return put.json();
+    throw new Error(`PUT ${path} failed after retry`);
   }
 
   async function pushCampaign(data, token) {
