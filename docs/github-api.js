@@ -41,12 +41,12 @@ const GitHub = (() => {
 
   // ── Write via Contents API ───────────────────────────────────────────
   async function getSha(apiBase, token) {
-    // Cache-bust so we always get the CURRENT sha, never a stale cached one.
+    // Cache-bust via the URL timestamp only. Do NOT send a Cache-Control header:
+    // GitHub's API rejects it in CORS preflight, which blocks the request.
     const res = await fetch(`${apiBase}?ref=${REPO.branch}&t=${Date.now()}`, {
       headers: {
         'Accept': 'application/vnd.github+json',
-        'Authorization': `Bearer ${token}`,
-        'Cache-Control': 'no-cache'
+        'Authorization': `Bearer ${token}`
       },
       cache: 'no-store'
     });
