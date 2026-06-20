@@ -97,7 +97,7 @@
           "revealed": true
         }
       ],
-      "locked": false
+      "locked": true
     },
     {
       "id": "cotu",
