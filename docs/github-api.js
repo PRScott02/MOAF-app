@@ -64,11 +64,11 @@ const GitHub = (() => {
     const json = JSON.stringify(dataObj, null, 2);
     const contentB64 = btoa(unescape(encodeURIComponent(json)));
 
-    // Try the PUT; if GitHub reports a sha conflict (409/422), re-fetch the
-    // current sha and retry once. This handles the case where the file changed
-    // since we last loaded it (e.g. edited elsewhere or a stale cache).
-    let sha = await getSha(apiBase, token);
-    for (let attempt = 0; attempt < 2; attempt++) {
+    const MAX_ATTEMPTS = 5;
+    let lastErr = '';
+    for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+      // Always fetch a fresh sha right before each attempt.
+      const sha = await getSha(apiBase, token);
       const body = { message, content: contentB64, branch: REPO.branch };
       if (sha) body.sha = sha;
 
@@ -84,16 +84,17 @@ const GitHub = (() => {
 
       if (put.ok) return put.json();
 
-      // On a conflict, refresh the sha and loop to retry once.
-      if ((put.status === 409 || put.status === 422) && attempt === 0) {
-        sha = await getSha(apiBase, token);
+      lastErr = `HTTP ${put.status} — ${await put.text()}`;
+
+      // Conflict (sha mismatch) → wait briefly for GitHub's API to settle, then retry.
+      if (put.status === 409 || put.status === 422) {
+        await new Promise(r => setTimeout(r, 400 + attempt * 300));
         continue;
       }
-
-      const err = await put.text();
-      throw new Error(`PUT ${path} failed: HTTP ${put.status} — ${err}`);
+      // Any other error is not retryable.
+      throw new Error(`PUT ${path} failed: ${lastErr}`);
     }
-    throw new Error(`PUT ${path} failed after retry`);
+    throw new Error(`PUT ${path} failed after ${MAX_ATTEMPTS} attempts: ${lastErr}`);
   }
 
   async function pushCampaign(data, token) {

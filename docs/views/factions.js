@@ -55,12 +55,14 @@ const FactionsView = (() => {
           <h2>▸ Faction Matrix</h2>
           <div class="matrix-grid">
             ${factions.map(f => {
-              const locked = Data.isLocked(f);
+              const isAdmin = Data.canEditCampaign();
+              const actuallyLocked = f.locked === true;
+              const showRedacted = actuallyLocked && !isAdmin;
               return `
-              <div class="matrix-card ${locked ? 'locked-card' : ''}" style="--primary:${f.primary};--accent:${f.accent}" data-faction-jump="${f.id}">
-                <div class="matrix-emblem"><span class="letter">${locked ? '🔒' : escapeHtml(f.letter || '?')}</span></div>
+              <div class="matrix-card ${showRedacted ? 'locked-card' : ''}${actuallyLocked && isAdmin ? ' admin-locked' : ''}" style="--primary:${f.primary};--accent:${f.accent}" data-faction-jump="${f.id}">
+                <div class="matrix-emblem"><span class="letter">${showRedacted ? '🔒' : escapeHtml(f.letter || '?')}</span></div>
                 <div>
-                  ${locked ? `
+                  ${showRedacted ? `
                     <span class="matrix-kicker" style="color:var(--red)">▸ CLASSIFIED // NOT YET DISCOVERED</span>
                     <h3>[ REDACTED ]</h3>
                     <p class="matrix-sub">This faction's records are sealed. Intelligence will unlock as your investigation progresses.</p>
@@ -70,12 +72,12 @@ const FactionsView = (() => {
                     <p class="matrix-sub">${escapeHtml(f.subtitle || '')}</p>
                     <span class="count">${npcCount[f.id] || 0} NPC Dossiers</span>
                   `}
-                  ${Data.canEditCampaign() ? `
+                  ${isAdmin ? `
                     <div style="margin-top:10px">
-                      <span class="reveal-toggle ${locked ? 'hidden' : 'revealed'}"
+                      <span class="reveal-toggle ${actuallyLocked ? 'hidden' : 'revealed'}"
                             data-faction-lock-toggle data-faction-id="${f.id}"
                             onclick="event.stopPropagation()">
-                        ${f.locked ? '🔒 LOCKED' : '🔓 UNLOCKED'}
+                        ${actuallyLocked ? '🔒 LOCKED' : '🔓 UNLOCKED'}
                       </span>
                     </div>
                   ` : ''}

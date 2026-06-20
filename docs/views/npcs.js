@@ -117,9 +117,11 @@ const NpcsView = (() => {
 
   function renderNpc(n) {
     const color = factionColor(n.faction);
-    const locked = Data.isLocked(n);
+    const isAdmin = Data.canEditCampaign();
+    const actuallyLocked = n.locked === true;
+    const showRedacted = actuallyLocked && !isAdmin;
 
-    if (locked) {
+    if (showRedacted) {
       return `
         <article class="npc-card locked-card" data-npc-id="${escapeHtml(n.id)}" style="--faction-color:${color}">
           <div class="npc-portrait" style="color:var(--red);text-shadow:0 0 20px var(--red)">🔒</div>
@@ -128,19 +130,13 @@ const NpcsView = (() => {
             <h3>[ REDACTED ]</h3>
             <span class="npc-faction-tag">Unknown Affiliation</span>
             <div class="mini">This individual has not yet been identified in your investigation.</div>
-            ${Data.canEditCampaign() ? `
-              <div style="margin-top:auto;padding-top:12px;display:flex;justify-content:flex-end;gap:6px">
-                <span class="reveal-toggle hidden" data-npc-lock data-npc-id="${escapeHtml(n.id)}">🔒 LOCKED</span>
-                <button class="edit-btn" data-npc-edit data-npc-id="${escapeHtml(n.id)}">EDIT</button>
-              </div>
-            ` : ''}
           </div>
         </article>
       `;
     }
 
     return `
-      <article class="npc-card" data-npc-id="${escapeHtml(n.id)}" style="--faction-color:${color}">
+      <article class="npc-card${actuallyLocked && isAdmin ? ' admin-locked' : ''}" data-npc-id="${escapeHtml(n.id)}" style="--faction-color:${color}">
         <div class="npc-portrait">${escapeHtml(initials(n.name))}</div>
         <div class="npc-body">
           <div class="npc-role">${escapeHtml(n.role || '')}</div>
@@ -150,9 +146,11 @@ const NpcsView = (() => {
           ${renderNpcField(n, 'Quote', 'quote')}
           ${renderNpcField(n, 'Public Face', 'mini')}
           ${renderNpcField(n, 'Vibe', 'mini')}
-          ${Data.canEditCampaign() ? `
+          ${isAdmin ? `
             <div style="margin-top:auto;padding-top:12px;display:flex;justify-content:flex-end;gap:6px">
-              <span class="reveal-toggle revealed" data-npc-lock data-npc-id="${escapeHtml(n.id)}">🔓 UNLOCKED</span>
+              <span class="reveal-toggle ${actuallyLocked ? 'hidden' : 'revealed'}" data-npc-lock data-npc-id="${escapeHtml(n.id)}">
+                ${actuallyLocked ? '🔒 LOCKED' : '🔓 UNLOCKED'}
+              </span>
               <button class="edit-btn" data-npc-edit data-npc-id="${escapeHtml(n.id)}">EDIT</button>
             </div>
           ` : ''}

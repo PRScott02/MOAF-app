@@ -39,9 +39,12 @@ const EvidenceView = (() => {
 
   function renderCard(e) {
     const accent = e.accent || '#7fffc5';
-    const locked = Data.isLocked(e);
+    const isAdmin = Data.canEditCampaign();
+    const actuallyLocked = e.locked === true;
+    // Players see the sealed placeholder when locked; admins always see the full card.
+    const showSealed = actuallyLocked && !isAdmin;
 
-    if (locked) {
+    if (showSealed) {
       return `
         <article class="evidence-card locked-card" data-ev-id="${escapeHtml(e.id)}" style="--accent:${accent}">
           <div class="evidence-icon" style="color:var(--red);text-shadow:0 0 20px var(--red)">🔒</div>
@@ -49,18 +52,13 @@ const EvidenceView = (() => {
             <div class="evidence-kicker" style="color:var(--red)">▸ ENCRYPTED // NOT YET RECOVERED</div>
             <h3>[ SEALED FILE ]</h3>
             <p class="evidence-desc">This record has not yet been recovered in your investigation.</p>
-            ${Data.canEditCampaign() ? `
-              <div class="evidence-admin">
-                <span class="reveal-toggle hidden" data-ev-lock data-ev-id="${escapeHtml(e.id)}">🔒 LOCKED</span>
-              </div>
-            ` : ''}
           </div>
         </article>
       `;
     }
 
     return `
-      <article class="evidence-card" data-ev-id="${escapeHtml(e.id)}" style="--accent:${accent}">
+      <article class="evidence-card${actuallyLocked && isAdmin ? ' admin-locked' : ''}" data-ev-id="${escapeHtml(e.id)}" style="--accent:${accent}">
         <div class="evidence-icon">▦</div>
         <div class="evidence-body">
           <div class="evidence-kicker">▸ ${escapeHtml(e.subtitle || 'RECOVERED FILE')}</div>
@@ -69,9 +67,11 @@ const EvidenceView = (() => {
           <div class="evidence-actions">
             <button class="btn primary" data-ev-open data-ev-id="${escapeHtml(e.id)}">▸ ACCESS TERMINAL</button>
           </div>
-          ${Data.canEditCampaign() ? `
+          ${isAdmin ? `
             <div class="evidence-admin">
-              <span class="reveal-toggle revealed" data-ev-lock data-ev-id="${escapeHtml(e.id)}">🔓 UNLOCKED</span>
+              <span class="reveal-toggle ${actuallyLocked ? 'hidden' : 'revealed'}" data-ev-lock data-ev-id="${escapeHtml(e.id)}">
+                ${actuallyLocked ? '🔒 LOCKED (hidden from players)' : '🔓 UNLOCKED (players can see)'}
+              </span>
             </div>
           ` : ''}
         </div>
