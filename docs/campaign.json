@@ -37,7 +37,7 @@
         {
           "label": "Directorate",
           "value": "Policy, citywide control, elite coordination, classified continuity orders.",
-          "revealed": false
+          "revealed": true
         },
         {
           "label": "Internal Security",
@@ -4096,7 +4096,8 @@
       "file": "ash-see-the-doc.html",
       "desc": "An intercepted message routed through legacy analog relay hardware. Acoustic output enabled. Addressed to Ash.",
       "accent": "#7fffc5",
-      "locked": false
+      "locked": true,
+      "type": "html"
     },
     {
       "id": "mozzie-cricket-message",
@@ -4105,7 +4106,8 @@
       "file": "mozzie-cricket-message.html",
       "desc": "A second legacy-relay transmission captured on the same node. Origin obscured. Addressed to Mozzie Farouk.",
       "accent": "#7fffc5",
-      "locked": true
+      "locked": true,
+      "type": "html"
     },
     {
       "id": "bci-memory-shard",
@@ -4114,7 +4116,8 @@
       "file": "bci-memory-shard.html",
       "desc": "Unauthorized terminal session. Spoofed credentials loaded, signal masked through an idle proxy chain. Memory shard recovery in progress.",
       "accent": "#ff4267",
-      "locked": true
+      "locked": true,
+      "type": "html"
     },
     {
       "id": "td-terminal-letter",
@@ -4123,7 +4126,8 @@
       "file": "td-terminal-letter.html",
       "desc": "A letter recovered from a BCI portable terminal belonging to Ash Calder. Flagged by Truth Division signal watchers.",
       "accent": "#b982ff",
-      "locked": true
+      "locked": true,
+      "type": "html"
     },
     {
       "id": "redwire-terminal",
@@ -4132,7 +4136,8 @@
       "file": "redwire-terminal.html",
       "desc": "A BCI intelligence index on the RedWire Cartel's data-smuggling operations. Cross-referenced contraband routes and contacts.",
       "accent": "#ff5a5f",
-      "locked": true
+      "locked": true,
+      "type": "html"
     },
     {
       "id": "cotu-letter-fragment",
@@ -4141,7 +4146,8 @@
       "file": "cotu-letter-fragment.html",
       "desc": "A partially corrupted letter fragment intercepted from Choir of the Unforgotten channels. Recovery incomplete.",
       "accent": "#ffcc66",
-      "locked": true
+      "locked": true,
+      "type": "html"
     },
     {
       "id": "arasaka-lock-override",
@@ -4150,6 +4156,167 @@
       "file": "arasaka-lock-override.html",
       "desc": "An Arasaka private-security lock override interface. Live access node. Handle with care.",
       "accent": "#d11f2f",
+      "locked": true,
+      "type": "html"
+    },
+    {
+      "id": "cotu-databoard",
+      "title": "Stolen Databoard // \"Do You Want The Truth?\"",
+      "subtitle": "CotU Broadcast // Node 7-A",
+      "file": "cotu-databoard.png",
+      "desc": "A stolen databoard broadcasting CotU propaganda across a compromised relay. \"They control the record. We control the remembrance.\"",
+      "accent": "#b5ff3a",
+      "type": "image",
+      "locked": true
+    },
+    {
+      "id": "bci-ruiz-sealed-report",
+      "title": "Sealed Incident Report // Damien Ruiz",
+      "subtitle": "BCI Municipal Enforcement",
+      "file": "bci-ruiz-sealed-report.png",
+      "desc": "A sealed BCI incident report on Damien Ruiz, age 13. Parents listed as active persons of interest. Heavily redacted.",
+      "accent": "#ff4267",
+      "type": "image",
+      "locked": true
+    },
+    {
+      "id": "cotu-intercepted-email",
+      "title": "Intercepted Encrypted Email // Ember",
+      "subtitle": "NCPD Cyber Intercept // CotU Relay",
+      "file": "cotu-intercepted-email.png",
+      "desc": "A partially decrypted message from \"Ember\" of the Choir. A meet in the Runoff — bring the shard, come alone.",
+      "accent": "#59e3ff",
+      "type": "image",
+      "locked": true
+    },
+    {
+      "id": "bci-faction-index",
+      "title": "Stolen BCI Faction Index",
+      "subtitle": "BCI Internal // Omega Black",
+      "file": "bci-faction-index.png",
+      "desc": "A stolen BCI internal dossier indexing all six major factions with threat assessments. Heavily redacted, player-safe distribution.",
+      "accent": "#8bffb1",
+      "type": "image",
+      "locked": true
+    },
+    {
+      "id": "pi-license-data",
+      "title": "Licensed PI Credential File",
+      "subtitle": "MSCA Civic Registry",
+      "file": "pi-license-data.png",
+      "desc": "Official licensing records for Ash Calder, Colton Cross, and Mozzie Farouk. Photos redacted, identities sealed.",
+      "accent": "#74e8ff",
+      "type": "image",
+      "locked": true
+    },
+    {
+      "id": "bci-enforcer",
+      "title": "BCI Enforcer",
+      "subtitle": "Character Dossier // Visual",
+      "file": "bci-enforcer.png",
+      "desc": "Surveillance capture of a BCI Enforcer in full armor. Red optics. \"Thought is theft.\"",
+      "accent": "#ff4267",
+      "type": "image",
+      "locked": true
+    },
+    {
+      "id": "bci-patrol-captain",
+      "title": "BCI Patrol Captain",
+      "subtitle": "Character Dossier // Visual",
+      "file": "bci-patrol-captain.png",
+      "desc": "A BCI Patrol Captain on the rain-slicked streets of Meridian Spire. Baton drawn.",
+      "accent": "#8bffb1",
+      "type": "image",
+      "locked": true
+    },
+    {
+      "id": "bci-patrol",
+      "title": "BCI Patrol Officer",
+      "subtitle": "Character Dossier // Visual",
+      "file": "bci-patrol.png",
+      "desc": "Standard BCI patrol unit, Bureau of Corporate Integrity. Cyan optics, restraint gear.",
+      "accent": "#74e8ff",
+      "type": "image",
+      "locked": true
+    },
+    {
+      "id": "bci-police-report",
+      "title": "Police Report // Psycho Incident",
+      "subtitle": "BCI Sector Response Unit 9",
+      "file": "bci-police-report.png",
+      "desc": "A BCI incident report on a violent cognitive threat in the Market Belt. Arasaka intervention. 17 BCI killed, 83 affected.",
+      "accent": "#7fffc5",
+      "type": "image",
+      "locked": true
+    },
+    {
+      "id": "pi-office-dossier",
+      "title": "PI Office Property Dossier",
+      "subtitle": "Meridian Spire Municipal Authority",
+      "file": "pi-office-dossier.png",
+      "desc": "Municipal property record for Meridian Licensed Inquiry Office 47-B, Old Transit Court, Platform Block C-17.",
+      "accent": "#ffd27d",
+      "type": "image",
+      "locked": true
+    },
+    {
+      "id": "colton-email",
+      "title": "Email // \"Gray Market\"",
+      "subtitle": "Colton's Inbox // MSG-7321.A",
+      "file": "colton-email.png",
+      "desc": "An anonymous message to Colton inviting him to the Gray Market. \"There's more going on than you've been told. Bring your friends.\"",
+      "accent": "#7fffc5",
+      "type": "image",
+      "locked": true
+    },
+    {
+      "id": "mozzie-arasaka-message",
+      "title": "Arasaka Secure Comms // \"Explain Yourself\"",
+      "subtitle": "Arasaka Internal // Ultra Black",
+      "file": "mozzie-arasaka-message.png",
+      "desc": "A decrypted Arasaka message to Mozzie Farouk from \"Father.\" \"What were you doing near the psycho? I want an answer immediately.\"",
+      "accent": "#ff4267",
+      "type": "image",
+      "locked": true
+    },
+    {
+      "id": "red-archive-agent",
+      "title": "Red Archive Agent",
+      "subtitle": "Character Dossier // Visual",
+      "file": "red-archive-agent.png",
+      "desc": "A Red Archive operative in the Meridian Spire rain. \"Memories are data. Data is truth.\"",
+      "accent": "#ff4c5f",
+      "type": "image",
+      "locked": true
+    },
+    {
+      "id": "ruiz-dna-match",
+      "title": "DNA Sample Report // H. Ruiz",
+      "subtitle": "BCI Forensic Bio-Lab",
+      "file": "ruiz-dna-match.png",
+      "desc": "A BCI forensic report showing a 61% partial DNA match to H. Ruiz, recovered from the Market Belt. Flagged for review.",
+      "accent": "#7fffc5",
+      "type": "image",
+      "locked": true
+    },
+    {
+      "id": "nyx-bellweather-art",
+      "title": "Nyx Bellweather // \"The Night's Echo\"",
+      "subtitle": "Character Dossier // Visual",
+      "file": "nyx-bellweather-art.png",
+      "desc": "Information broker and shadowrunner operating out of Runoff Sector 7. Deals in secrets, knows everyone, trusts no one. Rumored connections in every district.",
+      "accent": "#b982ff",
+      "type": "image",
+      "locked": true
+    },
+    {
+      "id": "nyx-bellweather-dossier",
+      "title": "Nyx Bellweather // Field Dossier",
+      "subtitle": "Hacker / Infiltrator // Meridian Spire",
+      "file": "nyx-bellweather-dossier.png",
+      "desc": "\"Secrets are just data waiting to be connected.\" Operates in the gray between corporate firewalls and street nets. Ghost Link, Signal Bleed, Deep Mask, Trace Suppress.",
+      "accent": "#b982ff",
+      "type": "image",
       "locked": true
     }
   ]

@@ -209,3 +209,22 @@
 @media (max-width: 1000px) {
   .evidence-grid { grid-template-columns: 1fr; }
 }
+
+/* ── Evidence image thumbnail ───────────────────────────────────────── */
+.evidence-thumb {
+  flex-shrink: 0;
+  width: 96px; height: 96px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background-size: cover;
+  background-position: center;
+  background-color: #05100c;
+}
+.evidence-admin {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}

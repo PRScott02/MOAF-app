@@ -57,18 +57,25 @@ const EvidenceView = (() => {
       `;
     }
 
+    const isImage = e.type === 'image';
+    // Thumbnail preview for image-type evidence; icon for HTML terminals.
+    const iconBlock = isImage
+      ? `<div class="evidence-thumb" style="background-image:url('evidence/${encodeURIComponent(e.file)}')"></div>`
+      : `<div class="evidence-icon">▦</div>`;
+
     return `
       <article class="evidence-card${actuallyLocked && isAdmin ? ' admin-locked' : ''}" data-ev-id="${escapeHtml(e.id)}" style="--accent:${accent}">
-        <div class="evidence-icon">▦</div>
+        ${iconBlock}
         <div class="evidence-body">
           <div class="evidence-kicker">▸ ${escapeHtml(e.subtitle || 'RECOVERED FILE')}</div>
           <h3>${escapeHtml(e.title)}</h3>
           <p class="evidence-desc">${escapeHtml(e.desc || '')}</p>
           <div class="evidence-actions">
-            <button class="btn primary" data-ev-open data-ev-id="${escapeHtml(e.id)}">▸ ACCESS TERMINAL</button>
+            <button class="btn primary" data-ev-open data-ev-id="${escapeHtml(e.id)}">▸ ${isImage ? 'VIEW FILE' : 'ACCESS TERMINAL'}</button>
           </div>
           ${isAdmin ? `
             <div class="evidence-admin">
+              <button class="edit-btn" data-ev-label data-ev-id="${escapeHtml(e.id)}">EDIT LABEL</button>
               <span class="reveal-toggle ${actuallyLocked ? 'hidden' : 'revealed'}" data-ev-lock data-ev-id="${escapeHtml(e.id)}">
                 ${actuallyLocked ? '🔒 LOCKED (hidden from players)' : '🔓 UNLOCKED (players can see)'}
               </span>
@@ -96,6 +103,7 @@ const EvidenceView = (() => {
       card.addEventListener('click', e => {
         if (e.target.closest('[data-ev-lock]')) return;
         if (e.target.closest('[data-ev-open]')) return;
+        if (e.target.closest('[data-ev-label]')) return;
         const id = card.getAttribute('data-ev-id');
         const item = Data.getCampaign().evidence.find(x => x.id === id);
         if (!item || Data.isLocked(item)) return;
@@ -118,6 +126,58 @@ const EvidenceView = (() => {
           App.rerender();
         } catch (err) { Toast.show('Save failed: ' + err.message, true); }
       });
+    });
+
+    // Edit label (admin) — title, subtitle, description
+    container.querySelectorAll('[data-ev-label]').forEach(el => {
+      el.addEventListener('click', e => {
+        e.stopPropagation();
+        const id = el.getAttribute('data-ev-id');
+        const item = Data.getCampaign().evidence.find(x => x.id === id);
+        if (item) openLabelEditor(item);
+      });
+    });
+  }
+
+  function openLabelEditor(item) {
+    const host = document.createElement('div');
+    host.innerHTML = `
+      <div class="modal-backdrop" data-close-modal>
+        <div class="modal" onclick="event.stopPropagation()">
+          <h2>Edit Label</h2>
+          <div class="modal-row">
+            <label>Title</label>
+            <input type="text" id="ev-title" value="${escapeHtml(item.title)}">
+          </div>
+          <div class="modal-row">
+            <label>Subtitle (the small kicker line)</label>
+            <input type="text" id="ev-subtitle" value="${escapeHtml(item.subtitle || '')}">
+          </div>
+          <div class="modal-row">
+            <label>Description</label>
+            <textarea id="ev-desc" rows="4">${escapeHtml(item.desc || '')}</textarea>
+          </div>
+          <div class="modal-actions">
+            <button class="btn" data-close-modal>Cancel</button>
+            <button class="btn primary" id="ev-label-save">SAVE & PUSH</button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(host.firstElementChild);
+    const backdrop = document.querySelector('.modal-backdrop:last-of-type');
+    backdrop.querySelectorAll('[data-close-modal]').forEach(b => b.addEventListener('click', () => backdrop.remove()));
+    backdrop.querySelector('#ev-label-save').addEventListener('click', async () => {
+      item.title = backdrop.querySelector('#ev-title').value.trim() || item.title;
+      item.subtitle = backdrop.querySelector('#ev-subtitle').value.trim();
+      item.desc = backdrop.querySelector('#ev-desc').value.trim();
+      try {
+        Toast.show('Saving…');
+        await Data.pushCampaign();
+        Toast.show('Label updated');
+        backdrop.remove();
+        App.rerender();
+      } catch (err) { Toast.show('Save failed: ' + err.message, true); }
     });
   }
 

@@ -3,7 +3,7 @@
  * Caches the app shell so it loads offline; falls back to cache on network failure
  * but always tries network first for the JSON data so changes are picked up.
  */
-const CACHE_NAME = 'moaf-v6';
+const CACHE_NAME = 'moaf-v8';
 const SHELL = [
   './',
   './index.html',
