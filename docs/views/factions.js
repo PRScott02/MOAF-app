@@ -226,7 +226,8 @@ const FactionsView = (() => {
   }
 
   function renderFactionNpc(f, n, idx) {
-    const visible = Data.canEditCampaign() || n.revealed !== false;
+    const isAdmin = Data.canEditCampaign();
+    const visible = isAdmin || n.revealed !== false;
     if (!visible) {
       return `
         <div class="npc-card-mini">
@@ -236,9 +237,39 @@ const FactionsView = (() => {
           </div>
         </div>`;
     }
+
+    // Build clean structured content from parsedFields (falls back to body blob).
+    let inner = '';
+    if (n.parsedFields && Object.keys(n.parsedFields).length) {
+      const blocks = [];
+      for (const [label, field] of Object.entries(n.parsedFields)) {
+        const showField = isAdmin || field.gm !== true;
+        if (showField) {
+          blocks.push(`
+            <div class="dossier-field">
+              <b>${escapeHtml(label)}</b>
+              <span>${escapeHtml(field.value)}</span>
+            </div>
+          `);
+        } else {
+          blocks.push(`
+            <div class="dossier-field redacted">
+              <b>${escapeHtml(label)}</b>
+              <span>[ REDACTED // CLEARANCE INSUFFICIENT ]</span>
+            </div>
+          `);
+        }
+      }
+      inner = blocks.join('');
+    } else if (n.body) {
+      // Fallback: show the raw body but strip the stray "Open full dossier" line.
+      const cleaned = n.body.split('\n').filter(l => l.trim() && l.trim() !== 'Open full dossier').join('\n');
+      inner = `<p>${escapeHtml(cleaned)}</p>`;
+    }
+
     return `
       <div class="npc-card-mini">
-        ${Data.canEditCampaign() ? `
+        ${isAdmin ? `
           <div style="display:flex;justify-content:flex-end;gap:6px;margin-bottom:8px">
             <span class="reveal-toggle ${n.revealed === false ? 'hidden' : 'revealed'}"
                   data-faction-npc-toggle data-faction-id="${f.id}" data-npc-idx="${idx}">
@@ -249,7 +280,9 @@ const FactionsView = (() => {
           </div>
         ` : ''}
         <h4>${escapeHtml(n.name)}</h4>
-        <p>${escapeHtml(n.body)}</p>
+        ${n.role ? `<div class="dossier-role">${escapeHtml(n.role)}</div>` : ''}
+        ${n.quote ? `<div class="dossier-quote">"${escapeHtml(n.quote)}"</div>` : ''}
+        ${inner}
       </div>
     `;
   }
