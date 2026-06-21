@@ -52,7 +52,7 @@
         {
           "label": "Enforcer Corps",
           "value": "High-risk tactical response, raids, forced extractions, memory seizure operations.",
-          "revealed": true
+          "revealed": false
         },
         {
           "label": "Cognitive Health Division",
