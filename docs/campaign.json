@@ -5340,7 +5340,7 @@
       "file": "redwire-terminal.html",
       "desc": "A BCI intelligence index on the RedWire Cartel's data-smuggling operations. Cross-referenced contraband routes and contacts.",
       "accent": "#ff5a5f",
-      "locked": true,
+      "locked": false,
       "type": "html"
     },
     {
