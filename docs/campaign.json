@@ -62,7 +62,7 @@
         {
           "label": "Public Trust Office",
           "value": "Propaganda, citizen advisories, controlled crisis narratives.",
-          "revealed": true
+          "revealed": false
         }
       ],
       "npcs": [
