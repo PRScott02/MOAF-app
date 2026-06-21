@@ -5310,7 +5310,7 @@
       "file": "mozzie-cricket-message.html",
       "desc": "A second legacy-relay transmission captured on the same node. Origin obscured. Addressed to Mozzie Farouk.",
       "accent": "#7fffc5",
-      "locked": true,
+      "locked": false,
       "type": "html"
     },
     {
