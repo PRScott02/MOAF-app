@@ -5451,7 +5451,7 @@
       "desc": "A BCI incident report on a violent cognitive threat in the Market Belt. Arasaka intervention. 17 BCI killed, 83 affected.",
       "accent": "#7fffc5",
       "type": "image",
-      "locked": true
+      "locked": false
     },
     {
       "id": "pi-office-dossier",
@@ -5461,7 +5461,7 @@
       "desc": "Municipal property record for Meridian Licensed Inquiry Office 47-B, Old Transit Court, Platform Block C-17.",
       "accent": "#ffd27d",
       "type": "image",
-      "locked": true
+      "locked": false
     },
     {
       "id": "colton-email",
