@@ -5300,7 +5300,7 @@
       "file": "ash-see-the-doc.html",
       "desc": "An intercepted message routed through legacy analog relay hardware. Acoustic output enabled. Addressed to Ash.",
       "accent": "#7fffc5",
-      "locked": true,
+      "locked": false,
       "type": "html"
     },
     {
