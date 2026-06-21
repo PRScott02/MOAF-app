@@ -5421,7 +5421,7 @@
       "desc": "Surveillance capture of a BCI Enforcer in full armor. Red optics. \"Thought is theft.\"",
       "accent": "#ff4267",
       "type": "image",
-      "locked": true
+      "locked": false
     },
     {
       "id": "bci-patrol-captain",
