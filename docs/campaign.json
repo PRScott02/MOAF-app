@@ -5320,7 +5320,7 @@
       "file": "bci-memory-shard.html",
       "desc": "Unauthorized terminal session. Spoofed credentials loaded, signal masked through an idle proxy chain. Memory shard recovery in progress.",
       "accent": "#ff4267",
-      "locked": true,
+      "locked": false,
       "type": "html"
     },
     {
