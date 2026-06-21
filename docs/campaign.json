@@ -5461,7 +5461,7 @@
       "desc": "Municipal property record for Meridian Licensed Inquiry Office 47-B, Old Transit Court, Platform Block C-17.",
       "accent": "#ffd27d",
       "type": "image",
-      "locked": true
+      "locked": false
     },
     {
       "id": "colton-email",
@@ -5471,7 +5471,7 @@
       "desc": "An anonymous message to Colton inviting him to the Gray Market. \"There's more going on than you've been told. Bring your friends.\"",
       "accent": "#7fffc5",
       "type": "image",
-      "locked": true
+      "locked": false
     },
     {
       "id": "mozzie-arasaka-message",
