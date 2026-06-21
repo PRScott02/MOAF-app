@@ -5411,7 +5411,7 @@
       "desc": "Official licensing records for Ash Calder, Colton Cross, and Mozzie Farouk. Photos redacted, identities sealed.",
       "accent": "#74e8ff",
       "type": "image",
-      "locked": true
+      "locked": false
     },
     {
       "id": "bci-enforcer",
