@@ -5391,7 +5391,7 @@
       "desc": "A partially decrypted message from \"Ember\" of the Choir. A meet in the Runoff — bring the shard, come alone.",
       "accent": "#59e3ff",
       "type": "image",
-      "locked": true
+      "locked": false
     },
     {
       "id": "bci-faction-index",
