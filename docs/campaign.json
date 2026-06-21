@@ -5501,7 +5501,7 @@
       "desc": "A BCI forensic report showing a 61% partial DNA match to H. Ruiz, recovered from the Market Belt. Flagged for review.",
       "accent": "#7fffc5",
       "type": "image",
-      "locked": true
+      "locked": false
     },
     {
       "id": "nyx-bellweather-art",
