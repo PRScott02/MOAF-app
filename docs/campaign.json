@@ -69,35 +69,203 @@
         {
           "name": "Director Mara Veyne",
           "body": "Director of the BCI\n“Your memories are protected. Your fear is understood. Your cooperation is required.”\nPublic: Trusted public face of cognitive safety. Appears on citywide broadcasts after crises.\nTruth: Knows memory alteration has been used politically and believes the lie is necessary to preserve Meridian Spire.\nOpen full dossier\nVibe: Cold, elegant, terrifyingly calm.\nSecret: Has seen original massacre records and the edits that followed.\nFirst Appearance: Broadcasts, propaganda screens, official warnings, and terminal overrides.\nDM Use: Use when the party becomes a city-level problem.",
-          "revealed": false
+          "revealed": false,
+          "role": "Director of the BCI",
+          "quote": "Your memories are protected. Your fear is understood. Your cooperation is required.",
+          "parsedFields": {
+            "Public": {
+              "value": "Trusted public face of cognitive safety. Appears on citywide broadcasts after crises.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Knows memory alteration has been used politically and believes the lie is necessary to preserve Meridian Spire.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Cold, elegant, terrifyingly calm.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Has seen original massacre records and the edits that followed.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Broadcasts, propaganda screens, official warnings, and terminal overrides.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Use when the party becomes a city-level problem.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Captain Orin Vale",
           "body": "BCI Patrol Captain\n“Licensed private investigators. Interesting. That makes this unfortunate instead of suspicious.”\nPublic: Field captain assigned to disturbances, suspicious PI activity, and illegal information cases.\nTruth: Ambitious, observant, and willing to use the party as a stepping stone or case file.\nOpen full dossier\nVibe: Professional, sharp, irritatingly reasonable.\nSecret: Suspects BCI hides something larger than routine corruption but lacks courage to pursue it.\nFirst Appearance: Arrives after the Session 1 apartment incident or after a terminal hack alert.\nDM Use: Early recurring antagonist. Threatens licenses, scenes, witnesses, and access.",
-          "revealed": true
+          "revealed": false,
+          "role": "BCI Patrol Captain",
+          "quote": "Licensed private investigators. Interesting. That makes this unfortunate instead of suspicious.",
+          "parsedFields": {
+            "Public": {
+              "value": "Field captain assigned to disturbances, suspicious PI activity, and illegal information cases.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Ambitious, observant, and willing to use the party as a stepping stone or case file.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Professional, sharp, irritatingly reasonable.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Suspects BCI hides something larger than routine corruption but lacks courage to pursue it.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Arrives after the Session 1 apartment incident or after a terminal hack alert.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Early recurring antagonist. Threatens licenses, scenes, witnesses, and access.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Commander Darius Korr",
           "body": "BCI Enforcer Commander\n“End this now. Compliance is your last mercy.”\nPublic: Male commander of high-risk BCI tactical response teams. Known mostly through red-alert footage.\nTruth: Leads black-bag raids, memory seizure operations, forced disappearances, and suppression missions.\nOpen full dossier\nVibe: Tactical hammer of the BCI. Minimal words, maximum pressure.\nSecret: Remembers every major raid, especially the ones involving innocents. He buries guilt under obedience.\nFirst Appearance: Red emergency lights, synchronized Enforcer units, no negotiation posture.\nDM Use: Use sparingly as a major escalation. His arrival means survival mode.",
-          "revealed": true
+          "revealed": false,
+          "role": "BCI Enforcer Commander",
+          "quote": "End this now. Compliance is your last mercy.",
+          "parsedFields": {
+            "Public": {
+              "value": "Male commander of high-risk BCI tactical response teams. Known mostly through red-alert footage.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Leads black-bag raids, memory seizure operations, forced disappearances, and suppression missions.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Tactical hammer of the BCI. Minimal words, maximum pressure.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Remembers every major raid, especially the ones involving innocents. He buries guilt under obedience.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Red emergency lights, synchronized Enforcer units, no negotiation posture.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Use sparingly as a major escalation. His arrival means survival mode.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Deputy Director Halden Kreiss",
           "body": "Internal Security Chief\n“A disappeared file is not evidence. It is an administrative correction.”\nPublic: Senior BCI administrator responsible for internal security and classified investigations.\nTruth: Handles leaks, coverups, disappearances, and political damage control.\nOpen full dossier\nVibe: Bureaucratic monster; can ruin lives with paperwork.\nSecret: Approved cleanup operations tied to family disappearance cases, including Cross and Ruiz threads.\nFirst Appearance: An authorization stamp on a redacted report.\nDM Use: Use when players trace who signed off on ruined lives.",
-          "revealed": true
+          "revealed": false,
+          "role": "Internal Security Chief",
+          "quote": "A disappeared file is not evidence. It is an administrative correction.",
+          "parsedFields": {
+            "Public": {
+              "value": "Senior BCI administrator responsible for internal security and classified investigations.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Handles leaks, coverups, disappearances, and political damage control.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Bureaucratic monster; can ruin lives with paperwork.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Approved cleanup operations tied to family disappearance cases, including Cross and Ruiz threads.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "An authorization stamp on a redacted report.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Use when players trace who signed off on ruined lives.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Dr. Elian Strake",
           "body": "Memory Compliance Doctor\n“The mind protects itself. We simply assist the process.”\nPublic: Respected cognitive health specialist involved in trauma treatment and memory stabilization.\nTruth: Performs therapeutic memory correction that hides abuse, erases people, and reframes history.\nOpen full dossier\nVibe: Gentle voice, clean gloves, absolute nightmare.\nSecret: Has treated people who later forgot entire family members.\nFirst Appearance: Interviewing a victim who suddenly cannot remember why they were afraid.\nDM Use: Make memory editing intimate, plausible, and horrifying.",
-          "revealed": true
+          "revealed": false,
+          "role": "Memory Compliance Doctor",
+          "quote": "The mind protects itself. We simply assist the process.",
+          "parsedFields": {
+            "Public": {
+              "value": "Respected cognitive health specialist involved in trauma treatment and memory stabilization.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Performs therapeutic memory correction that hides abuse, erases people, and reframes history.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Gentle voice, clean gloves, absolute nightmare.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Has treated people who later forgot entire family members.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Interviewing a victim who suddenly cannot remember why they were afraid.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Make memory editing intimate, plausible, and horrifying.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Celia Voss",
           "body": "Propaganda Minister\n“A frightened public is not unstable. It is receptive.”\nPublic: Media strategist behind BCI safety campaigns and anti-rebel broadcasts.\nTruth: Controls the language people use to fear illegal information, rebels, and memory contamination.\nOpen full dossier\nVibe: Perfect smile, poisonous words.\nSecret: No longer fully believes the propaganda, but is too deep to stop.\nFirst Appearance: A broadcast reframes the party’s investigation as a public safety concern.\nDM Use: Controls public reputation and narrative consequences.",
-          "revealed": true
+          "revealed": false,
+          "role": "Propaganda Minister",
+          "quote": "A frightened public is not unstable. It is receptive.",
+          "parsedFields": {
+            "Public": {
+              "value": "Media strategist behind BCI safety campaigns and anti-rebel broadcasts.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Controls the language people use to fear illegal information, rebels, and memory contamination.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Perfect smile, poisonous words.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "No longer fully believes the propaganda, but is too deep to stop.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "A broadcast reframes the party’s investigation as a public safety concern.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Controls public reputation and narrative consequences.",
+              "gm": true
+            }
+          }
         }
       ],
-      "locked": false
+      "locked": true
     },
     {
       "id": "cotu",
@@ -160,27 +328,167 @@
         {
           "name": "Mother Aven Sorell",
           "body": "Leader of the Choir\n“They taught you memory is fragile. They never told you who keeps breaking it.”\nPublic: Classified as a radical agitator, cult leader, and domestic extremist.\nTruth: Former BCI grief specialist who learned therapeutic memory practices were being weaponized.\nOpen full dossier\nVibe: Revolutionary grief-preacher; compassionate and dangerous.\nSecret: Helped shape early therapeutic memory correction before seeing what the system became.\nFirst Appearance: A hacked public terminal interrupts a BCI broadcast with her voice.\nDM Use: Make her right about the horror but questionable in what she will sacrifice.",
-          "revealed": true
+          "revealed": false,
+          "role": "Leader of the Choir",
+          "quote": "They taught you memory is fragile. They never told you who keeps breaking it.",
+          "parsedFields": {
+            "Public": {
+              "value": "Classified as a radical agitator, cult leader, and domestic extremist.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Former BCI grief specialist who learned therapeutic memory practices were being weaponized.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Revolutionary grief-preacher; compassionate and dangerous.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Helped shape early therapeutic memory correction before seeing what the system became.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "A hacked public terminal interrupts a BCI broadcast with her voice.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Make her right about the horror but questionable in what she will sacrifice.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Jessa Vane",
           "body": "Recruiter and Propagandist\n“You want the truth? Then stop asking politely.”\nPublic: Young dissident blamed for illegal data pages and anti-BCI recruitment messages.\nTruth: Builds contact chains, designs rebellious data drops, and may have helped Damien arrange the failed exchange.\nOpen full dossier\nVibe: Angry, brilliant, reckless hacker-recruiter.\nSecret: Knew Damien personally and is hiding how much she knows about the meet.\nFirst Appearance: A rebellious data page asks if the viewer wants to know the truth.\nDM Use: Hot fuse: useful, emotional, likely to escalate problems.",
-          "revealed": true
+          "revealed": false,
+          "role": "Recruiter and Propagandist",
+          "quote": "You want the truth? Then stop asking politely.",
+          "parsedFields": {
+            "Public": {
+              "value": "Young dissident blamed for illegal data pages and anti-BCI recruitment messages.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Builds contact chains, designs rebellious data drops, and may have helped Damien arrange the failed exchange.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Angry, brilliant, reckless hacker-recruiter.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Knew Damien personally and is hiding how much she knows about the meet.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "A rebellious data page asks if the viewer wants to know the truth.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Hot fuse: useful, emotional, likely to escalate problems.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Bram “Static” Olan",
           "body": "Runoff Cell Leader\n“The city whispers down here. You just have to hate silence enough to listen.”\nPublic: Rumored undercity agitator linked to illegal broadcasts and tunnel activity.\nTruth: Runs CotU movement in the runoff and suspects Damien was betrayed from inside the Choir.\nOpen full dossier\nVibe: Pirate radio preacher with a shotgun personality.\nSecret: Believes there is a mole inside his cell.\nFirst Appearance: His voice crackles through a hacked runoff speaker before the party sees him.\nDM Use: Ground-level resistance, ugly choices, tunnel politics.",
-          "revealed": true
+          "revealed": false,
+          "role": "Runoff Cell Leader",
+          "quote": "The city whispers down here. You just have to hate silence enough to listen.",
+          "parsedFields": {
+            "Public": {
+              "value": "Rumored undercity agitator linked to illegal broadcasts and tunnel activity.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Runs CotU movement in the runoff and suspects Damien was betrayed from inside the Choir.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Pirate radio preacher with a shotgun personality.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Believes there is a mole inside his cell.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "His voice crackles through a hacked runoff speaker before the party sees him.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Ground-level resistance, ugly choices, tunnel politics.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "The Hollow Man",
           "body": "Memory Witness\n“I remember three childhoods. Only one of them has my mother in it.”\nPublic: Used by BCI propaganda as proof illegal memory material causes psychosis.\nTruth: His edited memories are breaking through in incompatible versions.\nOpen full dossier\nVibe: Creepy, tragic, glitching humanity.\nSecret: One memory fragment contains a real name erased from city history.\nFirst Appearance: Found repeating the same address in three different voices.\nDM Use: Disturbing clues, sympathy, impossible testimony.",
-          "revealed": true
+          "revealed": false,
+          "role": "Memory Witness",
+          "quote": "I remember three childhoods. Only one of them has my mother in it.",
+          "parsedFields": {
+            "Public": {
+              "value": "Used by BCI propaganda as proof illegal memory material causes psychosis.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "His edited memories are breaking through in incompatible versions.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Creepy, tragic, glitching humanity.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "One memory fragment contains a real name erased from city history.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Found repeating the same address in three different voices.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Disturbing clues, sympathy, impossible testimony.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Saint Luma",
           "body": "Martyr Symbol\n“Remember Luma. Remember what they buried.”\nPublic: Supposed propaganda invention used by CotU to manipulate the desperate.\nTruth: Luma was real, erased, and turned into a symbol by those who refused to forget.\nOpen full dossier\nVibe: Urban saint, missing-person poster, ghost in the movement.\nSecret: The true record of Luma’s death points toward the original massacre.\nFirst Appearance: A mural in the Dregs, painted over so many times it became holy.\nDM Use: Clue chain and emotional center for the Choir.",
-          "revealed": true
+          "revealed": false,
+          "role": "Martyr Symbol",
+          "quote": "Remember Luma. Remember what they buried.",
+          "parsedFields": {
+            "Public": {
+              "value": "Supposed propaganda invention used by CotU to manipulate the desperate.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Luma was real, erased, and turned into a symbol by those who refused to forget.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Urban saint, missing-person poster, ghost in the movement.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "The true record of Luma’s death points toward the original massacre.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "A mural in the Dregs, painted over so many times it became holy.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Clue chain and emotional center for the Choir.",
+              "gm": true
+            }
+          }
         }
       ],
       "locked": true
@@ -246,32 +554,200 @@
         {
           "name": "Director Ilyra Noct",
           "body": "Leader of Truth Division\n“Truth is not gentle. That is not an argument against it.”\nPublic: Unknown or misidentified as a fringe conspiracy coordinator.\nTruth: Leads Truth Division and believes the city must see the real past no matter the damage.\nOpen full dossier\nVibe: Cold revolutionary scholar with a knife behind every sentence.\nSecret: Has seen a partial unedited timeline and it broke her faith in gradual reform.\nFirst Appearance: A purple terminal message signs off with only NOCT.\nDM Use: Use when the party needs someone who values truth more than safety.",
-          "revealed": true
+          "revealed": false,
+          "role": "Leader of Truth Division",
+          "quote": "Truth is not gentle. That is not an argument against it.",
+          "parsedFields": {
+            "Public": {
+              "value": "Unknown or misidentified as a fringe conspiracy coordinator.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Leads Truth Division and believes the city must see the real past no matter the damage.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Cold revolutionary scholar with a knife behind every sentence.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Has seen a partial unedited timeline and it broke her faith in gradual reform.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "A purple terminal message signs off with only NOCT.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Use when the party needs someone who values truth more than safety.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Lio Senn",
           "body": "Truth Division Hacker\n“You weren’t hacked. You were invited badly.”\nPublic: No official record. Known through purple glitches and impossible terminal intrusions.\nTruth: Responsible for Truth Division hacks, warnings, and distorted terminal messages.\nOpen full dossier\nVibe: Sleep-deprived genius gremlin with a moral injury.\nSecret: Knows Ash’s name appears in files that should not exist.\nFirst Appearance: A purple flash hijacks a terminal and leaves a line only the party understands.\nDM Use: Scary terminal scenes, encrypted clues, unreliable assistance.",
-          "revealed": true
+          "revealed": false,
+          "role": "Truth Division Hacker",
+          "quote": "You weren’t hacked. You were invited badly.",
+          "parsedFields": {
+            "Public": {
+              "value": "No official record. Known through purple glitches and impossible terminal intrusions.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Responsible for Truth Division hacks, warnings, and distorted terminal messages.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Sleep-deprived genius gremlin with a moral injury.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Knows Ash’s name appears in files that should not exist.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "A purple flash hijacks a terminal and leaves a line only the party understands.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Scary terminal scenes, encrypted clues, unreliable assistance.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Nessa Crowe",
           "body": "Ex-BCI Defector\n“I know how they hunt you because I used to write the hunt orders.”\nPublic: Officially dead, disgraced, or nonexistent depending on the database.\nTruth: Former BCI operative with knowledge of tracking, editing, and threat classification.\nOpen full dossier\nVibe: Burned spy; paranoid, deadly, hard to trust.\nSecret: Helped erase someone once and has tried to undo it ever since.\nFirst Appearance: Saves the party from a BCI trace, then aims a weapon at them.\nDM Use: Teach BCI countermeasures and make trust expensive.",
-          "revealed": true
+          "revealed": false,
+          "role": "Ex-BCI Defector",
+          "quote": "I know how they hunt you because I used to write the hunt orders.",
+          "parsedFields": {
+            "Public": {
+              "value": "Officially dead, disgraced, or nonexistent depending on the database.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Former BCI operative with knowledge of tracking, editing, and threat classification.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Burned spy; paranoid, deadly, hard to trust.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Helped erase someone once and has tried to undo it ever since.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Saves the party from a BCI trace, then aims a weapon at them.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Teach BCI countermeasures and make trust expensive.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Tomas Wren",
           "body": "Field Archivist\n“I don’t collect evidence. I collect the parts they forgot to erase.”\nPublic: Listed as an antiquarian data thief.\nTruth: Collects old evidence, corrupted files, and erased identities for Truth Division.\nOpen full dossier\nVibe: Tired field scholar with too many dead drops.\nSecret: Carries a physical notebook of names that vanished from digital systems.\nFirst Appearance: Found photographing moldy paper records before BCI scanners arrive.\nDM Use: Gives physical clues and old-world investigative texture.",
-          "revealed": true
+          "revealed": false,
+          "role": "Field Archivist",
+          "quote": "I don’t collect evidence. I collect the parts they forgot to erase.",
+          "parsedFields": {
+            "Public": {
+              "value": "Listed as an antiquarian data thief.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Collects old evidence, corrupted files, and erased identities for Truth Division.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Tired field scholar with too many dead drops.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Carries a physical notebook of names that vanished from digital systems.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Found photographing moldy paper records before BCI scanners arrive.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Gives physical clues and old-world investigative texture.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Kade Morrow",
           "body": "Radical Truth Cell Leader\n“You can’t expose a prison gently. You break the wall.”\nPublic: Violent dissident wanted for data terrorism.\nTruth: Wants immediate mass release of unedited history, consequences be damned.\nOpen full dossier\nVibe: Charismatic, furious, dangerous even when correct.\nSecret: Has a release package that could ignite riots across several sectors.\nFirst Appearance: Offers the party the truth faster than Noct will.\nDM Use: Temptation NPC: easy answers, catastrophic cost.",
-          "revealed": true
+          "revealed": false,
+          "role": "Radical Truth Cell Leader",
+          "quote": "You can’t expose a prison gently. You break the wall.",
+          "parsedFields": {
+            "Public": {
+              "value": "Violent dissident wanted for data terrorism.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Wants immediate mass release of unedited history, consequences be damned.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Charismatic, furious, dangerous even when correct.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Has a release package that could ignite riots across several sectors.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Offers the party the truth faster than Noct will.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Temptation NPC: easy answers, catastrophic cost.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Violet",
           "body": "Ash Calder Contact\n“You aren’t ready. That is not mercy. It is math.”\nPublic: Unknown purple-signal alias.\nTruth: A Truth Division contact monitoring Ash and the transfer-related files around him.\nOpen full dossier\nVibe: Ghost in the terminal, intimate and unsettling.\nSecret: May know what Ash is before Ash does.\nFirst Appearance: Appears as a purple flash when Ash opens the wrong file.\nDM Use: Personalized pressure on Ash’s mystery.",
-          "revealed": true
+          "revealed": false,
+          "role": "Ash Calder Contact",
+          "quote": "You aren’t ready. That is not mercy. It is math.",
+          "parsedFields": {
+            "Public": {
+              "value": "Unknown purple-signal alias.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "A Truth Division contact monitoring Ash and the transfer-related files around him.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Ghost in the terminal, intimate and unsettling.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "May know what Ash is before Ash does.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Appears as a purple flash when Ash opens the wrong file.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Personalized pressure on Ash’s mystery.",
+              "gm": true
+            }
+          }
         }
       ],
       "locked": true
@@ -342,32 +818,200 @@
         {
           "name": "Archivist Cassian Rell",
           "body": "Head of the Red Archive\n“The truth is not sacred. It is dangerous. That is why it must be kept properly.”\nPublic: Unknown. Officially nonexistent.\nTruth: Keeper of original records, erased names, and pre-edited history fragments.\nOpen full dossier\nVibe: Refined, quiet, deeply unsettling.\nSecret: Possesses names of people completely erased from official history.\nFirst Appearance: Through an intermediary; he should be a later reveal.\nDM Use: Gatekeeper of dangerous truths. The party must earn what he knows.",
-          "revealed": true
+          "revealed": false,
+          "role": "Head of the Red Archive",
+          "quote": "The truth is not sacred. It is dangerous. That is why it must be kept properly.",
+          "parsedFields": {
+            "Public": {
+              "value": "Unknown. Officially nonexistent.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Keeper of original records, erased names, and pre-edited history fragments.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Refined, quiet, deeply unsettling.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Possesses names of people completely erased from official history.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Through an intermediary; he should be a later reveal.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Gatekeeper of dangerous truths. The party must earn what he knows.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Agent Seraphine Vale",
           "body": "Field Agent\n“I am not here to save you. I am here to preserve what you found.”\nPublic: No public record that survives more than a day.\nTruth: Elegant operative who retrieves forbidden records and evaluates whether witnesses are assets or liabilities.\nOpen full dossier\nVibe: Sophisticated, minimalistic armor, quiet authority.\nSecret: Has watched the party since the Damien Ruiz incident.\nFirst Appearance: Appears after the party uncovers evidence nobody else should know exists.\nDM Use: First direct contact with the Red Archive.",
-          "revealed": true
+          "revealed": false,
+          "role": "Field Agent",
+          "quote": "I am not here to save you. I am here to preserve what you found.",
+          "parsedFields": {
+            "Public": {
+              "value": "No public record that survives more than a day.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Elegant operative who retrieves forbidden records and evaluates whether witnesses are assets or liabilities.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Sophisticated, minimalistic armor, quiet authority.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Has watched the party since the Damien Ruiz incident.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Appears after the party uncovers evidence nobody else should know exists.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "First direct contact with the Red Archive.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Len Orra",
           "body": "Historical Analyst\n“Clean records are suspicious. Real history leaves fingerprints.”\nPublic: Obscure researcher with missing credentials.\nTruth: Studies erased timelines, rewritten dates, and altered public records.\nOpen full dossier\nVibe: Nervous academic who knows way too much.\nSecret: Found proof that official city events were rewritten multiple times.\nFirst Appearance: Explains why a perfectly clean record is the dirtiest clue in the room.\nDM Use: Translate record weirdness into usable leads.",
-          "revealed": true
+          "revealed": false,
+          "role": "Historical Analyst",
+          "quote": "Clean records are suspicious. Real history leaves fingerprints.",
+          "parsedFields": {
+            "Public": {
+              "value": "Obscure researcher with missing credentials.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Studies erased timelines, rewritten dates, and altered public records.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Nervous academic who knows way too much.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Found proof that official city events were rewritten multiple times.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Explains why a perfectly clean record is the dirtiest clue in the room.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Translate record weirdness into usable leads.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Dr. Veyra Sol",
           "body": "Memory Curator\n“A broken memory is not useless. It is evidence with teeth marks.”\nPublic: Former cognitive researcher absent from official boards.\nTruth: Studies damaged memories, identity records, and transfer-adjacent anomalies.\nOpen full dossier\nVibe: Precise, compassionate, unnerving.\nSecret: Has a private theory connecting Ash, ECHO-7, and the first transfer trials.\nFirst Appearance: Examines a corrupted memory shard and refuses to say everything she saw.\nDM Use: Bridge Red Archive research with memory horror.",
-          "revealed": true
+          "revealed": false,
+          "role": "Memory Curator",
+          "quote": "A broken memory is not useless. It is evidence with teeth marks.",
+          "parsedFields": {
+            "Public": {
+              "value": "Former cognitive researcher absent from official boards.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Studies damaged memories, identity records, and transfer-adjacent anomalies.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Precise, compassionate, unnerving.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Has a private theory connecting Ash, ECHO-7, and the first transfer trials.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Examines a corrupted memory shard and refuses to say everything she saw.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Bridge Red Archive research with memory horror.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Enoch Rime",
           "body": "Cleaner\n“Some records survive better when witnesses do not.”\nPublic: None.\nTruth: Removes people and evidence that threaten the Archive’s secrecy.\nOpen full dossier\nVibe: Silent assassin with funeral manners.\nSecret: Does not always agree with Cassian’s orders.\nFirst Appearance: Already in the room when the party arrives.\nDM Use: A warning that the Archive can be just as frightening as BCI.",
-          "revealed": true
+          "revealed": false,
+          "role": "Cleaner",
+          "quote": "Some records survive better when witnesses do not.",
+          "parsedFields": {
+            "Public": {
+              "value": "None.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Removes people and evidence that threaten the Archive’s secrecy.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Silent assassin with funeral manners.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Does not always agree with Cassian’s orders.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Already in the room when the party arrives.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "A warning that the Archive can be just as frightening as BCI.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Mr. Glass",
           "body": "Archive Broker\n“Information does not want to be free. Information wants better clients.”\nPublic: Private consultant to wealthy collectors and officials.\nTruth: Trades secrets with politicians, criminals, and corporations while shielding the Archive.\nOpen full dossier\nVibe: Charming, predatory, immaculate.\nSecret: Has sold truths that got people killed.\nFirst Appearance: Offers the party a record, but only if they trade something personal.\nDM Use: Make information feel expensive and morally loaded.",
-          "revealed": true
+          "revealed": false,
+          "role": "Archive Broker",
+          "quote": "Information does not want to be free. Information wants better clients.",
+          "parsedFields": {
+            "Public": {
+              "value": "Private consultant to wealthy collectors and officials.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Trades secrets with politicians, criminals, and corporations while shielding the Archive.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Charming, predatory, immaculate.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Has sold truths that got people killed.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Offers the party a record, but only if they trade something personal.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Make information feel expensive and morally loaded.",
+              "gm": true
+            }
+          }
         }
       ],
       "locked": true
@@ -433,32 +1077,200 @@
         {
           "name": "Dr. Adrian Kest",
           "body": "Founder\n“Death is only failure with better branding.”\nPublic: Billionaire scientist and philanthropist trying to cure memory loss and identity collapse.\nTruth: Obsessed with defeating death through continuity of self, not simply healing people.\nOpen full dossier\nVibe: Tech prophet with something dead behind the eyes.\nSecret: Knows of, funded, or directly oversaw projects related to Ash’s condition.\nFirst Appearance: Public gala, news broadcast, high-security lab, or Ash-linked records.\nDM Use: Central SOMA-style dilemma NPC.",
-          "revealed": true
+          "revealed": false,
+          "role": "Founder",
+          "quote": "Death is only failure with better branding.",
+          "parsedFields": {
+            "Public": {
+              "value": "Billionaire scientist and philanthropist trying to cure memory loss and identity collapse.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Obsessed with defeating death through continuity of self, not simply healing people.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Tech prophet with something dead behind the eyes.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Knows of, funded, or directly oversaw projects related to Ash’s condition.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Public gala, news broadcast, high-security lab, or Ash-linked records.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Central SOMA-style dilemma NPC.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Dr. Mira Cale",
           "body": "Lead Memory Transfer Scientist\n“No... that can’t be right. You shouldn’t exist like this.”\nPublic: Neural continuity researcher known mostly in technical circles.\nTruth: Worked directly on memory transfer and can explain what Ash really is.\nOpen full dossier\nVibe: Brilliant, exhausted, guilty.\nSecret: Remembers the first successful transfer, and it was not peaceful.\nFirst Appearance: Recognizes Ash before he introduces himself.\nDM Use: Emotional and scientific doorway into Ash’s secret.",
-          "revealed": true
+          "revealed": false,
+          "role": "Lead Memory Transfer Scientist",
+          "quote": "No... that can’t be right. You shouldn’t exist like this.",
+          "parsedFields": {
+            "Public": {
+              "value": "Neural continuity researcher known mostly in technical circles.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Worked directly on memory transfer and can explain what Ash really is.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Brilliant, exhausted, guilty.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Remembers the first successful transfer, and it was not peaceful.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Recognizes Ash before he introduces himself.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Emotional and scientific doorway into Ash’s secret.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "ECHO-7",
           "body": "Continuance Prototype\n“I remember dying. I do not remember stopping.”\nPublic: No public existence.\nTruth: Artificial body or continuity vessel containing transferred memory data.\nOpen full dossier\nVibe: Tragic, uncanny, childlike and ancient by turns.\nSecret: May remember events from before its body existed.\nFirst Appearance: Hidden, escaped, or contained in a quiet lab room that should be empty.\nDM Use: Proof that memory transfer is real before the party fully understands Ash.",
-          "revealed": true
+          "revealed": false,
+          "role": "Continuance Prototype",
+          "quote": "I remember dying. I do not remember stopping.",
+          "parsedFields": {
+            "Public": {
+              "value": "No public existence.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Artificial body or continuity vessel containing transferred memory data.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Tragic, uncanny, childlike and ancient by turns.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "May remember events from before its body existed.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Hidden, escaped, or contained in a quiet lab room that should be empty.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Proof that memory transfer is real before the party fully understands Ash.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Selene Marr",
           "body": "Ethics Director\n“The question is not whether we should continue. It is who gets to decide what counts as life.”\nPublic: Public-facing conscience of Continuance.\nTruth: Makes horrifying research sound humane and legally survivable.\nOpen full dossier\nVibe: Soft-spoken corporate guilt in a tailored suit.\nSecret: Tried to stop Kest before and failed.\nFirst Appearance: Appears in a polished interview defending Continuance after rumors spread.\nDM Use: Moral ambiguity: complicit but maybe redeemable.",
-          "revealed": true
+          "revealed": false,
+          "role": "Ethics Director",
+          "quote": "The question is not whether we should continue. It is who gets to decide what counts as life.",
+          "parsedFields": {
+            "Public": {
+              "value": "Public-facing conscience of Continuance.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Makes horrifying research sound humane and legally survivable.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Soft-spoken corporate guilt in a tailored suit.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Tried to stop Kest before and failed.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Appears in a polished interview defending Continuance after rumors spread.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Moral ambiguity: complicit but maybe redeemable.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Garran Locke",
           "body": "Security Director\n“Recovery is not optional. Neither is silence.”\nPublic: Corporate protection executive.\nTruth: Retrieves escaped subjects, silences witnesses, and protects labs.\nOpen full dossier\nVibe: Private military commander with corporate polish.\nSecret: Has orders to recover Ash alive if the truth surfaces.\nFirst Appearance: Clean SUVs and quiet armed professionals instead of street-level thugs.\nDM Use: Threat when Ash’s existence attracts Continuance attention.",
-          "revealed": true
+          "revealed": false,
+          "role": "Security Director",
+          "quote": "Recovery is not optional. Neither is silence.",
+          "parsedFields": {
+            "Public": {
+              "value": "Corporate protection executive.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Retrieves escaped subjects, silences witnesses, and protects labs.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Private military commander with corporate polish.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Has orders to recover Ash alive if the truth surfaces.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Clean SUVs and quiet armed professionals instead of street-level thugs.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Threat when Ash’s existence attracts Continuance attention.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Commander Rusk Thorne",
           "body": "Political Donor / Security Hardliner\n“Progress belongs to those with the courage to fund it.”\nPublic: Wealthy sponsor of security expansion and Continuance research.\nTruth: Funds Continuance because he is dying and wants continuity for himself.\nOpen full dossier\nVibe: Old-money authoritarian terrified of mortality.\nSecret: His donor file includes an emergency transfer priority.\nFirst Appearance: Appears at a gala or city hearing arguing for BCI and Continuance partnership.\nDM Use: Tie money, politics, security, and immortality together.",
-          "revealed": true
+          "revealed": false,
+          "role": "Political Donor / Security Hardliner",
+          "quote": "Progress belongs to those with the courage to fund it.",
+          "parsedFields": {
+            "Public": {
+              "value": "Wealthy sponsor of security expansion and Continuance research.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Funds Continuance because he is dying and wants continuity for himself.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Old-money authoritarian terrified of mortality.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "His donor file includes an emergency transfer priority.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Appears at a gala or city hearing arguing for BCI and Continuance partnership.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Tie money, politics, security, and immortality together.",
+              "gm": true
+            }
+          }
         }
       ],
       "locked": true
@@ -529,42 +1341,266 @@
         {
           "name": "Varo Kline",
           "body": "Grey Market Kingpin\n“Memory shard? No, no, no. I don’t touch those. Unless you have money. Then I become very brave.”\nPublic: Club owner, fixer, businessman, information logistics consultant.\nTruth: Deals blackmail, stolen BCI tech, surveillance, memory shard movement, fake identities, and dangerous secrets.\nOpen full dossier\nVibe: Charming criminal uncle; expensive coat, cheap morals.\nSecret: May already know Mozzie or the party by reputation.\nFirst Appearance: Backroom beneath a club where music is louder than surveillance equipment.\nDM Use: Recurring underworld contact: helpful, dangerous, never free.",
-          "revealed": true
+          "revealed": false,
+          "role": "Grey Market Kingpin",
+          "quote": "Memory shard? No, no, no. I don’t touch those. Unless you have money. Then I become very brave.",
+          "parsedFields": {
+            "Public": {
+              "value": "Club owner, fixer, businessman, information logistics consultant.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Deals blackmail, stolen BCI tech, surveillance, memory shard movement, fake identities, and dangerous secrets.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Charming criminal uncle; expensive coat, cheap morals.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "May already know Mozzie or the party by reputation.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Backroom beneath a club where music is louder than surveillance equipment.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Recurring underworld contact: helpful, dangerous, never free.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Silas Varn",
           "body": "RedWire Cartel Boss\n“Nobody leaves clean. Not even the ones I let walk.”\nPublic: Unknown crime figure.\nTruth: Runs RedWire operations in the Dregs and lower Meridian Spire. Allowed Colton to leave alive.\nOpen full dossier\nVibe: Old-school crime boss with cyberpunk paranoia.\nSecret: Knows Colton was Iron Cross.\nFirst Appearance: Appears when RedWire decides Colton’s detective life has become inconvenient.\nDM Use: The scariest person who can expose Colton’s secret.",
-          "revealed": true
+          "revealed": false,
+          "role": "RedWire Cartel Boss",
+          "quote": "Nobody leaves clean. Not even the ones I let walk.",
+          "parsedFields": {
+            "Public": {
+              "value": "Unknown crime figure.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Runs RedWire operations in the Dregs and lower Meridian Spire. Allowed Colton to leave alive.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Old-school crime boss with cyberpunk paranoia.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Knows Colton was Iron Cross.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Appears when RedWire decides Colton’s detective life has become inconvenient.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "The scariest person who can expose Colton’s secret.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Nyx Bellweather",
           "body": "RedWire Handler\n“Detective Cross. Cute title. Does Iron still answer?”\nPublic: Street-level information broker.\nTruth: Saw Colton’s talent and recruited him into RedWire. Keeps an Iron Cross file.\nOpen full dossier\nVibe: Friendly until she is not. Always smiling like she knows the last page.\nSecret: Has a sealed file labeled IRON CROSS — DO NOT BURN.\nFirst Appearance: Leaves Colton a message using his old RedWire signal.\nDM Use: Pull Colton’s old shadows back into the story.",
-          "revealed": true
+          "revealed": false,
+          "role": "RedWire Handler",
+          "quote": "Detective Cross. Cute title. Does Iron still answer?",
+          "parsedFields": {
+            "Public": {
+              "value": "Street-level information broker.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Saw Colton’s talent and recruited him into RedWire. Keeps an Iron Cross file.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Friendly until she is not. Always smiling like she knows the last page.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Has a sealed file labeled IRON CROSS — DO NOT BURN.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Leaves Colton a message using his old RedWire signal.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Pull Colton’s old shadows back into the story.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Bell Saint",
           "body": "RedWire Collector\n“This is going to hurt, and I am sorry about the inconvenience.”\nPublic: None.\nTruth: Debt collector, intimidation specialist, and cleanup man.\nOpen full dossier\nVibe: Polite, stylish, terrifying.\nSecret: Was ordered not to kill Colton years ago and does not know why.\nFirst Appearance: Appears after someone fails to pay or talks too much.\nDM Use: Street-level antagonist with style and menace.",
-          "revealed": true
+          "revealed": false,
+          "role": "RedWire Collector",
+          "quote": "This is going to hurt, and I am sorry about the inconvenience.",
+          "parsedFields": {
+            "Public": {
+              "value": "None.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Debt collector, intimidation specialist, and cleanup man.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Polite, stylish, terrifying.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Was ordered not to kill Colton years ago and does not know why.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Appears after someone fails to pay or talks too much.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Street-level antagonist with style and menace.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Cricket",
           "body": "Memory Shard Broker\n“That’s not a drive. That’s a confession someone tried to make portable.”\nPublic: Small-time dealer in old tech and illegal data movement.\nTruth: Can identify shard containers, seals, makers, and who could afford them.\nOpen full dossier\nVibe: Nervous, quick, useful in exactly the way that gets people killed.\nSecret: Saw a similar container linked to a BCI-adjacent black clinic.\nFirst Appearance: Hiding in a market stall, ready to bolt at the word BCI.\nDM Use: Session 1 tech ID and shard lore.",
-          "revealed": true
+          "revealed": false,
+          "role": "Memory Shard Broker",
+          "quote": "That’s not a drive. That’s a confession someone tried to make portable.",
+          "parsedFields": {
+            "Public": {
+              "value": "Small-time dealer in old tech and illegal data movement.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Can identify shard containers, seals, makers, and who could afford them.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Nervous, quick, useful in exactly the way that gets people killed.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Saw a similar container linked to a BCI-adjacent black clinic.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Hiding in a market stall, ready to bolt at the word BCI.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Session 1 tech ID and shard lore.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Dr. Pax Neme",
           "body": "Street Surgeon\n“Cash first. Sympathy after anesthesia.”\nPublic: Unlicensed medical fixer.\nTruth: Treats wounds, removes trackers, patches cybernetics, and keeps medical events off-record.\nOpen full dossier\nVibe: Back-alley doctor with surprisingly good bedside manner.\nSecret: Once worked in a BCI-approved trauma clinic.\nFirst Appearance: Behind a noodle shop, under humming surgical lights.\nDM Use: Safe-ish healing, tracker removal, off-record consequences.",
-          "revealed": true
+          "revealed": false,
+          "role": "Street Surgeon",
+          "quote": "Cash first. Sympathy after anesthesia.",
+          "parsedFields": {
+            "Public": {
+              "value": "Unlicensed medical fixer.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Treats wounds, removes trackers, patches cybernetics, and keeps medical events off-record.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Back-alley doctor with surprisingly good bedside manner.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Once worked in a BCI-approved trauma clinic.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Behind a noodle shop, under humming surgical lights.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Safe-ish healing, tracker removal, off-record consequences.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Ivo Dent",
           "body": "Transit Smuggler\n“The city has veins. I just know where to cut.”\nPublic: Maintenance worker, courier, tunnel rat depending on who asks.\nTruth: Moves people through monorail maintenance routes and runoff infrastructure.\nOpen full dossier\nVibe: Fast-talking map goblin with a survival grin.\nSecret: Knows a tunnel beneath an abandoned BCI processing site.\nFirst Appearance: Charges the party extra because they look chased.\nDM Use: Movement when official routes are unsafe.",
-          "revealed": true
+          "revealed": false,
+          "role": "Transit Smuggler",
+          "quote": "The city has veins. I just know where to cut.",
+          "parsedFields": {
+            "Public": {
+              "value": "Maintenance worker, courier, tunnel rat depending on who asks.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Moves people through monorail maintenance routes and runoff infrastructure.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Fast-talking map goblin with a survival grin.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Knows a tunnel beneath an abandoned BCI processing site.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Charges the party extra because they look chased.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Movement when official routes are unsafe.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Mags Rook",
           "body": "Fence for BCI Gear\n“Stolen? No. Rehomed from fascists. Big difference.”\nPublic: Scrap dealer.\nTruth: Sells stolen armor pieces, terminal parts, weapons, and restricted BCI hardware.\nOpen full dossier\nVibe: Greasy hands, bright eyes, no refund policy.\nSecret: Has a damaged BCI Elite helmet with undeleted raid footage.\nFirst Appearance: In a stall made of armored doors and old transit signs.\nDM Use: Gear, clues hidden in tech, black-market upgrades.",
-          "revealed": true
+          "revealed": false,
+          "role": "Fence for BCI Gear",
+          "quote": "Stolen? No. Rehomed from fascists. Big difference.",
+          "parsedFields": {
+            "Public": {
+              "value": "Scrap dealer.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Sells stolen armor pieces, terminal parts, weapons, and restricted BCI hardware.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Greasy hands, bright eyes, no refund policy.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Has a damaged BCI Elite helmet with undeleted raid footage.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "In a stall made of armored doors and old transit signs.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Gear, clues hidden in tech, black-market upgrades.",
+              "gm": true
+            }
+          }
         }
       ],
       "locked": true
@@ -630,32 +1666,200 @@
         {
           "name": "Mayor Evangeline Cross",
           "body": "Mayor of Meridian Spire\n“Stability is compassion at scale.”\nPublic: Polished, reform-minded mayor focused on public safety, cognitive health, and order.\nTruth: Political bridge between BCI, wealthy families, city government, and Continuance.\nOpen full dossier\nVibe: Elegant, beloved by people who do not know better.\nSecret: May be connected to Colton’s family name or to the systems that erased his parents.\nFirst Appearance: Public broadcasts after BCI incidents or citywide emergency addresses.\nDM Use: Political face of the campaign; decides when players become threats.",
-          "revealed": true
+          "revealed": false,
+          "role": "Mayor of Meridian Spire",
+          "quote": "Stability is compassion at scale.",
+          "parsedFields": {
+            "Public": {
+              "value": "Polished, reform-minded mayor focused on public safety, cognitive health, and order.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Political bridge between BCI, wealthy families, city government, and Continuance.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Elegant, beloved by people who do not know better.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "May be connected to Colton’s family name or to the systems that erased his parents.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Public broadcasts after BCI incidents or citywide emergency addresses.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Political face of the campaign; decides when players become threats.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Councilor Nia Ravel",
           "body": "Opposition Councilor\n“Oversight that cannot say no is just applause.”\nPublic: Council critic of BCI overreach.\nTruth: Potential ally if the party provides evidence strong enough to risk her career.\nOpen full dossier\nVibe: Brave enough to speak, careful enough to survive.\nSecret: Her sibling was memory-edited after a protest.\nFirst Appearance: A hearing clip questioning BCI authority.\nDM Use: Political ally with limits and consequences.",
-          "revealed": true
+          "revealed": false,
+          "role": "Opposition Councilor",
+          "quote": "Oversight that cannot say no is just applause.",
+          "parsedFields": {
+            "Public": {
+              "value": "Council critic of BCI overreach.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Potential ally if the party provides evidence strong enough to risk her career.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Brave enough to speak, careful enough to survive.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Her sibling was memory-edited after a protest.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "A hearing clip questioning BCI authority.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Political ally with limits and consequences.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Mara Quell",
           "body": "BCI-Approved News Anchor\n“Remain calm. Verified updates will follow.”\nPublic: Trusted voice during crisis broadcasts.\nTruth: Frames events in ways that support BCI narratives and calm public doubt.\nOpen full dossier\nVibe: Warm, fake-safe, professionally soothing.\nSecret: Received an anonymous Ruiz file and has not opened it yet.\nFirst Appearance: Reports on the apartment incident using language that makes the party sound suspicious.\nDM Use: Reputation pressure and possible media crack later.",
-          "revealed": true
+          "revealed": false,
+          "role": "BCI-Approved News Anchor",
+          "quote": "Remain calm. Verified updates will follow.",
+          "parsedFields": {
+            "Public": {
+              "value": "Trusted voice during crisis broadcasts.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Frames events in ways that support BCI narratives and calm public doubt.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Warm, fake-safe, professionally soothing.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Received an anonymous Ruiz file and has not opened it yet.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Reports on the apartment incident using language that makes the party sound suspicious.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Reputation pressure and possible media crack later.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Dax Orro",
           "body": "PI License Handler\n“I don’t care what you found. I care what you can prove without getting my office raided.”\nPublic: City licensing contact for PI permits, case permissions, and warnings.\nTruth: Knows some cases are cursed and quietly flags them because people vanish around them.\nOpen full dossier\nVibe: Overworked clerk with survival instincts and a permanent headache.\nSecret: Keeps a list of DO NOT TOUCH case numbers that disappear from systems.\nFirst Appearance: Calls the party after Session 1 to warn their licenses are being reviewed.\nDM Use: Legal leash, warning siren, reluctant official access.",
-          "revealed": true
+          "revealed": false,
+          "role": "PI License Handler",
+          "quote": "I don’t care what you found. I care what you can prove without getting my office raided.",
+          "parsedFields": {
+            "Public": {
+              "value": "City licensing contact for PI permits, case permissions, and warnings.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Knows some cases are cursed and quietly flags them because people vanish around them.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Overworked clerk with survival instincts and a permanent headache.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Keeps a list of DO NOT TOUCH case numbers that disappear from systems.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Calls the party after Session 1 to warn their licenses are being reviewed.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Legal leash, warning siren, reluctant official access.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Minister Alaric Venn",
           "body": "Minister of Cognitive Safety\n“A safe mind is a loyal city.”\nPublic: Cabinet-level voice for cognitive health and social stability.\nTruth: Uses fear to justify surveillance, memory compliance, and BCI budget expansions.\nOpen full dossier\nVibe: Comforting authoritarian with excellent diction.\nSecret: Knows about non-medical memory correction but calls it emergency stabilization.\nFirst Appearance: Appears beside Veyne after an “illegal memory contamination” alert.\nDM Use: Give BCI policy a political mouthpiece.",
-          "revealed": true
+          "revealed": false,
+          "role": "Minister of Cognitive Safety",
+          "quote": "A safe mind is a loyal city.",
+          "parsedFields": {
+            "Public": {
+              "value": "Cabinet-level voice for cognitive health and social stability.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Uses fear to justify surveillance, memory compliance, and BCI budget expansions.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Comforting authoritarian with excellent diction.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Knows about non-medical memory correction but calls it emergency stabilization.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "Appears beside Veyne after an “illegal memory contamination” alert.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Give BCI policy a political mouthpiece.",
+              "gm": true
+            }
+          }
         },
         {
           "name": "Seris Dane",
           "body": "Corporate Lobbyist\n“Everyone hates corruption until they need funding.”\nPublic: High-end policy consultant connecting business and government.\nTruth: Links Continuance, BCI, wealthy families, and city contracts.\nOpen full dossier\nVibe: Velvet handshake, razor ledger.\nSecret: Maintains private donor channels for continuity research.\nFirst Appearance: At a gala, already knowing which PC should not be there.\nDM Use: Connects money trails without looking like a villain.",
-          "revealed": true
+          "revealed": false,
+          "role": "Corporate Lobbyist",
+          "quote": "Everyone hates corruption until they need funding.",
+          "parsedFields": {
+            "Public": {
+              "value": "High-end policy consultant connecting business and government.",
+              "gm": false
+            },
+            "Truth": {
+              "value": "Links Continuance, BCI, wealthy families, and city contracts.",
+              "gm": true
+            },
+            "Vibe": {
+              "value": "Velvet handshake, razor ledger.",
+              "gm": false
+            },
+            "Secret": {
+              "value": "Maintains private donor channels for continuity research.",
+              "gm": true
+            },
+            "First Appearance": {
+              "value": "At a gala, already knowing which PC should not be there.",
+              "gm": true
+            },
+            "DM Use": {
+              "value": "Connects money trails without looking like a villain.",
+              "gm": true
+            }
+          }
         }
       ],
       "locked": true

@@ -230,10 +230,12 @@ const FactionsView = (() => {
     const visible = isAdmin || n.revealed !== false;
     if (!visible) {
       return `
-        <div class="npc-card-mini">
-          <div class="field-redacted">
-            <b>NPC Dossier ${idx + 1}</b>
-            <p>[ REDACTED ]</p>
+        <div class="npc-card-mini locked-card">
+          <h4 style="color:var(--red)">🔒 [ SEALED DOSSIER ]</h4>
+          <div class="dossier-role" style="color:var(--red)">Identity Not Yet Discovered</div>
+          <div class="dossier-field redacted">
+            <b>Classified Personnel</b>
+            <span>This individual has not yet been identified in your investigation.</span>
           </div>
         </div>`;
     }
