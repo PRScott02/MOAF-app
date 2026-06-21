@@ -5350,7 +5350,7 @@
       "file": "cotu-letter-fragment.html",
       "desc": "A partially corrupted letter fragment intercepted from Choir of the Unforgotten channels. Recovery incomplete.",
       "accent": "#ffcc66",
-      "locked": true,
+      "locked": false,
       "type": "html"
     },
     {
