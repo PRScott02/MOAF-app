@@ -5521,7 +5521,7 @@
       "desc": "\"Secrets are just data waiting to be connected.\" Operates in the gray between corporate firewalls and street nets. Ghost Link, Signal Bleed, Deep Mask, Trace Suppress.",
       "accent": "#b982ff",
       "type": "image",
-      "locked": true
+      "locked": false
     }
   ]
 }
