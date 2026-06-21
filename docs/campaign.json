@@ -265,7 +265,7 @@
           }
         }
       ],
-      "locked": true
+      "locked": false
     },
     {
       "id": "cotu",
