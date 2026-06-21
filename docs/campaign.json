@@ -5511,7 +5511,7 @@
       "desc": "Information broker and shadowrunner operating out of Runoff Sector 7. Deals in secrets, knows everyone, trusts no one. Rumored connections in every district.",
       "accent": "#b982ff",
       "type": "image",
-      "locked": true
+      "locked": false
     },
     {
       "id": "nyx-bellweather-dossier",
