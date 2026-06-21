@@ -42,7 +42,7 @@
         {
           "label": "Internal Security",
           "value": "Leak suppression, erased case files, black-bag warrants, evidence laundering.",
-          "revealed": true
+          "revealed": false
         },
         {
           "label": "Patrol Division",
