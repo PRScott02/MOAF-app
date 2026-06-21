@@ -5371,7 +5371,7 @@
       "desc": "A stolen databoard broadcasting CotU propaganda across a compromised relay. \"They control the record. We control the remembrance.\"",
       "accent": "#b5ff3a",
       "type": "image",
-      "locked": true
+      "locked": false
     },
     {
       "id": "bci-ruiz-sealed-report",
