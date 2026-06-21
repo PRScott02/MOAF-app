@@ -5360,7 +5360,7 @@
       "file": "arasaka-lock-override.html",
       "desc": "An Arasaka private-security lock override interface. Live access node. Handle with care.",
       "accent": "#d11f2f",
-      "locked": true,
+      "locked": false,
       "type": "html"
     },
     {
