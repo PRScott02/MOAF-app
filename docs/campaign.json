@@ -5381,7 +5381,7 @@
       "desc": "A sealed BCI incident report on Damien Ruiz, age 13. Parents listed as active persons of interest. Heavily redacted.",
       "accent": "#ff4267",
       "type": "image",
-      "locked": true
+      "locked": false
     },
     {
       "id": "cotu-intercepted-email",
