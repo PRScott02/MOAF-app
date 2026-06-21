@@ -5441,7 +5441,7 @@
       "desc": "Standard BCI patrol unit, Bureau of Corporate Integrity. Cyan optics, restraint gear.",
       "accent": "#74e8ff",
       "type": "image",
-      "locked": true
+      "locked": false
     },
     {
       "id": "bci-police-report",
