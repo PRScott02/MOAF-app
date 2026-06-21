@@ -347,3 +347,13 @@
   font-size: 12px;
   letter-spacing: 0.1em;
 }
+
+/* Dossier field that's locked from players (admin view marker) */
+.dossier-field.admin-locked-field {
+  border-color: rgba(255,66,103,0.4);
+  background: rgba(40,12,16,0.3);
+}
+.dossier-field b .reveal-toggle {
+  vertical-align: middle;
+  cursor: pointer;
+}

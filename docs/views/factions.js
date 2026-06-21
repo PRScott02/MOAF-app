@@ -245,11 +245,24 @@ const FactionsView = (() => {
     if (n.parsedFields && Object.keys(n.parsedFields).length) {
       const blocks = [];
       for (const [label, field] of Object.entries(n.parsedFields)) {
-        const showField = isAdmin || field.gm !== true;
+        // Per-field reveal: if 'revealed' is set, use it; otherwise default to
+        // visible unless it's a GM-secret field.
+        const fieldRevealed = (typeof field.revealed === 'boolean')
+          ? field.revealed
+          : (field.gm !== true);
+        const showField = isAdmin || fieldRevealed;
+        const adminToggle = isAdmin ? `
+          <span class="reveal-toggle ${fieldRevealed ? 'revealed' : 'hidden'}"
+                style="font-size:9px;margin-left:8px"
+                data-dossier-field-toggle
+                data-faction-id="${f.id}" data-npc-idx="${idx}" data-field-label="${escapeHtml(label)}">
+            ${fieldRevealed ? '🔓' : '🔒'}
+          </span>` : '';
+
         if (showField) {
           blocks.push(`
-            <div class="dossier-field">
-              <b>${escapeHtml(label)}</b>
+            <div class="dossier-field${(!fieldRevealed && isAdmin) ? ' admin-locked-field' : ''}">
+              <b>${escapeHtml(label)}${adminToggle}</b>
               <span>${escapeHtml(field.value)}</span>
             </div>
           `);
@@ -363,6 +376,23 @@ const FactionsView = (() => {
         if (!f || !f.structure[idx]) return;
         f.structure[idx].revealed = !(f.structure[idx].revealed !== false);
         await pushAndRefresh('Updated structure visibility');
+      });
+    });
+
+    // Toggle an individual dossier FIELD's reveal state
+    container.querySelectorAll('[data-dossier-field-toggle]').forEach(el => {
+      el.addEventListener('click', async (ev) => {
+        ev.stopPropagation();
+        const fid = el.getAttribute('data-faction-id');
+        const idx = parseInt(el.getAttribute('data-npc-idx'), 10);
+        const label = el.getAttribute('data-field-label');
+        const f = Data.getCampaign().factions.find(x => x.id === fid);
+        if (!f || !f.npcs[idx] || !f.npcs[idx].parsedFields[label]) return;
+        const field = f.npcs[idx].parsedFields[label];
+        // Current effective state, then flip it.
+        const current = (typeof field.revealed === 'boolean') ? field.revealed : (field.gm !== true);
+        field.revealed = !current;
+        await pushAndRefresh('Updated field visibility');
       });
     });
 
