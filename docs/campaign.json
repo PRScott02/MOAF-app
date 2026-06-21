@@ -5491,7 +5491,7 @@
       "desc": "A Red Archive operative in the Meridian Spire rain. \"Memories are data. Data is truth.\"",
       "accent": "#ff4c5f",
       "type": "image",
-      "locked": true
+      "locked": false
     },
     {
       "id": "ruiz-dna-match",
