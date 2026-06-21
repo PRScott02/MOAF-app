@@ -5401,7 +5401,7 @@
       "desc": "A stolen BCI internal dossier indexing all six major factions with threat assessments. Heavily redacted, player-safe distribution.",
       "accent": "#8bffb1",
       "type": "image",
-      "locked": true
+      "locked": false
     },
     {
       "id": "pi-license-data",
