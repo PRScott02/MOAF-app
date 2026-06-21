@@ -5431,7 +5431,7 @@
       "desc": "A BCI Patrol Captain on the rain-slicked streets of Meridian Spire. Baton drawn.",
       "accent": "#8bffb1",
       "type": "image",
-      "locked": true
+      "locked": false
     },
     {
       "id": "bci-patrol",
