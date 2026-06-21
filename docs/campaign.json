@@ -5481,7 +5481,7 @@
       "desc": "A decrypted Arasaka message to Mozzie Farouk from \"Father.\" \"What were you doing near the psycho? I want an answer immediately.\"",
       "accent": "#ff4267",
       "type": "image",
-      "locked": true
+      "locked": false
     },
     {
       "id": "red-archive-agent",
