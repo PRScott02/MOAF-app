@@ -5330,7 +5330,7 @@
       "file": "td-terminal-letter.html",
       "desc": "A letter recovered from a BCI portable terminal belonging to Ash Calder. Flagged by Truth Division signal watchers.",
       "accent": "#b982ff",
-      "locked": true,
+      "locked": false,
       "type": "html"
     },
     {
