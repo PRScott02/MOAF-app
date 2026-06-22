@@ -491,7 +491,7 @@
           }
         }
       ],
-      "locked": false
+      "locked": true
     },
     {
       "id": "truth",
@@ -3813,7 +3813,7 @@
         }
       },
       "connectionsRevealed": true,
-      "locked": true
+      "locked": false
     },
     {
       "id": "bell-saint",
