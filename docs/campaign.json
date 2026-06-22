@@ -1930,7 +1930,7 @@
         }
       },
       "connectionsRevealed": true,
-      "locked": true
+      "locked": false
     },
     {
       "id": "captain-orin-vale",
