@@ -2048,7 +2048,7 @@
         }
       },
       "connectionsRevealed": true,
-      "locked": true
+      "locked": false
     },
     {
       "id": "cricket",
